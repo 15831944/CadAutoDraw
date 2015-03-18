@@ -16,6 +16,14 @@ namespace AutoDrawDWG
         }
 
         string ProjectName;
+        string addStation = "";
+        List<string> ListStation = new List<string>();
+
+        //
+        TextBox T_AddStation;
+        Button B_AddStation;
+        ListBox L_AddStation;
+        //
 
         private void B_Valide_Click(object sender, EventArgs e)
         {
@@ -56,21 +64,22 @@ namespace AutoDrawDWG
                 /// 添加textBox和按钮
                 /// 
                 //textBox
-                TextBox T_AddStation = new TextBox();
+                T_AddStation = new TextBox();
                 T_AddStation.Name = "T_AddStation";
                 T_AddStation.Text = "添加站点";
                 T_AddStation.Location = new Point(8, 24);
                 T_AddStation.Size = new Size(gb.Size.Width - 16, 24);
 
                 //按钮
-                Button B_AddStation = new Button();
+                B_AddStation = new Button();
                 B_AddStation.Name = "B_AddStation";
                 B_AddStation.Text = "添加站点";
                 B_AddStation.Location = new Point(8, 54);
                 B_AddStation.Size = new Size(gb.Size.Width - 16, 23);
+                B_AddStation.MouseClick += B_AddStation_MouseClick;
 
                 //listBox
-                ListBox L_AddStation = new ListBox();
+                L_AddStation = new ListBox();
                 L_AddStation.Name = "B_AddStation";
                 L_AddStation.Location = new Point(8, 83);
                 L_AddStation.Size = new Size(gb.Size.Width - 16, gb.Size.Height - 83 - 10);
@@ -79,6 +88,30 @@ namespace AutoDrawDWG
                 gb.Controls.Add(B_AddStation);  //添加按钮
                 gb.Controls.Add(L_AddStation);  //添加listBox
                 //在第一层GroupBox中添加tableLayoutPannel
+            }
+        }
+
+
+        void B_AddStation_MouseClick(object sender, MouseEventArgs e)
+        {
+            //throw new NotImplementedException();
+            if (e.Button == MouseButtons.Left)
+            {
+
+                if (T_AddStation.Text == "添加站点" || T_AddStation.Text == "")
+                {
+                    MessageBox.Show("需要指定站或里程", "注意", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                }
+                else
+                {
+                    if (!ListStation.Contains(T_AddStation.Text))
+                    {
+                        ListStation.Add(T_AddStation.Text);
+                        L_AddStation.Items.Add(T_AddStation.Text.ToString());
+                    }
+                    
+                    
+                }
             }
         }
 
