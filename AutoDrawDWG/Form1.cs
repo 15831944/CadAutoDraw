@@ -18,12 +18,8 @@ namespace AutoDrawDWG
         string ProjectName;
         string addStation = "";
         List<string> ListStation = new List<string>();
+        List<string> isEditStation = new List<string>();
 
-        //
-        TextBox T_AddStation;
-        Button B_AddStation;
-        ListBox L_AddStation;
-        //
 
         private void B_Valide_Click(object sender, EventArgs e)
         {
@@ -49,71 +45,12 @@ namespace AutoDrawDWG
 
                 }
                 this.Text = "绘制" + ProjectName + "线";
-                //groupBox1.Text = ProjectName;
 
-                this.Size = new Size(300, 300);
-                //添加第一层Groupbox
-                GroupBox gb = new GroupBox();
-                gb.Name = "MainGroueBox";
-                gb.Location = new Point(12, 41);
-                gb.Size = new Size(this.Size.Width / 2 - 20, this.Size.Height - 92);
-                gb.Text = "设置站点";
-                this.Controls.Add(gb);
-
-                ///在第一层GroupBox中添加按钮用来设置项目中站点
-                /// 添加textBox和按钮
-                /// 
-                //textBox
-                T_AddStation = new TextBox();
-                T_AddStation.Name = "T_AddStation";
-                T_AddStation.Text = "添加站点";
-                T_AddStation.Location = new Point(8, 24);
-                T_AddStation.Size = new Size(gb.Size.Width - 16, 24);
-
-                //按钮
-                B_AddStation = new Button();
-                B_AddStation.Name = "B_AddStation";
-                B_AddStation.Text = "添加站点";
-                B_AddStation.Location = new Point(8, 54);
-                B_AddStation.Size = new Size(gb.Size.Width - 16, 23);
-                B_AddStation.MouseClick += B_AddStation_MouseClick;
-
-                //listBox
-                L_AddStation = new ListBox();
-                L_AddStation.Name = "B_AddStation";
-                L_AddStation.Location = new Point(8, 83);
-                L_AddStation.Size = new Size(gb.Size.Width - 16, gb.Size.Height - 83 - 10);
-
-                gb.Controls.Add(T_AddStation);  //添加textBox
-                gb.Controls.Add(B_AddStation);  //添加按钮
-                gb.Controls.Add(L_AddStation);  //添加listBox
-                //在第一层GroupBox中添加tableLayoutPannel
+                this.Size = new Size(300, 400);
+                MainGroupBox.Visible = true;
             }
         }
 
-
-        void B_AddStation_MouseClick(object sender, MouseEventArgs e)
-        {
-            //throw new NotImplementedException();
-            if (e.Button == MouseButtons.Left)
-            {
-
-                if (T_AddStation.Text == "添加站点" || T_AddStation.Text == "")
-                {
-                    MessageBox.Show("需要指定站或里程", "注意", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                }
-                else
-                {
-                    if (!ListStation.Contains(T_AddStation.Text))
-                    {
-                        ListStation.Add(T_AddStation.Text);
-                        L_AddStation.Items.Add(T_AddStation.Text.ToString());
-                    }
-                    
-                    
-                }
-            }
-        }
 
         private void T_ProjectName_TextChanged(object sender, EventArgs e)
         {
@@ -124,31 +61,77 @@ namespace AutoDrawDWG
                 //groupBox1.Text = ProjectName;
             }
         }
-
-
-
+        
         private void Form1_ResizeEnd(object sender, EventArgs e)
         {
-            foreach (Control c in this.Controls)
-            {
-                if (c is GroupBox)
-                {
-                    c.Size = new Size(c.Size.Width, this.Size.Height - 92);
-                    foreach(Control subC in c.Controls)
-                    {
-                        if(subC is ListBox)
-                        {
-                            subC.Size = new Size(c.Size.Width - 12, c.Size.Height - 83 - 10);
-                        }
-                    }
-                    break;
-                }
-            }
+            MainGroupBox.Size = new Size(MainGroupBox.Size.Width, this.Size.Height - 92);
+            L_AddSt.Size = new Size(MainGroupBox.Size.Width - 12, MainGroupBox.Size.Height - 83 - 5);
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             this.Size = new Size(223, 88);
         }
+
+        private void B_AddSt_Click(object sender, EventArgs e)
+        {
+            if (T_AddSt.Text == "添加站点" || T_AddSt.Text == "")
+                {
+                    MessageBox.Show("需要指定站或里程", "注意", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                }
+                else
+                {
+                    FonctionsCs fonctions = new FonctionsCs();
+
+                    if (fonctions.isExMatch(T_AddSt.Text.ToString(), @"(^[\u4e00-\u9fa5]*)$"))
+                    {
+                        if (!ListStation.Contains(T_AddSt.Text))
+                        {
+                            ListStation.Add(T_AddSt.Text);
+                            L_AddSt.Items.Add(T_AddSt.Text.ToString());
+                            isEditStation.Add(T_AddSt.Text.ToString());
+                            comboBox1.DataSource= isEditStation;
+                            comboBox1.DataSourceChanged += comboBox1_DataSourceChanged  ; 
+                            comboBox2.DataSource = isEditStation;
+                            this.Size = new Size(400, this.Size.Height);
+                            groupBox1.Visible = true;
+                            groupBox1.Text = "站间设备设置";
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("名称不符合规范"+System.Environment.NewLine+"或与管理员联系.", "注意", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                    }
+	
+                    
+                    
+                }
+            }
+
+        private void comboBox1_DataSourceChanged(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (isEditStation.Contains(comboBox1.SelectedItem.ToString()))
+            {
+                //isEditStation.Remove(comboBox1.SelectedItem.ToString());
+                comboBox1.DataSource = isEditStation; 
+            }
+        }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (isEditStation.Contains(comboBox2.SelectedItem.ToString()))
+            {
+                //isEditStation.Remove(comboBox2.SelectedItem.ToString());
+                comboBox2.DataSource = isEditStation;
+            }
+        }
+
+
+        
     }
 }
