@@ -20,10 +20,15 @@ namespace AutoDrawDWG
         List<string> ListStation = new List<string>();
         List<string> isEditStation = new List<string>();
 
+        DataSet DS_Station;
+        DataTable inforTable;
+        DataColumn stationID;
+        DataSet DS_EditStation = new DataSet();
+
 
         private void B_Valide_Click(object sender, EventArgs e)
         {
-            if (T_ProjectName.Text == "")
+            //if (T_ProjectName.Text == "")
             {
                 using (OpenFileDialog fileDialog = new OpenFileDialog())
                 {
@@ -46,7 +51,7 @@ namespace AutoDrawDWG
                 }
                 this.Text = "绘制" + ProjectName + "线";
 
-                this.Size = new Size(300, 400);
+                this.Size = new Size(700, 400);
                 MainGroupBox.Visible = true;
             }
         }
@@ -71,6 +76,14 @@ namespace AutoDrawDWG
         private void Form1_Load(object sender, EventArgs e)
         {
             this.Size = new Size(223, 88);
+
+            DS_Station = new DataSet("StationInfo");
+            inforTable = DS_Station.Tables.Add("StationAndInfo");
+            //stationID = inforTable.Columns.Add("StationID", typeof(Int32));
+            inforTable.Columns.Add("StationName", typeof(string));
+            inforTable.Columns.Add("DistanceMark", typeof(string));
+
+            //inforTable.PrimaryKey = new DataColumn[] { stationID };
         }
 
         private void B_AddSt_Click(object sender, EventArgs e)
@@ -83,25 +96,60 @@ namespace AutoDrawDWG
                 {
                     FonctionsCs fonctions = new FonctionsCs();
 
-                    if (fonctions.isExMatch(T_AddSt.Text.ToString(), @"(^[\u4e00-\u9fa5]*)$"))
+                    if (fonctions.isExMatch(T_AddSt.Text.ToString(), @"^[\u4e00-\u9fa5]*$"))
                     {
                         if (!ListStation.Contains(T_AddSt.Text))
                         {
-                            ListStation.Add(T_AddSt.Text);
-                            L_AddSt.Items.Add(T_AddSt.Text.ToString());
-                            isEditStation.Add(T_AddSt.Text.ToString());
-                            comboBox1.DataSource= isEditStation;
-                            comboBox1.DataSourceChanged += comboBox1_DataSourceChanged  ; 
-                            comboBox2.DataSource = isEditStation;
-                            this.Size = new Size(400, this.Size.Height);
+                            List<string> ListDistance = new List<string>();
+                            if (fonctions.isExMatch(T_StaLoc.Text.ToString().ToUpper(), @"^([A-Z]{2,3})(\d*).(\d{0,4})$", out ListDistance))
+                            {
+                                DataRow dr = DS_Station.Tables["StationAndInfo"].NewRow();
+                                //dr["StationID"] = DS_Station.Tables["StationAndInfo"].Rows.Count + 1;
+                                dr["StationName"] = T_AddSt.Text;
+                                dr["DistanceMark"] = T_StaLoc.Text.ToString().ToUpper();
+
+                                DS_Station.Tables["StationAndInfo"].Rows.Add(dr);
+                                dataGridView1.DataSource = DS_Station;
+                                dataGridView1.Columns[1].HeaderText = "站名";
+                                dataGridView1.Columns[2].HeaderText = "里程";
+                            }
+
+
+
+                            
+                            
+                            //DR_Stat
+                            //ListStation.Add(T_AddSt.Text + "," + T_StaLoc.Text.ToString().ToUpper());
+
+                            //listBox
+                            L_AddSt.Items.Add(T_AddSt.Text + "," + T_StaLoc.Text.ToString().ToUpper());
+                            //
+                            isEditStation.Add(T_AddSt.Text + "," + T_StaLoc.Text.ToString().ToUpper());
+
+                            //comboBox1.DataSourceChanged -= comboBox1_DataSourceChanged;
+                            comboBox1.DataSource = DS_Station;
+                            comboBox1.DisplayMember = DS_Station.Tables[0].Columns["StationName"].ToString();
+                            //comboBox1.DataSourceChanged += comboBox1_DataSourceChanged;
+
+                            //comboBox2.DataSourceChanged -= comboBox1_DataSourceChanged;
+                            comboBox2.DataSource = DS_Station;
+                            comboBox2.DisplayMember = DS_Station.Tables[0].Columns["StationName"].ToString();
+                            //comboBox2.DataSourceChanged += comboBox1_DataSourceChanged;
+
+                            this.Size = new Size(700, this.Size.Height);
                             groupBox1.Visible = true;
                             groupBox1.Text = "站间设备设置";
+
+                            dataGridView1.DataSource = null;
+                            dataGridView1.DataSource = DS_Station.Tables["StationAndInfo"];
                         }
                     }
                     else
                     {
-                        MessageBox.Show("名称不符合规范"+System.Environment.NewLine+"或与管理员联系.", "注意", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                        MessageBox.Show("名称不符合规范" + System.Environment.NewLine + "或与管理员联系.", "注意", MessageBoxButtons.OK, MessageBoxIcon.Hand);
                     }
+
+                    
 	
                     
                     
