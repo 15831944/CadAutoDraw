@@ -17,8 +17,8 @@ namespace AutoDrawDWG
 
         string ProjectName;
         string addStation = "";
-        List<string> ListStation = new List<string>();
-        List<string> isEditStation = new List<string>();
+        Dictionary<string,string> ListStation = new Dictionary<string,string>();
+        Dictionary<string,string> isEditStation = new Dictionary<string,string>();
 
         DataSet DS_Station;
         DataTable inforTable;
@@ -89,94 +89,100 @@ namespace AutoDrawDWG
         private void B_AddSt_Click(object sender, EventArgs e)
         {
             if (T_AddSt.Text == "添加站点" || T_AddSt.Text == "")
-                {
-                    MessageBox.Show("需要指定站或里程", "注意", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                }
-                else
-                {
-                    FonctionsCs fonctions = new FonctionsCs();
+            {
+                MessageBox.Show("需要指定站或里程", "注意", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+            }
+            else
+            {
+                FonctionsCs fonctions = new FonctionsCs();
+                List<string> ListDistance = new List<string>();
 
-                    if (fonctions.isExMatch(T_AddSt.Text.ToString(), @"^[\u4e00-\u9fa5]*$"))
+                if (fonctions.isExMatch(T_AddSt.Text.ToString().Replace(" ", ""), @"^[\u4e00-\u9fa5]*$") && fonctions.isExMatch(T_StaLoc.Text.ToString().Replace(" ", "").ToUpper(), @"^([A-Z]*)(\d*)([A-Z]*)(\d*).(\d{0,4})$", out ListDistance))
+                {
+                    bool isInTheList = false;
+
+
+                    if (ListStation.ContainsKey(T_AddSt.Text.ToString().Replace(" ", "")) || ListStation.ContainsValue(T_StaLoc.Text.ToString().Replace(" ", "").ToUpper()))
                     {
-                        if (!ListStation.Contains(T_AddSt.Text))
+                        isInTheList = true;
+
+                    }
+                    
+
+                    if (isInTheList == false)
+                    {
+
+
+                        DataRow dr = DS_Station.Tables["StationAndInfo"].NewRow();
+                        //dr["StationID"] = DS_Station.Tables["StationAndInfo"].Rows.Count + 1;
+                        dr["StationName"] = T_AddSt.Text.ToString().Replace(" ", "");
+                        dr["DistanceMark"] = T_StaLoc.Text.ToString().Replace(" ", "").ToUpper();
+
+                        DS_Station.Tables["StationAndInfo"].Rows.Add(dr);
+
+                        dataGridView1.DataSource = DS_Station.Tables["StationAndInfo"];
+                        //dataGridView1.DataSource = null;
+                        //dataGridView1.DataSource = DS_Station.Tables["StationAndInfo"];
+
+                        L_AddSt.Items.Add(T_AddSt.Text.ToString().Replace(" ", "") + "," + T_StaLoc.Text.ToString().Replace(" ", "").ToUpper());
+                        //
+                        ListStation.Add(T_AddSt.Text.ToString().Replace(" ", ""), T_StaLoc.Text.ToString().Replace(" ", "").ToUpper());
+                        isEditStation.Add(T_AddSt.Text.ToString().Replace(" ", ""), T_StaLoc.Text.ToString().Replace(" ", "").ToUpper());
+                        //dataGridView1.Columns[0].HeaderText = "站名";
+                        //dataGridView1.Columns[1].HeaderText = "里程";
+
+                        BindingSource _bsSomeList = new BindingSource();
+                        _bsSomeList.DataSource = ListStation;
+                        comboBox1.DataSource = null;
+                        comboBox1.Items.Clear();
+                        comboBox1.DataSource = _bsSomeList;
+                        //comboBox1.ValueMember = "StationName";
+
+
+                        BindingSource _bsSomeList2 = new BindingSource();
+                        _bsSomeList2.DataSource = ListStation;
+                        comboBox2.DataSource = null;
+                        comboBox2.Items.Clear();
+                        comboBox2.DataSource = _bsSomeList2;
+                        
+                        if (groupBox1.Visible == false)
                         {
-                            List<string> ListDistance = new List<string>();
-                            if (fonctions.isExMatch(T_StaLoc.Text.ToString().ToUpper(), @"^([A-Z]{2,3})(\d*).(\d{0,4})$", out ListDistance))
-                            {
-                                DataRow dr = DS_Station.Tables["StationAndInfo"].NewRow();
-                                //dr["StationID"] = DS_Station.Tables["StationAndInfo"].Rows.Count + 1;
-                                dr["StationName"] = T_AddSt.Text;
-                                dr["DistanceMark"] = T_StaLoc.Text.ToString().ToUpper();
-
-                                DS_Station.Tables["StationAndInfo"].Rows.Add(dr);
-                                dataGridView1.DataSource = DS_Station;
-                                dataGridView1.Columns[1].HeaderText = "站名";
-                                dataGridView1.Columns[2].HeaderText = "里程";
-                            }
-
-
-
-                            
-                            
-                            //DR_Stat
-                            //ListStation.Add(T_AddSt.Text + "," + T_StaLoc.Text.ToString().ToUpper());
-
-                            //listBox
-                            L_AddSt.Items.Add(T_AddSt.Text + "," + T_StaLoc.Text.ToString().ToUpper());
-                            //
-                            isEditStation.Add(T_AddSt.Text + "," + T_StaLoc.Text.ToString().ToUpper());
-
-                            //comboBox1.DataSourceChanged -= comboBox1_DataSourceChanged;
-                            comboBox1.DataSource = DS_Station;
-                            comboBox1.DisplayMember = DS_Station.Tables[0].Columns["StationName"].ToString();
-                            //comboBox1.DataSourceChanged += comboBox1_DataSourceChanged;
-
-                            //comboBox2.DataSourceChanged -= comboBox1_DataSourceChanged;
-                            comboBox2.DataSource = DS_Station;
-                            comboBox2.DisplayMember = DS_Station.Tables[0].Columns["StationName"].ToString();
-                            //comboBox2.DataSourceChanged += comboBox1_DataSourceChanged;
-
                             this.Size = new Size(700, this.Size.Height);
                             groupBox1.Visible = true;
                             groupBox1.Text = "站间设备设置";
-
-                            dataGridView1.DataSource = null;
-                            dataGridView1.DataSource = DS_Station.Tables["StationAndInfo"];
                         }
+
+
                     }
+
+
                     else
                     {
                         MessageBox.Show("名称不符合规范" + System.Environment.NewLine + "或与管理员联系.", "注意", MessageBoxButtons.OK, MessageBoxIcon.Hand);
                     }
-
-                    
-	
-                    
-                    
                 }
             }
+        }
 
         private void comboBox1_DataSourceChanged(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (isEditStation.Contains(comboBox1.SelectedItem.ToString()))
-            {
-                //isEditStation.Remove(comboBox1.SelectedItem.ToString());
-                comboBox1.DataSource = isEditStation; 
-            }
+            comboBox1.Text = comboBox1.SelectedItem.ToString();
+                //MessageBox.Show(comboBox1.SelectedItem.ToString());
         }
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (isEditStation.Contains(comboBox2.SelectedItem.ToString()))
-            {
-                //isEditStation.Remove(comboBox2.SelectedItem.ToString());
-                comboBox2.DataSource = isEditStation;
-            }
+
+        }
+
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            //MessageBox.Show(dataGridView1.SelectedColumns.+" ","1");
         }
 
 

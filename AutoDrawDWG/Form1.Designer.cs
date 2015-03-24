@@ -31,6 +31,9 @@
             this.T_ProjectName = new System.Windows.Forms.TextBox();
             this.B_Valide = new System.Windows.Forms.Button();
             this.MainGroupBox = new System.Windows.Forms.GroupBox();
+            this.T_StaLoc = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.L_AddSt = new System.Windows.Forms.ListBox();
             this.B_AddSt = new System.Windows.Forms.Button();
             this.T_AddSt = new System.Windows.Forms.TextBox();
@@ -43,9 +46,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.T_StaLoc = new System.Windows.Forms.TextBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.MainGroupBox.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -87,6 +87,31 @@
             this.MainGroupBox.TabStop = false;
             this.MainGroupBox.Text = "设置站点";
             this.MainGroupBox.Visible = false;
+            // 
+            // T_StaLoc
+            // 
+            this.T_StaLoc.Location = new System.Drawing.Point(65, 43);
+            this.T_StaLoc.Name = "T_StaLoc";
+            this.T_StaLoc.Size = new System.Drawing.Size(116, 20);
+            this.T_StaLoc.TabIndex = 1;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(15, 43);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(34, 13);
+            this.label4.TabIndex = 4;
+            this.label4.Text = "里程:";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(15, 22);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(34, 13);
+            this.label3.TabIndex = 3;
+            this.label3.Text = "站名:";
             // 
             // L_AddSt
             // 
@@ -162,6 +187,8 @@
             // 
             // comboBox2
             // 
+            this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBox2.FormattingEnabled = true;
             this.comboBox2.Location = new System.Drawing.Point(42, 40);
             this.comboBox2.Name = "comboBox2";
@@ -171,6 +198,8 @@
             // 
             // comboBox1
             // 
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Location = new System.Drawing.Point(42, 15);
             this.comboBox1.Name = "comboBox1";
@@ -206,31 +235,6 @@
             this.button1.Text = "确认";
             this.button1.UseVisualStyleBackColor = true;
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(15, 22);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(34, 13);
-            this.label3.TabIndex = 3;
-            this.label3.Text = "站名:";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(15, 43);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(34, 13);
-            this.label4.TabIndex = 4;
-            this.label4.Text = "里程:";
-            // 
-            // T_StaLoc
-            // 
-            this.T_StaLoc.Location = new System.Drawing.Point(65, 43);
-            this.T_StaLoc.Name = "T_StaLoc";
-            this.T_StaLoc.Size = new System.Drawing.Size(116, 20);
-            this.T_StaLoc.TabIndex = 1;
-            // 
             // dataGridView1
             // 
             this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
@@ -239,6 +243,7 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(195, 307);
             this.dataGridView1.TabIndex = 4;
+            this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             // 
             // Form1
             // 
