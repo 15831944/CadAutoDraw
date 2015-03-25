@@ -28,30 +28,43 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.T_ProjectName = new System.Windows.Forms.TextBox();
             this.B_Valide = new System.Windows.Forms.Button();
             this.MainGroupBox = new System.Windows.Forms.GroupBox();
+            this.B_GridModiCancel = new System.Windows.Forms.Button();
+            this.B_GridModiValide = new System.Windows.Forms.Button();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.T_StaLoc = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.L_AddSt = new System.Windows.Forms.ListBox();
             this.B_AddSt = new System.Windows.Forms.Button();
             this.T_AddSt = new System.Windows.Forms.TextBox();
+            this.L_AddSt = new System.Windows.Forms.ListBox();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.修改ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.删除ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.Combo_Block = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.T_NumBlock = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.comboBox_To = new System.Windows.Forms.ComboBox();
+            this.comboBox_From = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.B_Admin = new System.Windows.Forms.Button();
             this.MainGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.contextMenuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // T_ProjectName
@@ -74,10 +87,12 @@
             // 
             // MainGroupBox
             // 
+            this.MainGroupBox.Controls.Add(this.B_GridModiCancel);
+            this.MainGroupBox.Controls.Add(this.B_GridModiValide);
+            this.MainGroupBox.Controls.Add(this.dataGridView1);
             this.MainGroupBox.Controls.Add(this.T_StaLoc);
             this.MainGroupBox.Controls.Add(this.label4);
             this.MainGroupBox.Controls.Add(this.label3);
-            this.MainGroupBox.Controls.Add(this.L_AddSt);
             this.MainGroupBox.Controls.Add(this.B_AddSt);
             this.MainGroupBox.Controls.Add(this.T_AddSt);
             this.MainGroupBox.Location = new System.Drawing.Point(12, 44);
@@ -87,6 +102,37 @@
             this.MainGroupBox.TabStop = false;
             this.MainGroupBox.Text = "设置站点";
             this.MainGroupBox.Visible = false;
+            // 
+            // B_GridModiCancel
+            // 
+            this.B_GridModiCancel.Location = new System.Drawing.Point(126, 266);
+            this.B_GridModiCancel.Name = "B_GridModiCancel";
+            this.B_GridModiCancel.Size = new System.Drawing.Size(75, 23);
+            this.B_GridModiCancel.TabIndex = 6;
+            this.B_GridModiCancel.Text = "button3";
+            this.B_GridModiCancel.UseVisualStyleBackColor = true;
+            // 
+            // B_GridModiValide
+            // 
+            this.B_GridModiValide.Location = new System.Drawing.Point(6, 266);
+            this.B_GridModiValide.Name = "B_GridModiValide";
+            this.B_GridModiValide.Size = new System.Drawing.Size(75, 23);
+            this.B_GridModiValide.TabIndex = 5;
+            this.B_GridModiValide.Text = "保存";
+            this.B_GridModiValide.UseVisualStyleBackColor = true;
+            this.B_GridModiValide.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // dataGridView1
+            // 
+            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.dataGridView1.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Location = new System.Drawing.Point(6, 98);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.Size = new System.Drawing.Size(195, 162);
+            this.dataGridView1.TabIndex = 4;
+            this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             // 
             // T_StaLoc
             // 
@@ -113,14 +159,6 @@
             this.label3.TabIndex = 3;
             this.label3.Text = "站名:";
             // 
-            // L_AddSt
-            // 
-            this.L_AddSt.FormattingEnabled = true;
-            this.L_AddSt.Location = new System.Drawing.Point(6, 100);
-            this.L_AddSt.Name = "L_AddSt";
-            this.L_AddSt.Size = new System.Drawing.Size(175, 43);
-            this.L_AddSt.TabIndex = 3;
-            // 
             // B_AddSt
             // 
             this.B_AddSt.Location = new System.Drawing.Point(65, 69);
@@ -138,10 +176,42 @@
             this.T_AddSt.Size = new System.Drawing.Size(116, 20);
             this.T_AddSt.TabIndex = 0;
             // 
+            // L_AddSt
+            // 
+            this.L_AddSt.FormattingEnabled = true;
+            this.L_AddSt.Location = new System.Drawing.Point(436, 60);
+            this.L_AddSt.Name = "L_AddSt";
+            this.L_AddSt.Size = new System.Drawing.Size(189, 290);
+            this.L_AddSt.TabIndex = 3;
+            this.L_AddSt.MouseDown += new System.Windows.Forms.MouseEventHandler(this.L_AddSt_MouseDown);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.修改ToolStripMenuItem,
+            this.删除ToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(101, 48);
+            this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
+            // 
+            // 修改ToolStripMenuItem
+            // 
+            this.修改ToolStripMenuItem.Name = "修改ToolStripMenuItem";
+            this.修改ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.修改ToolStripMenuItem.Text = "修改";
+            this.修改ToolStripMenuItem.Click += new System.EventHandler(this.修改ToolStripMenuItem_Click);
+            // 
+            // 删除ToolStripMenuItem
+            // 
+            this.删除ToolStripMenuItem.Name = "删除ToolStripMenuItem";
+            this.删除ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.删除ToolStripMenuItem.Text = "删除";
+            this.删除ToolStripMenuItem.Click += new System.EventHandler(this.删除ToolStripMenuItem_Click);
+            // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.panel1);
-            this.groupBox1.Location = new System.Drawing.Point(429, 44);
+            this.groupBox1.Location = new System.Drawing.Point(228, 44);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(205, 314);
             this.groupBox1.TabIndex = 3;
@@ -166,7 +236,7 @@
             // 
             this.panel3.BackColor = System.Drawing.SystemColors.Control;
             this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panel3.Location = new System.Drawing.Point(3, 112);
+            this.panel3.Location = new System.Drawing.Point(3, 187);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(183, 103);
             this.panel3.TabIndex = 1;
@@ -175,38 +245,78 @@
             // 
             this.panel2.BackColor = System.Drawing.SystemColors.Control;
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panel2.Controls.Add(this.comboBox2);
-            this.panel2.Controls.Add(this.comboBox1);
+            this.panel2.Controls.Add(this.Combo_Block);
+            this.panel2.Controls.Add(this.label6);
+            this.panel2.Controls.Add(this.T_NumBlock);
+            this.panel2.Controls.Add(this.label5);
+            this.panel2.Controls.Add(this.comboBox_To);
+            this.panel2.Controls.Add(this.comboBox_From);
             this.panel2.Controls.Add(this.label2);
             this.panel2.Controls.Add(this.label1);
             this.panel2.Controls.Add(this.button1);
             this.panel2.Location = new System.Drawing.Point(3, 3);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(183, 103);
+            this.panel2.Size = new System.Drawing.Size(183, 178);
             this.panel2.TabIndex = 0;
             // 
-            // comboBox2
+            // Combo_Block
             // 
-            this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(42, 40);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(121, 21);
-            this.comboBox2.TabIndex = 4;
-            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
+            this.Combo_Block.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.Combo_Block.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.Combo_Block.FormattingEnabled = true;
+            this.Combo_Block.Location = new System.Drawing.Point(42, 67);
+            this.Combo_Block.Name = "Combo_Block";
+            this.Combo_Block.Size = new System.Drawing.Size(121, 21);
+            this.Combo_Block.TabIndex = 8;
             // 
-            // comboBox1
+            // label6
             // 
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(42, 15);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 21);
-            this.comboBox1.TabIndex = 3;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
-            this.comboBox1.DataSourceChanged += new System.EventHandler(this.comboBox1_DataSourceChanged);
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(5, 96);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(34, 13);
+            this.label6.TabIndex = 7;
+            this.label6.Text = "数量:";
+            // 
+            // T_NumBlock
+            // 
+            this.T_NumBlock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.T_NumBlock.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.T_NumBlock.Location = new System.Drawing.Point(42, 93);
+            this.T_NumBlock.Name = "T_NumBlock";
+            this.T_NumBlock.Size = new System.Drawing.Size(121, 20);
+            this.T_NumBlock.TabIndex = 6;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(3, 70);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(34, 13);
+            this.label5.TabIndex = 5;
+            this.label5.Text = "设备:";
+            // 
+            // comboBox_To
+            // 
+            this.comboBox_To.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox_To.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBox_To.FormattingEnabled = true;
+            this.comboBox_To.Location = new System.Drawing.Point(42, 40);
+            this.comboBox_To.Name = "comboBox_To";
+            this.comboBox_To.Size = new System.Drawing.Size(121, 21);
+            this.comboBox_To.TabIndex = 4;
+            this.comboBox_To.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
+            // 
+            // comboBox_From
+            // 
+            this.comboBox_From.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox_From.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBox_From.FormattingEnabled = true;
+            this.comboBox_From.Location = new System.Drawing.Point(42, 15);
+            this.comboBox_From.Name = "comboBox_From";
+            this.comboBox_From.Size = new System.Drawing.Size(121, 21);
+            this.comboBox_From.TabIndex = 3;
+            this.comboBox_From.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // label2
             // 
@@ -228,22 +338,30 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(42, 67);
+            this.button1.Location = new System.Drawing.Point(42, 119);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(121, 23);
             this.button1.TabIndex = 0;
             this.button1.Text = "确认";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // dataGridView1
+            // statusStrip1
             // 
-            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(228, 48);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(195, 307);
-            this.dataGridView1.TabIndex = 4;
-            this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 356);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(637, 22);
+            this.statusStrip1.TabIndex = 4;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // B_Admin
+            // 
+            this.B_Admin.Location = new System.Drawing.Point(568, 5);
+            this.B_Admin.Name = "B_Admin";
+            this.B_Admin.Size = new System.Drawing.Size(57, 40);
+            this.B_Admin.TabIndex = 5;
+            this.B_Admin.Text = "设置块";
+            this.B_Admin.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -252,22 +370,26 @@
             this.BackColor = System.Drawing.SystemColors.Control;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(637, 378);
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.B_Admin);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.MainGroupBox);
+            this.Controls.Add(this.L_AddSt);
             this.Controls.Add(this.B_Valide);
             this.Controls.Add(this.T_ProjectName);
             this.Name = "Form1";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResizeEnd += new System.EventHandler(this.Form1_ResizeEnd);
             this.MainGroupBox.ResumeLayout(false);
             this.MainGroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -285,8 +407,8 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.ComboBox comboBox2;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox comboBox_To;
+        private System.Windows.Forms.ComboBox comboBox_From;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button button1;
@@ -294,6 +416,17 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.Button B_GridModiCancel;
+        private System.Windows.Forms.Button B_GridModiValide;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ComboBox Combo_Block;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox T_NumBlock;
+        private System.Windows.Forms.Button B_Admin;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem 修改ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 删除ToolStripMenuItem;
     }
 }
 

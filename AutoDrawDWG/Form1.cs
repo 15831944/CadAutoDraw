@@ -15,6 +15,91 @@ namespace AutoDrawDWG
             InitializeComponent();
         }
 
+        public class ListStationAndLocation
+        {
+            private string id = string.Empty;
+            private string name = string.Empty;
+            private string location = string.Empty;
+            
+            //可以根据自己的需求继续添加,如：private Int32 m_Index；
+
+            public ListStationAndLocation()
+            { }
+            public ListStationAndLocation(string sid, string sname,string slocation)
+            {
+                id = sid;
+                name = sname;
+                location = slocation;
+            }
+            public override string ToString()
+            {
+                return this.name;
+            }
+
+            public string ID
+            {
+                get
+                {
+                    return this.id;
+                }
+                set
+                {
+                    this.id = value;
+                }
+            }
+            public string Name
+            {
+                get
+                {
+                    return this.name;
+                }
+                set
+                {
+                    this.name = value;
+                }
+            }
+            public string Location
+            {
+                get
+                {
+                    return this.location;
+                }
+                set
+                {
+                    this.location = value;
+                }
+            }
+        }
+
+        public class BinoStation
+        {
+            private ListStationAndLocation _fromStation;
+            private ListStationAndLocation _toStation;
+
+            public ListStationAndLocation FromStation
+            {
+                get { return this._fromStation; }
+                set { this._fromStation = value; }
+            }
+
+            public ListStationAndLocation ToStation
+            {
+                get { return this._toStation; }
+                set { this._toStation = value; }
+            }
+
+            public BinoStation()
+            {
+
+            }
+
+            public BinoStation(ListStationAndLocation fromStation, ListStationAndLocation toStation)
+            {
+                this._fromStation = fromStation;
+                this._toStation = toStation;
+            }
+        }
+
         string ProjectName;
         string addStation = "";
         Dictionary<string,string> ListStation = new Dictionary<string,string>();
@@ -24,7 +109,9 @@ namespace AutoDrawDWG
         DataTable inforTable;
         DataColumn stationID;
         DataSet DS_EditStation = new DataSet();
-
+        
+        List<ListStationAndLocation> list_StationAndLocation = new List<ListStationAndLocation>();
+        List<BinoStation> list_BinoStation = new List<BinoStation>();
 
         private void B_Valide_Click(object sender, EventArgs e)
         {
@@ -51,7 +138,7 @@ namespace AutoDrawDWG
                 }
                 this.Text = "绘制" + ProjectName + "线";
 
-                this.Size = new Size(700, 400);
+                this.Size = new Size(700, 420);
                 MainGroupBox.Visible = true;
             }
         }
@@ -75,15 +162,20 @@ namespace AutoDrawDWG
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            this.Size = new Size(223, 88);
+            this.Size = new Size(223, 100);
 
             DS_Station = new DataSet("StationInfo");
             inforTable = DS_Station.Tables.Add("StationAndInfo");
-            //stationID = inforTable.Columns.Add("StationID", typeof(Int32));
-            inforTable.Columns.Add("StationName", typeof(string));
-            inforTable.Columns.Add("DistanceMark", typeof(string));
+            //DataColumn idColumn = new DataColumn("id",         Type.GetType("System.Int32"),"");
+            //idColumn.AutoIncrement=true;
+            stationID = inforTable.Columns.Add("ID", typeof(Int32));
+            stationID.AutoIncrement = true;
+
+            inforTable.Columns.Add("站名", typeof(string));
+            inforTable.Columns.Add("里程", typeof(string));
 
             //inforTable.PrimaryKey = new DataColumn[] { stationID };
+
         }
 
         private void B_AddSt_Click(object sender, EventArgs e)
@@ -111,39 +203,27 @@ namespace AutoDrawDWG
 
                     if (isInTheList == false)
                     {
-
-
-                        DataRow dr = DS_Station.Tables["StationAndInfo"].NewRow();
-                        //dr["StationID"] = DS_Station.Tables["StationAndInfo"].Rows.Count + 1;
-                        dr["StationName"] = T_AddSt.Text.ToString().Replace(" ", "");
-                        dr["DistanceMark"] = T_StaLoc.Text.ToString().Replace(" ", "").ToUpper();
-
-                        DS_Station.Tables["StationAndInfo"].Rows.Add(dr);
-
+                        //在dataset中添加数据
+                        addData(T_AddSt.Text.ToString().Replace(" ", ""), T_StaLoc.Text.ToString().Replace(" ", "").ToUpper());
+                      
                         dataGridView1.DataSource = DS_Station.Tables["StationAndInfo"];
-                        //dataGridView1.DataSource = null;
-                        //dataGridView1.DataSource = DS_Station.Tables["StationAndInfo"];
 
-                        L_AddSt.Items.Add(T_AddSt.Text.ToString().Replace(" ", "") + "," + T_StaLoc.Text.ToString().Replace(" ", "").ToUpper());
+                        //L_AddSt.Items.Add(T_AddSt.Text.ToString().Replace(" ", "") + "," + T_StaLoc.Text.ToString().Replace(" ", "").ToUpper());
                         //
                         ListStation.Add(T_AddSt.Text.ToString().Replace(" ", ""), T_StaLoc.Text.ToString().Replace(" ", "").ToUpper());
                         isEditStation.Add(T_AddSt.Text.ToString().Replace(" ", ""), T_StaLoc.Text.ToString().Replace(" ", "").ToUpper());
-                        //dataGridView1.Columns[0].HeaderText = "站名";
-                        //dataGridView1.Columns[1].HeaderText = "里程";
 
-                        BindingSource _bsSomeList = new BindingSource();
-                        _bsSomeList.DataSource = ListStation;
-                        comboBox1.DataSource = null;
-                        comboBox1.Items.Clear();
-                        comboBox1.DataSource = _bsSomeList;
-                        //comboBox1.ValueMember = "StationName";
+                        ListStationAndLocation StationAndLocation = new ListStationAndLocation(list_StationAndLocation.Count.ToString(), T_AddSt.Text.ToString().Replace(" ", ""), T_StaLoc.Text.ToString().Replace(" ", "").ToUpper());
+                        list_StationAndLocation.Add(StationAndLocation);
 
+                        this.comboBox_From.Items.Add(StationAndLocation);
+                        this.comboBox_From.DisplayMember = "Name";
+                        this.comboBox_From.ValueMember = "Location";
 
-                        BindingSource _bsSomeList2 = new BindingSource();
-                        _bsSomeList2.DataSource = ListStation;
-                        comboBox2.DataSource = null;
-                        comboBox2.Items.Clear();
-                        comboBox2.DataSource = _bsSomeList2;
+                        this.comboBox_To.Items.Add(StationAndLocation);
+                        this.comboBox_To.DisplayMember = "Name";
+                        this.comboBox_To.ValueMember = "Location";
+
                         
                         if (groupBox1.Visible == false)
                         {
@@ -164,14 +244,11 @@ namespace AutoDrawDWG
             }
         }
 
-        private void comboBox1_DataSourceChanged(object sender, EventArgs e)
-        {
-            //throw new NotImplementedException();
-        }
+
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            comboBox1.Text = comboBox1.SelectedItem.ToString();
+            //comboBox_From.Text = comboBox_From.SelectedItem.ToString();
                 //MessageBox.Show(comboBox1.SelectedItem.ToString());
         }
 
@@ -185,7 +262,118 @@ namespace AutoDrawDWG
             //MessageBox.Show(dataGridView1.SelectedColumns.+" ","1");
         }
 
+        private void addData(string name, string location)
+        {
+            DataRow dr = DS_Station.Tables["StationAndInfo"].NewRow();
 
+            dr["站名"] = name;
+            dr["里程"] = location;
+
+            DS_Station.Tables["StationAndInfo"].Rows.Add(dr);
+
+            DS_Station.AcceptChanges();
+        }
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (DS_Station.HasChanges(DataRowState.Modified | DataRowState.Added) && DS_Station.HasErrors)
+            {
+
+            }
+
+            /*
+            DataSet tempDataSet = DS_Station.GetChanges(DataRowState.Modified);
+            DataTable dataChanges = DS_Station.Tables[0].GetChanges();
+            DataSet dsSave = new DataSet();
+            dsSave.Tables.Add(dataChanges.Copy());
+
+            if (dsSave != null)
+            {
+
+            }
+            else
+            {
+                MessageBox.Show("没有数据需要保存");
+            }*/
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            //T_NumBlock.Text = comboBox_From.SelectedItem.ToString() + "--" + comboBox_To.SelectedItem.ToString();
+            if (comboBox_From.SelectedItem.ToString() != comboBox_To.SelectedItem.ToString())
+            {
+                //todo
+                BinoStation binoStation = new BinoStation(list_StationAndLocation[comboBox_From.SelectedIndex], list_StationAndLocation[comboBox_To.SelectedIndex]);
+                list_BinoStation.Add(binoStation);
+
+                //List<ListStationAndLocation>
+                refreshListBox(list_BinoStation);
+                
+            }
+
+        }
+
+        private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
+        {
+
+        }
+
+        private void 删除ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult messageboxResult = MessageBox.Show("确认删除?", "注意", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
+            if (messageboxResult == DialogResult.Yes)
+            {
+                //int posindex = L_AddSt.IndexFromPoint(new Point(e.X, e.Y));
+                list_BinoStation.RemoveAt(L_AddSt.SelectedIndex);
+                refreshListBox(list_BinoStation);
+            }
+        }
+
+        private void 修改ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //list_BinoStation[L_AddSt.SelectedIndex];
+            using (FormModif fM = new FormModif(L_AddSt.SelectedIndex, list_BinoStation[L_AddSt.SelectedIndex]))
+            {
+                fM.changeValues += fM_changeValues;
+                fM.ShowDialog();
+            }
+        }
+
+        void fM_changeValues(object sender, EventArgs e)
+        {
+            FormModif f2 = (FormModif)sender;
+            FormModif.index_BinoStation a = f2.Form2Value;
+            list_BinoStation[a.index].FromStation.Name = a.biStation.FromStation.Name;
+            list_BinoStation[a.index].FromStation.Location = a.biStation.FromStation.Location;
+            list_BinoStation[a.index].ToStation.Name = a.biStation.ToStation.Name;
+            list_BinoStation[a.index].ToStation.Location = a.biStation.ToStation.Location;
+            refreshListBox(list_BinoStation);
+            //throw new NotImplementedException();
+        }
+
+        private void refreshListBox(List<BinoStation> listElements)
+        {
+            L_AddSt.Items.Clear();
+            //L_AddSt.Items.Add(comboBox_From.SelectedItem.ToString() + "--" + comboBox_To.SelectedItem.ToString());
+            foreach (BinoStation bStation in listElements)
+            {
+                L_AddSt.Items.Add(bStation.FromStation.Name.ToString() + ";" + bStation.FromStation.Location.ToString() + "  ---  " + bStation.ToStation.Name.ToString() + ";" + bStation.ToStation.Location.ToString());
+            }
+        }
+
+        private void L_AddSt_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                int posindex = L_AddSt.IndexFromPoint(new Point(e.X, e.Y));
+                L_AddSt.ContextMenuStrip = null;
+                if (posindex >= 0 && posindex < L_AddSt.Items.Count)
+                {
+                    L_AddSt.SelectedIndex = posindex;
+                    contextMenuStrip1.Show(L_AddSt, new Point(e.X, e.Y));
+                }
+            }
+            L_AddSt.Refresh();
+        }
         
     }
 }
