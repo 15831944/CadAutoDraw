@@ -374,6 +374,11 @@ namespace AutoDrawDWG
             }
             L_AddSt.Refresh();
         }
+
+        private void B_Admin_Click(object sender, EventArgs e)
+        {
+
+        }
         
     }
 }

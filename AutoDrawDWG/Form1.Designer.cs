@@ -362,6 +362,7 @@
             this.B_Admin.TabIndex = 5;
             this.B_Admin.Text = "设置块";
             this.B_Admin.UseVisualStyleBackColor = true;
+            this.B_Admin.Click += new System.EventHandler(this.B_Admin_Click);
             // 
             // Form1
             // 
