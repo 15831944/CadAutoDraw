@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoDrawDWG", "AutoDrawDWG\AutoDrawDWG.csproj", "{BEC68FDA-151C-44BC-981F-94905D3D41FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CadBlockReader", "CadBlockReader\CadBlockReader.csproj", "{374C38BA-5751-4475-A4CC-9E277709F0B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjetStarter", "ProjetStarter\ProjetStarter.csproj", "{43788709-C5E8-4007-980D-9E5AB12F37A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{BEC68FDA-151C-44BC-981F-94905D3D41FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BEC68FDA-151C-44BC-981F-94905D3D41FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BEC68FDA-151C-44BC-981F-94905D3D41FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{374C38BA-5751-4475-A4CC-9E277709F0B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{374C38BA-5751-4475-A4CC-9E277709F0B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{374C38BA-5751-4475-A4CC-9E277709F0B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{374C38BA-5751-4475-A4CC-9E277709F0B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43788709-C5E8-4007-980D-9E5AB12F37A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43788709-C5E8-4007-980D-9E5AB12F37A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43788709-C5E8-4007-980D-9E5AB12F37A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43788709-C5E8-4007-980D-9E5AB12F37A6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

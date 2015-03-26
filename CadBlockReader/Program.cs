@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace AutoDrawDWG
+namespace CadBlockReader
 {
     static class Program
     {
@@ -14,9 +16,7 @@ namespace AutoDrawDWG
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            ProjetStarter ps = new ProjetStarter();
-            ps.starter();
-            //Application.Run(new Form1());
+            Application.Run(new Form1());
         }
     }
 }

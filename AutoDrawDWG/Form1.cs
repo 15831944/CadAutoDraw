@@ -100,6 +100,9 @@ namespace AutoDrawDWG
             }
         }
 
+        //文件名和文件格式。
+        string NameAndExtention;
+
         string ProjectName;
         string addStation = "";
         Dictionary<string,string> ListStation = new Dictionary<string,string>();
@@ -124,7 +127,7 @@ namespace AutoDrawDWG
                     fileDialog.Filter = "cad|*.dwg|所有文件(*.*)|*.*";
                     if (fileDialog.ShowDialog() == DialogResult.OK)
                     {
-                        string NameAndExtention = fileDialog.FileName;
+                        NameAndExtention = fileDialog.FileName;
 
                         string[] filePathAndExtentions = NameAndExtention.Split(new[] { "\\" }, StringSplitOptions.None);
                         string fileNameAndExtention = filePathAndExtentions[filePathAndExtentions.Length - 1];
@@ -378,6 +381,9 @@ namespace AutoDrawDWG
         private void B_Admin_Click(object sender, EventArgs e)
         {
 
+            BlockEditeur BE = new BlockEditeur(NameAndExtention);
+            BE.Owner = this;
+            BE.ShowDialog();
         }
         
     }
