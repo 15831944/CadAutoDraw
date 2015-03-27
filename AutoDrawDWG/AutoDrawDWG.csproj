@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{BEC68FDA-151C-44BC-981F-94905D3D41FF}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AutoDrawDWG</RootNamespace>
     <AssemblyName>AutoDrawDWG</AssemblyName>
@@ -56,8 +56,9 @@
   <PropertyGroup>
     <ManifestKeyFile>AutoDrawDWG_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
+  <PropertyGroup />
   <PropertyGroup>
-    <NoWin32Manifest>true</NoWin32Manifest>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="acdbmgd">
@@ -67,6 +68,9 @@
     <Reference Include="acmgd">
       <HintPath>..\..\..\..\..\..\..\Program Files\AutoCAD 2008\acmgd.dll</HintPath>
       <Private>False</Private>
+    </Reference>
+    <Reference Include="acmgdinternal">
+      <HintPath>..\..\..\..\..\..\..\Program Files\AutoCAD 2008\acmgdinternal.dll</HintPath>
     </Reference>
     <Reference Include="DotNetARX">
       <HintPath>..\..\..\..\..\Desktop\DotNetARX\2007\bin\Debug\DotNetARX.dll</HintPath>

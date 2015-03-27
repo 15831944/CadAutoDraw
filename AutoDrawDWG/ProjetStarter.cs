@@ -16,21 +16,20 @@ namespace AutoDrawDWG
         //private MainForm form;
         Editor ed = Application.DocumentManager.MdiActiveDocument.Editor;
 
-        
+        Form1 form;
         [CommandMethod("AutoDrawer")]
         public void starter()
         {
-            using (Form1 form = new Form1())
-            {
-                Application.ShowModelessDialog(form);  //显示非模态对话框 
-            }
-            /*
             if (form == null)
             {
                 form = new Form1();
                 Application.ShowModelessDialog(form);  //显示非模态对话框 
             }
-            else if (form.Visible == false && form.IsDisposed == false)
+            else
+            {
+                form.Activate();
+            }
+            /*else if (form.Visible == false && form.IsDisposed == false)
             {
                 form.Visible = true;
             }

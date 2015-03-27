@@ -14,9 +14,15 @@ namespace AutoDrawDWG
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            
+#if debug
+            //Application.Run(new Form1());
             ProjetStarter ps = new ProjetStarter();
             ps.starter();
-            //Application.Run(new Form1());
+#else
+
+            Application.Run(new Form1());
+#endif
         }
     }
 }
