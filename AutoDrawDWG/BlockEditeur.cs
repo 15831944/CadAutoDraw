@@ -21,24 +21,52 @@ namespace AutoDrawDWG
         {
             InitializeComponent();
             FilePath = filePath;
-            label1.Text = FilePath;
-            label1.Location = new Point((this.Size.Width - label1.Size.Width) / 2, label1.Location.Y);
+            
+            T_FilePath.Text = FilePath;
         }
 
         private void BlockEditeur_ResizeEnd(object sender, EventArgs e)
         {
-            label1.Location = new Point((this.Size.Width - label1.Size.Width) / 2, label1.Location.Y);
+
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        string currentFilePath = string.Empty;
+        string currentFileName = string.Empty;
+        private void B_ReadFile_Click(object sender, EventArgs e)
         {
-            //DotNetARX.BlockTools.ImportBlocksFromDwg(FilePath,)
+            using (OpenFileDialog fileDialog = new OpenFileDialog())
+            {
+                fileDialog.Multiselect = false;
+                fileDialog.Title = "请选择文件.";
+                fileDialog.Filter = "cad|*.dwg|所有文件(*.*)|*.*";
+                if (fileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    if (currentFilePath == "" || currentFilePath == string.Empty || currentFilePath != fileDialog.FileName)
+                    {
+                        currentFilePath = fileDialog.FileName;
+
+                        T_FilePath.Text = currentFilePath;
+
+                        string[] filePathAndExtentions = currentFilePath.Split(new[] { "\\" }, StringSplitOptions.None);
+                        currentFileName = filePathAndExtentions[filePathAndExtentions.Length - 1];
+
+                        this.toolStripStatusLabel1.Text = "已选择：" + currentFileName;
+
+                        string[] fileNameAndExtentions = currentFileName.Split(new[] { "." }, StringSplitOptions.None);
+
+                        string fileName = fileNameAndExtentions[0];
+                    }
+                }
+
+            }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void B_ReadBlock_Click(object sender, EventArgs e)
         {
             GenerateBlockPreview();
         }
+
+        
         /// DocumentLock m_DocumentLock = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LockDocument();
         ///  代码...
         /// m_DocumentLock.Dispose();
@@ -71,6 +99,8 @@ namespace AutoDrawDWG
                         BlockTableRecord btr = (BlockTableRecord)trans.GetObject(blockRecordId, OpenMode.ForRead);
                         // 如果是匿名块、布局块及没有预览图形的块，则返回
                         if (btr.IsAnonymous || btr.IsLayout || !btr.HasPreviewIcon) continue;
+
+                        #region 生成bitmap
                         Bitmap preview;
                         try
                         {
@@ -82,11 +112,17 @@ namespace AutoDrawDWG
 
                             preview = btr.PreviewIcon; // 适用于AutoCAD 2009及以上版本
                         }
-                        
+                        #endregion
+
+                        #region 在指定文件中读写块
+
+                        #endregion
+
                         preview.Save(path + "\\" + btr.Name + ".bmp"); // 保存块预览图案
                     }
                     trans.Commit();
                     m_DocumentLock.Dispose();
+                    this.toolStripStatusLabel1.Text = currentFileName + "块读取成功.";
                 }
                 catch (Exception  ee)
                 {
@@ -96,5 +132,14 @@ namespace AutoDrawDWG
                 
             }
         }
+
+        private void BlockEditeur_Load(object sender, EventArgs e)
+        {
+
+        }
+
+
+
+
     }
 }

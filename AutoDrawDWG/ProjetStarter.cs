@@ -20,6 +20,7 @@ namespace AutoDrawDWG
         [CommandMethod("AutoDrawer")]
         public void starter()
         {
+            ed.WriteMessage(DateTime.Now.ToShortDateString() + "AutoDrawer功能载入成功.");
             if (form == null)
             {
                 form = new Form1();
