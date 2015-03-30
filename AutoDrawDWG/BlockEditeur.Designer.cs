@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.B_ReadFile = new System.Windows.Forms.Button();
+            this.B_ChoisirFile = new System.Windows.Forms.Button();
             this.T_FilePath = new System.Windows.Forms.TextBox();
             this.B_ReadBlock = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
@@ -36,15 +36,15 @@
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // B_ReadFile
+            // B_ChoisirFile
             // 
-            this.B_ReadFile.Location = new System.Drawing.Point(197, 12);
-            this.B_ReadFile.Name = "B_ReadFile";
-            this.B_ReadFile.Size = new System.Drawing.Size(75, 23);
-            this.B_ReadFile.TabIndex = 0;
-            this.B_ReadFile.Text = "读取文件";
-            this.B_ReadFile.UseVisualStyleBackColor = true;
-            this.B_ReadFile.Click += new System.EventHandler(this.B_ReadFile_Click);
+            this.B_ChoisirFile.Location = new System.Drawing.Point(197, 12);
+            this.B_ChoisirFile.Name = "B_ChoisirFile";
+            this.B_ChoisirFile.Size = new System.Drawing.Size(75, 23);
+            this.B_ChoisirFile.TabIndex = 0;
+            this.B_ChoisirFile.Text = "选择文件";
+            this.B_ChoisirFile.UseVisualStyleBackColor = true;
+            this.B_ChoisirFile.Click += new System.EventHandler(this.B_ChoisirFile_Click);
             // 
             // T_FilePath
             // 
@@ -87,7 +87,7 @@
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.B_ReadBlock);
             this.Controls.Add(this.T_FilePath);
-            this.Controls.Add(this.B_ReadFile);
+            this.Controls.Add(this.B_ChoisirFile);
             this.Name = "BlockEditeur";
             this.Text = "块编辑";
             this.Load += new System.EventHandler(this.BlockEditeur_Load);
@@ -101,7 +101,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Button B_ReadFile;
+        private System.Windows.Forms.Button B_ChoisirFile;
         private System.Windows.Forms.TextBox T_FilePath;
         private System.Windows.Forms.Button B_ReadBlock;
         private System.Windows.Forms.StatusStrip statusStrip1;

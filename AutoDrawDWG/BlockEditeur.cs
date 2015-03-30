@@ -16,12 +16,16 @@ namespace AutoDrawDWG
 {
     public partial class BlockEditeur : Form
     {
+        //读取块源文件
         string FilePath = null;
-        public BlockEditeur(string filePath)
+        //块文件储存路径
+        string BlockFilePath = string.Empty;
+        public BlockEditeur(string filePath,string BlockPath)
         {
             InitializeComponent();
             FilePath = filePath;
-            
+            BlockFilePath = BlockPath;
+
             T_FilePath.Text = FilePath;
         }
 
@@ -32,7 +36,14 @@ namespace AutoDrawDWG
 
         string currentFilePath = string.Empty;
         string currentFileName = string.Empty;
-        private void B_ReadFile_Click(object sender, EventArgs e)
+
+        private void B_ReadBlock_Click(object sender, EventArgs e)
+        {
+            GenerateBlockPreview();
+        }
+
+        string NameAndExtention = string.Empty;
+        private void B_ChoisirFile_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog fileDialog = new OpenFileDialog())
             {
@@ -41,31 +52,19 @@ namespace AutoDrawDWG
                 fileDialog.Filter = "cad|*.dwg|所有文件(*.*)|*.*";
                 if (fileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    if (currentFilePath == "" || currentFilePath == string.Empty || currentFilePath != fileDialog.FileName)
-                    {
-                        currentFilePath = fileDialog.FileName;
+                    NameAndExtention = fileDialog.FileName;
 
-                        T_FilePath.Text = currentFilePath;
+                    string[] filePathAndExtentions = NameAndExtention.Split(new[] { "\\" }, StringSplitOptions.None);
+                    string fileNameAndExtention = filePathAndExtentions[filePathAndExtentions.Length - 1];
 
-                        string[] filePathAndExtentions = currentFilePath.Split(new[] { "\\" }, StringSplitOptions.None);
-                        currentFileName = filePathAndExtentions[filePathAndExtentions.Length - 1];
+                    string[] fileNameAndExtentions = fileNameAndExtention.Split(new[] { "." }, StringSplitOptions.None);
+                    string fileName = fileNameAndExtentions[0];
 
-                        this.toolStripStatusLabel1.Text = "已选择：" + currentFileName;
-
-                        string[] fileNameAndExtentions = currentFileName.Split(new[] { "." }, StringSplitOptions.None);
-
-                        string fileName = fileNameAndExtentions[0];
-                    }
+                    T_FilePath.Text = NameAndExtention;
                 }
 
             }
         }
-
-        private void B_ReadBlock_Click(object sender, EventArgs e)
-        {
-            GenerateBlockPreview();
-        }
-
         
         /// DocumentLock m_DocumentLock = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LockDocument();
         ///  代码...
@@ -82,7 +81,11 @@ namespace AutoDrawDWG
             string filename = FilePath;
             // 在C盘根目录下创建一个临时文件夹，用来存放文件中的块预览图标
             string path = "C:\\Temp";
-            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+
             using (Transaction trans = db.TransactionManager.StartTransaction())
             {
                 try
@@ -124,10 +127,14 @@ namespace AutoDrawDWG
                     m_DocumentLock.Dispose();
                     this.toolStripStatusLabel1.Text = currentFileName + "块读取成功.";
                 }
-                catch (Exception  ee)
+                catch (Autodesk.AutoCAD.Runtime.Exception  ee)
                 {
 
-                    MessageBox.Show("" + ee, "error");
+                    ed.WriteMessage("错误！\n 错误类型：" + ee.ErrorStatus.ToString() + "\n 错误信息" + ee.Message);
+                }
+                finally
+                {
+                    ed.WriteMessage("\n缩略图以生成.");
                 }
                 
             }
@@ -137,6 +144,8 @@ namespace AutoDrawDWG
         {
 
         }
+
+
 
 
 

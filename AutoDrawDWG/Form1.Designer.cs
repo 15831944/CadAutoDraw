@@ -58,9 +58,12 @@
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.B_Admin = new System.Windows.Forms.Button();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.B_Admin = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.块库文件储存位置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MainGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
@@ -68,11 +71,12 @@
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.statusStrip1.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // T_ProjectName
             // 
-            this.T_ProjectName.Location = new System.Drawing.Point(12, 12);
+            this.T_ProjectName.Location = new System.Drawing.Point(12, 27);
             this.T_ProjectName.Name = "T_ProjectName";
             this.T_ProjectName.Size = new System.Drawing.Size(100, 21);
             this.T_ProjectName.TabIndex = 0;
@@ -80,7 +84,7 @@
             // 
             // B_Valide
             // 
-            this.B_Valide.Location = new System.Drawing.Point(118, 12);
+            this.B_Valide.Location = new System.Drawing.Point(118, 27);
             this.B_Valide.Name = "B_Valide";
             this.B_Valide.Size = new System.Drawing.Size(75, 23);
             this.B_Valide.TabIndex = 1;
@@ -98,7 +102,7 @@
             this.MainGroupBox.Controls.Add(this.label3);
             this.MainGroupBox.Controls.Add(this.B_AddSt);
             this.MainGroupBox.Controls.Add(this.T_AddSt);
-            this.MainGroupBox.Location = new System.Drawing.Point(12, 41);
+            this.MainGroupBox.Location = new System.Drawing.Point(12, 56);
             this.MainGroupBox.Name = "MainGroupBox";
             this.MainGroupBox.Size = new System.Drawing.Size(210, 290);
             this.MainGroupBox.TabIndex = 2;
@@ -183,7 +187,7 @@
             // 
             this.L_AddSt.FormattingEnabled = true;
             this.L_AddSt.ItemHeight = 12;
-            this.L_AddSt.Location = new System.Drawing.Point(436, 55);
+            this.L_AddSt.Location = new System.Drawing.Point(436, 70);
             this.L_AddSt.Name = "L_AddSt";
             this.L_AddSt.Size = new System.Drawing.Size(189, 268);
             this.L_AddSt.TabIndex = 3;
@@ -215,7 +219,7 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.panel1);
-            this.groupBox1.Location = new System.Drawing.Point(228, 41);
+            this.groupBox1.Location = new System.Drawing.Point(228, 56);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(205, 290);
             this.groupBox1.TabIndex = 3;
@@ -354,21 +358,11 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 327);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 378);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(637, 22);
             this.statusStrip1.TabIndex = 4;
             this.statusStrip1.Text = "statusStrip1";
-            // 
-            // B_Admin
-            // 
-            this.B_Admin.Location = new System.Drawing.Point(568, 5);
-            this.B_Admin.Name = "B_Admin";
-            this.B_Admin.Size = new System.Drawing.Size(57, 37);
-            this.B_Admin.TabIndex = 5;
-            this.B_Admin.Text = "设置块";
-            this.B_Admin.UseVisualStyleBackColor = true;
-            this.B_Admin.Click += new System.EventHandler(this.B_Admin_Click);
             // 
             // toolStripStatusLabel1
             // 
@@ -376,9 +370,44 @@
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(131, 17);
             this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
             // 
+            // B_Admin
+            // 
+            this.B_Admin.Location = new System.Drawing.Point(568, 27);
+            this.B_Admin.Name = "B_Admin";
+            this.B_Admin.Size = new System.Drawing.Size(57, 37);
+            this.B_Admin.TabIndex = 5;
+            this.B_Admin.Text = "设置块";
+            this.B_Admin.UseVisualStyleBackColor = true;
+            this.B_Admin.Click += new System.EventHandler(this.B_Admin_Click);
+            // 
             // timer1
             // 
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.设置ToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(637, 25);
+            this.menuStrip1.TabIndex = 6;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // 设置ToolStripMenuItem
+            // 
+            this.设置ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.块库文件储存位置ToolStripMenuItem});
+            this.设置ToolStripMenuItem.Name = "设置ToolStripMenuItem";
+            this.设置ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
+            this.设置ToolStripMenuItem.Text = "设置";
+            // 
+            // 块库文件储存位置ToolStripMenuItem
+            // 
+            this.块库文件储存位置ToolStripMenuItem.Name = "块库文件储存位置ToolStripMenuItem";
+            this.块库文件储存位置ToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.块库文件储存位置ToolStripMenuItem.Text = "块库文件储存位置";
+            this.块库文件储存位置ToolStripMenuItem.Click += new System.EventHandler(this.块库文件储存位置ToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -386,14 +415,16 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(637, 349);
+            this.ClientSize = new System.Drawing.Size(637, 400);
             this.Controls.Add(this.B_Admin);
             this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.MainGroupBox);
             this.Controls.Add(this.L_AddSt);
             this.Controls.Add(this.B_Valide);
             this.Controls.Add(this.T_ProjectName);
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Form1";
@@ -409,6 +440,8 @@
             this.panel2.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -448,6 +481,9 @@
         private System.Windows.Forms.ToolStripMenuItem 删除ToolStripMenuItem;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem 设置ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 块库文件储存位置ToolStripMenuItem;
     }
 }
 
