@@ -4,14 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Text;
-using System.IO;
 using System.Windows.Forms;
-
-using DotNetARX;
-using Autodesk.AutoCAD.EditorInput;
-using Autodesk.AutoCAD.ApplicationServices;
-using Autodesk.AutoCAD.DatabaseServices;
-using Autodesk.AutoCAD.Geometry;
 
 namespace AutoDrawDWG
 {
@@ -116,8 +109,8 @@ namespace AutoDrawDWG
         Dictionary<string,string> isEditStation = new Dictionary<string,string>();
 
         DataSet DS_Station;
-        System.Data.DataTable inforTable;
-        System.Data.DataColumn stationID;
+        DataTable inforTable;
+        DataColumn stationID;
         DataSet DS_EditStation = new DataSet();
         
         List<ListStationAndLocation> list_StationAndLocation = new List<ListStationAndLocation>();
@@ -125,30 +118,32 @@ namespace AutoDrawDWG
 
         private void B_Valide_Click(object sender, EventArgs e)
         {
-            using (OpenFileDialog fileDialog = new OpenFileDialog())
+            //if (T_ProjectName.Text == "")
             {
-                fileDialog.Multiselect = false;
-                fileDialog.Title = "请选择文件.";
-                fileDialog.Filter = "cad|*.dwg|所有文件(*.*)|*.*";
-                if (fileDialog.ShowDialog() == DialogResult.OK)
+                using (OpenFileDialog fileDialog = new OpenFileDialog())
                 {
-                    NameAndExtention = fileDialog.FileName;
+                    fileDialog.Multiselect = false;
+                    fileDialog.Title = "请选择文件.";
+                    fileDialog.Filter = "cad|*.dwg|所有文件(*.*)|*.*";
+                    if (fileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        NameAndExtention = fileDialog.FileName;
 
-                    string[] filePathAndExtentions = NameAndExtention.Split(new[] { "\\" }, StringSplitOptions.None);
-                    string fileNameAndExtention = filePathAndExtentions[filePathAndExtentions.Length - 1];
+                        string[] filePathAndExtentions = NameAndExtention.Split(new[] { "\\" }, StringSplitOptions.None);
+                        string fileNameAndExtention = filePathAndExtentions[filePathAndExtentions.Length - 1];
 
-                    string[] fileNameAndExtentions = fileNameAndExtention.Split(new[] { "." }, StringSplitOptions.None);
-                    string fileName = fileNameAndExtentions[0];
-                    T_ProjectName.Text = fileName;
-                    ProjectName = fileName;
+                        string[] fileNameAndExtentions = fileNameAndExtention.Split(new[] { "." }, StringSplitOptions.None);
+                        string fileName = fileNameAndExtentions[0];
+                        T_ProjectName.Text = fileName;
+                        ProjectName = fileName;
+                    }
+
                 }
+                this.Text = "绘制" + ProjectName + "线";
 
+                this.Size = new Size(700, 420);
+                MainGroupBox.Visible = true;
             }
-            this.Text = "绘制" + ProjectName + "线";
-
-            this.Size = new Size(700, 420);
-            MainGroupBox.Visible = true;
-            
         }
 
 
@@ -387,7 +382,7 @@ namespace AutoDrawDWG
         private void B_Admin_Click(object sender, EventArgs e)
         {
 
-            BlockEditeur BE = new BlockEditeur(NameAndExtention, BlockDictionaryPath);
+            BlockEditeur BE = new BlockEditeur(NameAndExtention);
             BE.Owner = this;
             BE.ShowDialog();
         }
@@ -396,94 +391,6 @@ namespace AutoDrawDWG
         {
             this.toolStripStatusLabel1.Text = DateTime.Now.ToString();
         }
-
-        public string BlockDictionaryPath = string.Empty;
-        private void 块库文件储存位置ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            using (SaveFileDialog fileDialog = new SaveFileDialog())
-            {
-                
-                fileDialog.Title = "请选择文件.";
-                fileDialog.Filter = "cad|*.dwg|所有文件(*.*)|*.*";
-                if (fileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    if (!File.Exists(fileDialog.FileName))
-                    {
-                        BlockDictionaryPath = fileDialog.FileName;
-
-                        //生成一个新的cad文件用于储存块
-                        CreateNewDwg();
-
-                        //另存为
-                        ///AC1027 Autocad 2013
-                        ///AC1024 Autocad 2010/2011/2012
-                        ///AC1021 AutoCAD 2007/2008/2009
-                        ///AC1018 AutoCAD 2004/2005/2006
-                        ///AC1015 AutoCAD 2000/2000i/2002
-                        DwgVersion CADversion = DwgVersion.AC1500;
-                        SaveDwg(BlockDictionaryPath, CADversion);
-                        
-                    }
-                    else
-                    {
-                        Editor ed = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.Editor;
-                        ed.WriteMessage("文件已存在.");
-                    }
-
-                }
-
-            }
-        }
-
-        private void CreateNewDwg()
-        {
-            string template = "acad.dwt";//模板
-            DocumentCollection docs = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager;
-            Editor ed = docs.MdiActiveDocument.Editor;
-            Document doc = docs.Add(template);//根据模板创建文档
-            Database db = doc.Database;
-
-            using (doc.LockDocument())//锁定文档
-            {
-                using (Transaction trans = db.TransactionManager.StartTransaction())
-                {
-                    DBText textTitle = new DBText();
-                    textTitle.Position = new Autodesk.AutoCAD.Geometry.Point3d(50, 50, 0);
-                    textTitle.Height = 10;
-                    textTitle.TextString = "块库";
-                    //文字de水平对齐方式为居中
-                    textTitle.HorizontalMode = TextHorizontalMode.TextCenter;
-                    //文字的垂直对齐方式为居中
-                    textTitle.VerticalMode = TextVerticalMode.TextVerticalMid;
-                    //设置文字对齐点
-                    textTitle.AlignmentPoint = textTitle.Position;
-
-                    //
-                    DBText textTime = new DBText();
-                    textTime.Height = 100;
-                    textTime.TextString = "日期;" + DateTime.Now.ToShortDateString();
-                    //文字de水平对齐方式为居中
-                    textTime.HorizontalMode = TextHorizontalMode.TextCenter;
-                    //文字的垂直对齐方式为居中
-                    textTime.VerticalMode = TextVerticalMode.TextVerticalMid;
-                    //对齐点
-                    textTime.AlignmentPoint = new Point3d(50, 35, 0);
-                    db.AddToModelSpace(textTitle, textTime);
-                    trans.Commit();//提交事务处理
-                }
-            }
-        }
-
-        private void SaveDwg(string savePath, DwgVersion versionCAD)
-        {
-            Document doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
-            //获取DWGTITLED系统变量，它指示当前图形是否已命名
-            object tiled = Autodesk.AutoCAD.ApplicationServices.Application.GetSystemVariable("DWGTITLED");
-            if (!doc.Saved()) return;
-            if (Convert.ToInt16(tiled) == 0)//如果图形没有命名
-                doc.Database.SaveAs(savePath, versionCAD);
-            else
-                doc.Save();//如果已经命名则保存
-        }
+        
     }
 }
