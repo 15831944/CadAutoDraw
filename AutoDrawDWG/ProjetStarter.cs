@@ -25,11 +25,12 @@ namespace AutoDrawDWG
             {
                 form = new Form1();
                 Application.ShowModelessDialog(form);  //显示非模态对话框 
+                //Application.ShowModalDialog(form);  //显示非模态对话框 
             }
-            else
-            {
-                form.Activate();
-            }
+            //else
+            //{
+            //    form.Activate();
+            //}
             /*else if (form.Visible == false && form.IsDisposed == false)
             {
                 form.Visible = true;

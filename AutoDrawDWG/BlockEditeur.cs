@@ -75,10 +75,10 @@ namespace AutoDrawDWG
             Database db = HostApplicationServices.WorkingDatabase;
             Editor ed = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.Editor;
             // 提示用户选择文件
-            //PromptFileNameResult result = ed.GetFileNameForOpen("请选择需要预览的文件");
-            //if (result.Status != PromptStatus.OK) return; // 如果未选择，则返回
-            //string filename = result.StringResult; // 获取带有路径的文件名
-            string filename = FilePath;
+            PromptFileNameResult result = ed.GetFileNameForOpen("请选择需要预览的文件");
+            if (result.Status != PromptStatus.OK) return; // 如果未选择，则返回
+            string filename = result.StringResult; // 获取带有路径的文件名
+            filename = FilePath;
             // 在C盘根目录下创建一个临时文件夹，用来存放文件中的块预览图标
             string path = "C:\\Temp";
             if (!Directory.Exists(path))
