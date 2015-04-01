@@ -28,72 +28,60 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.B_ReadFile = new System.Windows.Forms.Button();
-            this.T_FilePath = new System.Windows.Forms.TextBox();
-            this.B_ReadBlock = new System.Windows.Forms.Button();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.statusStrip1.SuspendLayout();
+            this.button1 = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.button2 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // B_ReadFile
+            // button1
             // 
-            this.B_ReadFile.Location = new System.Drawing.Point(197, 12);
-            this.B_ReadFile.Name = "B_ReadFile";
-            this.B_ReadFile.Size = new System.Drawing.Size(75, 23);
-            this.B_ReadFile.TabIndex = 0;
-            this.B_ReadFile.Text = "读取文件";
-            this.B_ReadFile.UseVisualStyleBackColor = true;
-            this.B_ReadFile.Click += new System.EventHandler(this.B_ReadFile_Click);
+            this.button1.Location = new System.Drawing.Point(197, 36);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 0;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // T_FilePath
+            // label1
             // 
-            this.T_FilePath.Location = new System.Drawing.Point(12, 12);
-            this.T_FilePath.Name = "T_FilePath";
-            this.T_FilePath.Size = new System.Drawing.Size(179, 21);
-            this.T_FilePath.TabIndex = 2;
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(106, 9);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(41, 12);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "label1";
             // 
-            // B_ReadBlock
+            // textBox1
             // 
-            this.B_ReadBlock.Location = new System.Drawing.Point(197, 41);
-            this.B_ReadBlock.Name = "B_ReadBlock";
-            this.B_ReadBlock.Size = new System.Drawing.Size(75, 23);
-            this.B_ReadBlock.TabIndex = 3;
-            this.B_ReadBlock.Text = "读取块";
-            this.B_ReadBlock.UseVisualStyleBackColor = true;
-            this.B_ReadBlock.Click += new System.EventHandler(this.B_ReadBlock_Click);
+            this.textBox1.Location = new System.Drawing.Point(12, 38);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(179, 21);
+            this.textBox1.TabIndex = 2;
             // 
-            // statusStrip1
+            // button2
             // 
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 239);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(284, 22);
-            this.statusStrip1.TabIndex = 4;
-            this.statusStrip1.Text = "statusStrip1";
-            // 
-            // toolStripStatusLabel1
-            // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(131, 17);
-            this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
+            this.button2.Location = new System.Drawing.Point(108, 88);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 3;
+            this.button2.Text = "button2";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // BlockEditeur
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 261);
-            this.Controls.Add(this.statusStrip1);
-            this.Controls.Add(this.B_ReadBlock);
-            this.Controls.Add(this.T_FilePath);
-            this.Controls.Add(this.B_ReadFile);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.button1);
             this.Name = "BlockEditeur";
             this.Text = "块编辑";
-            this.Load += new System.EventHandler(this.BlockEditeur_Load);
             this.ResizeEnd += new System.EventHandler(this.BlockEditeur_ResizeEnd);
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -101,10 +89,9 @@
 
         #endregion
 
-        private System.Windows.Forms.Button B_ReadFile;
-        private System.Windows.Forms.TextBox T_FilePath;
-        private System.Windows.Forms.Button B_ReadBlock;
-        private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Button button2;
     }
 }

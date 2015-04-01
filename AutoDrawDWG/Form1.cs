@@ -177,7 +177,6 @@ namespace AutoDrawDWG
             inforTable.Columns.Add("站名", typeof(string));
             inforTable.Columns.Add("里程", typeof(string));
 
-            timer1.Start();
             //inforTable.PrimaryKey = new DataColumn[] { stationID };
 
         }
@@ -385,11 +384,6 @@ namespace AutoDrawDWG
             BlockEditeur BE = new BlockEditeur(NameAndExtention);
             BE.Owner = this;
             BE.ShowDialog();
-        }
-
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            this.toolStripStatusLabel1.Text = DateTime.Now.ToString();
         }
         
     }
