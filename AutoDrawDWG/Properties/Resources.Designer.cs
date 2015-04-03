@@ -59,5 +59,15 @@ namespace AutoDrawDWG.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   查找类似 aaaaa 
+        ///aaa 的本地化字符串。
+        /// </summary>
+        internal static string setting {
+            get {
+                return ResourceManager.GetString("setting", resourceCulture);
+            }
+        }
     }
 }

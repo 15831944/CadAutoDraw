@@ -118,32 +118,30 @@ namespace AutoDrawDWG
 
         private void B_Valide_Click(object sender, EventArgs e)
         {
-            //if (T_ProjectName.Text == "")
+            using (OpenFileDialog fileDialog = new OpenFileDialog())
             {
-                using (OpenFileDialog fileDialog = new OpenFileDialog())
+                fileDialog.Multiselect = false;
+                fileDialog.Title = "请选择文件.";
+                fileDialog.Filter = "cad|*.dwg|所有文件(*.*)|*.*";
+                if (fileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    fileDialog.Multiselect = false;
-                    fileDialog.Title = "请选择文件.";
-                    fileDialog.Filter = "cad|*.dwg|所有文件(*.*)|*.*";
-                    if (fileDialog.ShowDialog() == DialogResult.OK)
-                    {
-                        NameAndExtention = fileDialog.FileName;
+                    NameAndExtention = fileDialog.FileName;
 
-                        string[] filePathAndExtentions = NameAndExtention.Split(new[] { "\\" }, StringSplitOptions.None);
-                        string fileNameAndExtention = filePathAndExtentions[filePathAndExtentions.Length - 1];
+                    string[] filePathAndExtentions = NameAndExtention.Split(new[] { "\\" }, StringSplitOptions.None);
+                    string fileNameAndExtention = filePathAndExtentions[filePathAndExtentions.Length - 1];
 
-                        string[] fileNameAndExtentions = fileNameAndExtention.Split(new[] { "." }, StringSplitOptions.None);
-                        string fileName = fileNameAndExtentions[0];
-                        T_ProjectName.Text = fileName;
-                        ProjectName = fileName;
-                    }
-
+                    string[] fileNameAndExtentions = fileNameAndExtention.Split(new[] { "." }, StringSplitOptions.None);
+                    string fileName = fileNameAndExtentions[0];
+                    T_ProjectName.Text = fileName;
+                    ProjectName = fileName;
                 }
-                this.Text = "绘制" + ProjectName + "线";
 
-                this.Size = new Size(700, 420);
-                MainGroupBox.Visible = true;
             }
+            this.Text = "绘制" + ProjectName + "线";
+
+            this.Size = new Size(700, 420);
+            MainGroupBox.Visible = true;
+            
         }
 
 
@@ -166,7 +164,7 @@ namespace AutoDrawDWG
         private void Form1_Load(object sender, EventArgs e)
         {
             this.Size = new Size(223, 100);
-
+            toolStripStatusLabel1.Text = "";
             DS_Station = new DataSet("StationInfo");
             inforTable = DS_Station.Tables.Add("StationAndInfo");
             //DataColumn idColumn = new DataColumn("id",         Type.GetType("System.Int32"),"");
@@ -384,6 +382,16 @@ namespace AutoDrawDWG
             BlockEditeur BE = new BlockEditeur(NameAndExtention);
             BE.Owner = this;
             BE.ShowDialog();
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            toolStripStatusLabel1.Text = DateTime.Now.ToString();
+        }
+
+        private void 设置储存位置ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
         
     }
