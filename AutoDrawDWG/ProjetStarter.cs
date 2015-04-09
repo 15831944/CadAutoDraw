@@ -8,6 +8,8 @@ using Autodesk.AutoCAD.Geometry;
 using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Runtime;
 
+
+
 namespace AutoDrawDWG
 {
     public class ProjetStarter
@@ -17,19 +19,23 @@ namespace AutoDrawDWG
         Editor ed = Application.DocumentManager.MdiActiveDocument.Editor;
 
         Form1 form;
-        [CommandMethod("AutoDrawer")]
+        [CommandMethod("AutoDrawer", CommandFlags.Session)]
         public void starter()
         {
-            if (form == null)
+            if (form == null || form.IsDisposed)
             {
+                ed.WriteMessage("功能已载入.");
                 form = new Form1();
                 Application.ShowModelessDialog(form);  //显示非模态对话框 
                 //Application.ShowModalDialog(form);  //显示非模态对话框 
+                
             }
-            //else
-            //{
-            //    form.Activate();
-            //}
+
+            else
+            {
+
+                form.Activate();
+            }
             /*else if (form.Visible == false && form.IsDisposed == false)
             {
                 form.Visible = true;

@@ -381,7 +381,8 @@ namespace AutoDrawDWG
 
             BlockEditeur BE = new BlockEditeur(NameAndExtention);
             BE.Owner = this;
-            BE.ShowDialog();
+            //BE.ShowDialog();
+            BE.Show();
         }
 
         private void timer1_Tick(object sender, EventArgs e)
