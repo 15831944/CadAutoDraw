@@ -40,6 +40,7 @@
             this.button2 = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.B_AutoClean = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.listViewMultiSelect = new System.Windows.Forms.CheckBox();
             this.listBox1 = new System.Windows.Forms.ListBox();
@@ -52,7 +53,6 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.B_AutoClean = new System.Windows.Forms.Button();
             this.contextMenuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -135,7 +135,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(194, 316);
+            this.button2.Location = new System.Drawing.Point(207, 316);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 6;
@@ -176,6 +176,16 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "导入块";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // B_AutoClean
+            // 
+            this.B_AutoClean.Location = new System.Drawing.Point(89, 316);
+            this.B_AutoClean.Name = "B_AutoClean";
+            this.B_AutoClean.Size = new System.Drawing.Size(112, 23);
+            this.B_AutoClean.TabIndex = 15;
+            this.B_AutoClean.Text = "清理(还有问题)";
+            this.B_AutoClean.UseVisualStyleBackColor = true;
+            this.B_AutoClean.Click += new System.EventHandler(this.B_AutoClean_Click);
             // 
             // button4
             // 
@@ -284,16 +294,6 @@
             // timer1
             // 
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
-            // B_AutoClean
-            // 
-            this.B_AutoClean.Location = new System.Drawing.Point(89, 316);
-            this.B_AutoClean.Name = "B_AutoClean";
-            this.B_AutoClean.Size = new System.Drawing.Size(75, 23);
-            this.B_AutoClean.TabIndex = 15;
-            this.B_AutoClean.Text = "清理";
-            this.B_AutoClean.UseVisualStyleBackColor = true;
-            this.B_AutoClean.Click += new System.EventHandler(this.B_AutoClean_Click);
             // 
             // BlockEditeur
             // 

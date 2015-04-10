@@ -21,6 +21,42 @@ namespace AutoDrawDWG
 {
     public partial class BlockEditeur : Form
     {
+
+        public class objectBound
+        {
+            private Point3d _DownLeftDownPoint;
+            private Point3d _UpRightPoint;
+
+            private Point3d downLeftPoint
+            {
+                get
+                {
+                    return _DownLeftDownPoint;
+                }
+                set
+                {
+                    _DownLeftDownPoint = value;
+                }
+            }
+            private Point3d upRightPoint
+            {
+                get
+                {
+                    return _UpRightPoint;
+                }
+                set
+                {
+                    _UpRightPoint = value;
+                }
+            }
+
+            public objectBound(Point3d DownLeftPoint, Point3d UpRightPoint)
+            {
+                upRightPoint  = UpRightPoint;
+                downLeftPoint = DownLeftPoint;
+            }
+        }
+
         string[] FilePaths = null;
         Size defSize = new Size(30, 30);
         public BlockEditeur(string filePath)
@@ -176,9 +212,10 @@ namespace AutoDrawDWG
                             preview = btRecord.PreviewIcon; // 适用于AutoCAD 2009及以上版本 
                             preview.Save(path + "\\" + btRecord.Name + "_" + str.ToString() + ".bmp"); // 保存块预览图案
 
+
                             //自动整理图块比例
                             //listBox1.Items.Add(btRecord.Name);
-                            autoBlockScaleFit(btRecord, trans, ed);
+                            autoBlockScaleFit(db, btRecord, trans, ed);
                             
                             //重新生成块
                             //btr.
@@ -187,6 +224,7 @@ namespace AutoDrawDWG
                         }
                         catch (Exception ee)
                         {
+                            trans.Abort();
                             ed.WriteMessage("错误;  " + ee.ToString());
                             //preview = btr.PreviewIcon; // 适用于AutoCAD 2009及以上版本
                         }
@@ -299,53 +337,231 @@ namespace AutoDrawDWG
         }
 
         Dictionary<string, int> typeAndNum = new Dictionary<string, int>();
-        private void autoBlockScaleFit(BlockTableRecord blockTR, Transaction tr, Editor ed)
+        Dictionary<string, double> sizeEntity = new Dictionary<string, double>();
+        public void autoBlockScaleFit(Database db, BlockTableRecord blockTR, Transaction tr)
         {
-            List<string> entType = new List<string>();
-            
-            foreach (ObjectId entId in blockTR)
+            Point3d DownLeft_Point = new Point3d();
+            Point3d UpRight_Point = new Point3d();
+            string compareResult = string.Empty;
+
+            bool started = false;
+            try
             {
-                Entity entSubBlock = (Entity)tr.GetObject(entId, OpenMode.ForWrite);
-
-                if (!typeAndNum.ContainsKey(entSubBlock.GetType().Name.ToString()))
+                string blockName = blockTR.Name;
+                foreach (ObjectId entId in blockTR)
                 {
-                    typeAndNum.Add(entSubBlock.GetType().Name.ToString(), 1);
+                    
+                    DBObject objSubBlock = (DBObject)tr.GetObject(entId, OpenMode.ForWrite);
 
-                }
-                else
-                {
-                    int numType = typeAndNum[entSubBlock.GetType().Name.ToString()];
-                    typeAndNum[entSubBlock.GetType().Name.ToString()] = numType + 1;
-                }
-
-                //
-                Point3d maxPoint=entSubBlock.GeometricExtents.MaxPoint;
-                Point3d minPoint=entSubBlock.GeometricExtents.MinPoint;
-                //
-
-                string[] temp = entSubBlock.GetType().ToString().ToLower().Split(new[] { "." }, StringSplitOptions.None);
-                string type = temp[temp.Length-1];
-                switch (type)
-                {
-                    case("line"):
-                        //entSubBlock.GeometricExtents.MaxPoint
-                        break;
-                    case ("mline"):
-                        //entSubBlock
-                        break;
-                    case ("hatch"):
-                        //entSubBlock
-                        break;
-                    case ("polyline"):
-                        //entSubBlock
-                        break;
-                    case ("circle"):
-                        //entSubBlock
-                        break;
+                    if (started == false)
+                    {
                         
+                        UpRight_Point = objSubBlock.Bounds.Value.MaxPoint;
+                        DownLeft_Point = objSubBlock.Bounds.Value.MinPoint;
+                        started = true;
+                    }
+                    else
+                    {
+                        compare3dPoint(objSubBlock.Bounds.Value.MaxPoint, UpRight_Point, out compareResult);
+                        if (compareResult == "")
+                        {
+
+                        }
+                        compare3dPoint(objSubBlock.Bounds.Value.MinPoint, DownLeft_Point, out compareResult);
+                        if (compareResult == "")
+                        {
+
+                        }
+
+                        
+                    }
                 }
             }
+            catch (Exception)
+            {
+
+            }
+
+        }
+
+        private void compare3dPoint(Point3d pointEntity, Point3d pointRecord,out string resulte)
+        {
+            resulte = "";
+            //左上
+            if ((pointEntity.X < pointRecord.X) && (pointEntity.Y > pointRecord.Y))
+            {
+                resulte = "upleft";
+            }
+            //右上
+            else if ((pointEntity.X > pointRecord.X) && (pointEntity.Y >= pointRecord.Y))
+            {
+                resulte = "upright"; //good
+            }
+            //左下
+            else if ((pointEntity.X < pointRecord.X) && (pointEntity.Y <= pointRecord.Y))
+            {
+                resulte = "downleft"; //good
+            }
+            //右下
+            else if ((pointEntity.X > pointRecord.X) && (pointEntity.Y < pointRecord.Y))
+            {
+                resulte = "downright";
+
+            }
+            //右下
+            else if ((pointEntity.X == pointRecord.X) && (pointEntity.Y == pointRecord.Y))
+            {
+                resulte = "identical";
+
+            }
+            else
+            {
+
+            }
             
+        }
+
+        public void autoBlockScaleFit(Database db, BlockTableRecord blockTR, Transaction tr, Editor ed)
+        {
+            List<string> entType = new List<string>();
+
+            try
+            {
+                string testST = blockTR.Name;
+                foreach (ObjectId entId in blockTR)
+                {
+                    
+                    if (entId != null)
+                    {
+                        Entity entSubBlock = (Entity)tr.GetObject(entId, OpenMode.ForWrite);
+                        //DBObject objSubBlock = (DBObject)tr.GetObject(entId, OpenMode.ForWrite);
+
+
+                        if (!typeAndNum.ContainsKey(entSubBlock.GetType().Name.ToString()))
+                        {
+                            typeAndNum.Add(entSubBlock.GetType().Name.ToString(), 1);
+
+                        }
+                        else
+                        {
+                            int numType = typeAndNum[entSubBlock.GetType().Name.ToString()];
+                            typeAndNum[entSubBlock.GetType().Name.ToString()] = numType + 1;
+                        }
+
+                        //
+                        Point3d maxPoint;
+                        Point3d minPoint;
+                        //Point3d maxPoint1;
+                        //Point3d minPoint1;
+                        if (true)
+                        {
+                            maxPoint = entSubBlock.GeometricExtents.MaxPoint;
+                            minPoint = entSubBlock.GeometricExtents.MinPoint;
+
+                            //maxPoint1 = entSubBlock.Bounds.Value.MaxPoint;
+                            //minPoint1 = entSubBlock.Bounds.Value.MinPoint;
+
+                            /*Polyline c1 = new Polyline();
+                            c1.CreatePolyCircle(new Point2d(maxPoint.X, maxPoint.Y), 5);
+
+                            Polyline c2 = new Polyline();
+                            c2.CreatePolyCircle(new Point2d(minPoint.X, minPoint.Y), 5);
+
+                            db.AddToModelSpace(c1, c2);*/
+                        }
+                        else
+                        {
+
+                        }
+
+
+                        //
+
+                        //
+
+                        //
+
+                        string[] temp = entSubBlock.GetType().ToString().ToLower().Split(new[] { "." }, StringSplitOptions.None);
+                        string type = temp[temp.Length - 1];
+                        switch (type)
+                        {
+                            case ("line"):
+                                //entSubBlock.GeometricExtents.MaxPoint
+                                break;
+                            case ("mline"):
+                                //entSubBlock
+                                break;
+                            case ("hatch"):
+                                //entSubBlock
+                                //entSubBlock.Highlight();
+                                break;
+                            case ("polyline"):
+                                //entSubBlock
+                                break;
+                            case ("circle"):
+                                //entSubBlock
+                                maxPoint = entSubBlock.GeometricExtents.MaxPoint;
+                                minPoint = entSubBlock.GeometricExtents.MinPoint;
+
+                                Polyline c1 = new Polyline();                                
+                                c1.CreatePolyCircle(new Point2d(maxPoint.X, maxPoint.Y), 5);
+                                
+                                Polyline c2 = new Polyline();
+                                c2.CreatePolyCircle(new Point2d(minPoint.X, minPoint.Y), 5);
+
+                                c1.ColorIndex = entSubBlock.ColorIndex;
+                                c2.ColorIndex = entSubBlock.ColorIndex;
+
+                                try
+                                {
+                                    blockTR.UpgradeOpen();
+                                    blockTR.AppendEntity(c1);
+                                    blockTR.AppendEntity(c2);
+                                    blockTR.DowngradeOpen();
+                                }
+                                catch (Exception)
+                                {
+                                    
+                                    throw;
+                                }
+
+                                //db.AddToModelSpace(c1, c2);
+                                break;
+                            case ("dbtext"):
+
+                                break;
+                            case ("elipse"):
+
+                                break;
+                            case ("arc"):
+
+                                break;
+                            case ("block reference"):
+
+                                break;
+                            case ("aligned dimension"):
+
+                                break;
+                            case ("attribute definition"):
+
+                                break;
+
+                        }
+                        entSubBlock.DowngradeOpen();
+                    }
+                    else
+                    {
+                        //
+                    }
+                }
+            }
+            catch (Exception ee)
+            {
+                //tr.Abort();
+                MessageBox.Show("" + ee + System.Environment.NewLine + blockTR.Name, "错误");
+                ed.WriteMessage("错误信息: " + ee.Message + System.Environment.NewLine + "块" + blockTR.Name);
+            }
+
 
         }
 
