@@ -215,8 +215,9 @@ namespace AutoDrawDWG
 
                             //自动整理图块比例
                             //listBox1.Items.Add(btRecord.Name);
-                            autoBlockScaleFit(db, btRecord, trans, ed);
-                            
+                            autoBlockScaleFit(db, btRecord, trans);
+
+                            //int numa = sizeEntity.Count;
                             //重新生成块
                             //btr.
                             //在图中插入 块参照 (画块)
@@ -228,10 +229,11 @@ namespace AutoDrawDWG
                             ed.WriteMessage("错误;  " + ee.ToString());
                             //preview = btr.PreviewIcon; // 适用于AutoCAD 2009及以上版本
                         }
-                         
+                        
                     }
                     //
                     trans.Commit();
+                    int numa = sizeEntity.Count;
                     foreach (var item in typeAndNum)
                     {
 
@@ -337,7 +339,10 @@ namespace AutoDrawDWG
         }
 
         Dictionary<string, int> typeAndNum = new Dictionary<string, int>();
-        Dictionary<string, double> sizeEntity = new Dictionary<string, double>();
+        Dictionary<string, objectBound> sizeEntity = new Dictionary<string, objectBound>();
+
+       
+
         public void autoBlockScaleFit(Database db, BlockTableRecord blockTR, Transaction tr)
         {
             Point3d DownLeft_Point = new Point3d();
@@ -350,77 +355,85 @@ namespace AutoDrawDWG
                 string blockName = blockTR.Name;
                 foreach (ObjectId entId in blockTR)
                 {
-                    
+
                     DBObject objSubBlock = (DBObject)tr.GetObject(entId, OpenMode.ForWrite);
 
-                    if (started == false)
+                    if (objSubBlock.Bounds == null)
                     {
-                        
-                        UpRight_Point = objSubBlock.Bounds.Value.MaxPoint;
-                        DownLeft_Point = objSubBlock.Bounds.Value.MinPoint;
-                        started = true;
+                        continue;
                     }
                     else
                     {
-                        compare3dPoint(objSubBlock.Bounds.Value.MaxPoint, UpRight_Point, out compareResult);
-                        if (compareResult == "")
+                        if (started == false)
                         {
 
+                            UpRight_Point = objSubBlock.Bounds.Value.MaxPoint;
+                            DownLeft_Point = objSubBlock.Bounds.Value.MinPoint;
+                            started = true;
+                            continue;
                         }
-                        compare3dPoint(objSubBlock.Bounds.Value.MinPoint, DownLeft_Point, out compareResult);
-                        if (compareResult == "")
+                        else
                         {
+                            string compareMaxRes = string.Empty;
+                            string compareMinRes = string.Empty;
 
+                            if (objSubBlock.Bounds.Value.MaxPoint.X > UpRight_Point.X)
+                            {
+                                UpRight_Point = new Point3d(objSubBlock.Bounds.Value.MaxPoint.X, UpRight_Point.Y, UpRight_Point.Z);
+                            }
+                            if (objSubBlock.Bounds.Value.MaxPoint.Y > UpRight_Point.Y)
+                            {
+                                UpRight_Point = new Point3d(UpRight_Point.X, objSubBlock.Bounds.Value.MaxPoint.Y, UpRight_Point.Z);
+                            }
+
+                            if (objSubBlock.Bounds.Value.MinPoint.X < DownLeft_Point.X)
+                            {
+                                DownLeft_Point = new Point3d(objSubBlock.Bounds.Value.MinPoint.X, DownLeft_Point.Y, UpRight_Point.Z);
+                            }
+                            if (objSubBlock.Bounds.Value.MinPoint.Y < DownLeft_Point.Y)
+                            {
+                                DownLeft_Point = new Point3d(DownLeft_Point.X, objSubBlock.Bounds.Value.MinPoint.Y, UpRight_Point.Z);
+                            }
                         }
-
-                        
                     }
                 }
+
+                objectBound ob = new objectBound(DownLeft_Point, UpRight_Point);
+                sizeEntity.Add(blockName, ob);
+
+                /*
+                Polyline c1 = new Polyline();
+                c1.CreatePolyCircle(new Point2d(UpRight_Point.X, UpRight_Point.Y), 5);
+
+                Polyline c2 = new Polyline();
+                c2.CreatePolyCircle(new Point2d(DownLeft_Point.X, DownLeft_Point.Y), 5); ;
+
+                c1.ColorIndex = 200; //upright
+                c2.ColorIndex = 100;
+                //db.AddToModelSpace(c1, c2);
+
+                try
+                {
+                    blockTR.UpgradeOpen();
+                    blockTR.AppendEntity(c1);
+                    blockTR.AppendEntity(c2);
+                    blockTR.DowngradeOpen();
+                }
+                catch (Exception ee)
+                {
+                    MessageBox.Show(ee + "");
+                }
+                 * */
+                
             }
-            catch (Exception)
+            catch (Exception ee)
             {
 
             }
 
         }
 
-        private void compare3dPoint(Point3d pointEntity, Point3d pointRecord,out string resulte)
-        {
-            resulte = "";
-            //左上
-            if ((pointEntity.X < pointRecord.X) && (pointEntity.Y > pointRecord.Y))
-            {
-                resulte = "upleft";
-            }
-            //右上
-            else if ((pointEntity.X > pointRecord.X) && (pointEntity.Y >= pointRecord.Y))
-            {
-                resulte = "upright"; //good
-            }
-            //左下
-            else if ((pointEntity.X < pointRecord.X) && (pointEntity.Y <= pointRecord.Y))
-            {
-                resulte = "downleft"; //good
-            }
-            //右下
-            else if ((pointEntity.X > pointRecord.X) && (pointEntity.Y < pointRecord.Y))
-            {
-                resulte = "downright";
-
-            }
-            //右下
-            else if ((pointEntity.X == pointRecord.X) && (pointEntity.Y == pointRecord.Y))
-            {
-                resulte = "identical";
-
-            }
-            else
-            {
-
-            }
-            
-        }
-
+       
         public void autoBlockScaleFit(Database db, BlockTableRecord blockTR, Transaction tr, Editor ed)
         {
             List<string> entType = new List<string>();
@@ -430,7 +443,7 @@ namespace AutoDrawDWG
                 string testST = blockTR.Name;
                 foreach (ObjectId entId in blockTR)
                 {
-                    
+
                     if (entId != null)
                     {
                         Entity entSubBlock = (Entity)tr.GetObject(entId, OpenMode.ForWrite);
@@ -457,6 +470,7 @@ namespace AutoDrawDWG
                         {
                             maxPoint = entSubBlock.GeometricExtents.MaxPoint;
                             minPoint = entSubBlock.GeometricExtents.MinPoint;
+
 
                             //maxPoint1 = entSubBlock.Bounds.Value.MaxPoint;
                             //minPoint1 = entSubBlock.Bounds.Value.MinPoint;
@@ -503,9 +517,9 @@ namespace AutoDrawDWG
                                 maxPoint = entSubBlock.GeometricExtents.MaxPoint;
                                 minPoint = entSubBlock.GeometricExtents.MinPoint;
 
-                                Polyline c1 = new Polyline();                                
+                                Polyline c1 = new Polyline();
                                 c1.CreatePolyCircle(new Point2d(maxPoint.X, maxPoint.Y), 5);
-                                
+
                                 Polyline c2 = new Polyline();
                                 c2.CreatePolyCircle(new Point2d(minPoint.X, minPoint.Y), 5);
 
@@ -521,7 +535,7 @@ namespace AutoDrawDWG
                                 }
                                 catch (Exception)
                                 {
-                                    
+
                                     throw;
                                 }
 
