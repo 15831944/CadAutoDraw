@@ -215,7 +215,7 @@ namespace AutoDrawDWG
 
                             //自动整理图块比例
                             //listBox1.Items.Add(btRecord.Name);
-                            autoBlockScaleFit(db, btRecord, trans);
+                            autoBlockFit(db, btRecord, trans);
 
                             //int numa = sizeEntity.Count;
                             //重新生成块
@@ -343,7 +343,7 @@ namespace AutoDrawDWG
 
        
 
-        public void autoBlockScaleFit(Database db, BlockTableRecord blockTR, Transaction tr)
+        public void autoBlockFit(Database db, BlockTableRecord blockTR, Transaction tr)
         {
             Point3d DownLeft_Point = new Point3d();
             Point3d UpRight_Point = new Point3d();
@@ -400,6 +400,13 @@ namespace AutoDrawDWG
 
                 objectBound ob = new objectBound(DownLeft_Point, UpRight_Point);
                 sizeEntity.Add(blockName, ob);
+
+                //minPoint和maxPoint只差为块的大小.
+                //通过缩放解决图形大小的问题.
+
+                //minPoint的位置为块离原点的距离,默认为离基点的距离.
+                //通过平移解决插入位置的问题
+
 
                 /*
                 Polyline c1 = new Polyline();
