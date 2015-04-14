@@ -376,13 +376,17 @@ namespace AutoDrawDWG
             L_AddSt.Refresh();
         }
 
+        BlockEditeur BE;
         private void B_Admin_Click(object sender, EventArgs e)
         {
 
-            BlockEditeur BE = new BlockEditeur(NameAndExtention);
-            BE.Owner = this;
-            //BE.ShowDialog();
-            BE.Show();
+            if (BE == null || BE.IsDisposed)
+            {
+                BE = new BlockEditeur(NameAndExtention);
+                BE.Owner = this;
+                //BE.ShowDialog();
+                BE.Show();
+            }
         }
 
         private void timer1_Tick(object sender, EventArgs e)

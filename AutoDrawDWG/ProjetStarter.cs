@@ -9,7 +9,7 @@ using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Runtime;
 
 
-
+[assembly: CommandClass(typeof(AutoDrawDWG.ProjetStarter))]
 namespace AutoDrawDWG
 {
     public class ProjetStarter

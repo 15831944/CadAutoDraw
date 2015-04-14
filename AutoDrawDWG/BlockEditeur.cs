@@ -135,10 +135,17 @@ namespace AutoDrawDWG
 
         private void B_ReadBlock_Click(object sender, EventArgs e)
         {
+
+            B_ReadBlock.Click -= B_ReadBlock_Click;
+
+            //timer2.
+
             foreach (var FilePaths in FileAndPahts)
             {
                 GenerateBlockPreview(FilePaths);
             }
+
+            B_ReadBlock.Click += B_ReadBlock_Click;
             
 
             ///
@@ -151,9 +158,9 @@ namespace AutoDrawDWG
         ///  代码...
         /// m_DocumentLock.Dispose();
         /// 
-        public void GenerateBlockPreview(string openFilePath)
+        public bool GenerateBlockPreview(string openFilePath)
         {
-            
+            bool proEnd = false;
             Database db = HostApplicationServices.WorkingDatabase;
             ObjectId spaceId = db.CurrentSpaceId;//获取当前空间(模型空间或图纸空间)
             Editor ed = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.Editor;
@@ -244,6 +251,8 @@ namespace AutoDrawDWG
 
                     fillImageList("C:\\Temp", defSize);
                     fileListView("C:\\Temp");
+                    proEnd = true;
+                    
                 }
                 catch (Exception  ee)
                 {
@@ -252,6 +261,7 @@ namespace AutoDrawDWG
                 }
                 
             }
+            return proEnd;
         }
 
         private ObjectId CreateBlock(string nameOfBlock, Autodesk.AutoCAD.Geometry.Point3d pos)
@@ -396,6 +406,8 @@ namespace AutoDrawDWG
                             }
                         }
                     }
+
+
                 }
 
                 objectBound ob = new objectBound(DownLeft_Point, UpRight_Point);
@@ -408,7 +420,7 @@ namespace AutoDrawDWG
                 //通过平移解决插入位置的问题
 
 
-                /*
+                
                 Polyline c1 = new Polyline();
                 c1.CreatePolyCircle(new Point2d(UpRight_Point.X, UpRight_Point.Y), 5);
 
@@ -424,13 +436,18 @@ namespace AutoDrawDWG
                     blockTR.UpgradeOpen();
                     blockTR.AppendEntity(c1);
                     blockTR.AppendEntity(c2);
+                    tr.AddNewlyCreatedDBObject(c1, true);
+                    tr.AddNewlyCreatedDBObject(c2, true);
                     blockTR.DowngradeOpen();
+
+
+
                 }
                 catch (Exception ee)
                 {
                     MessageBox.Show(ee + "");
                 }
-                 * */
+                 
                 
             }
             catch (Exception ee)
@@ -440,7 +457,7 @@ namespace AutoDrawDWG
 
         }
 
-       
+        #region 虽然不影响使用但是图形中的某些entity因为没有minpoint,maxpoint值所以会报错,所以废弃
         public void autoBlockScaleFit(Database db, BlockTableRecord blockTR, Transaction tr, Editor ed)
         {
             List<string> entType = new List<string>();
@@ -450,10 +467,11 @@ namespace AutoDrawDWG
                 string testST = blockTR.Name;
                 foreach (ObjectId entId in blockTR)
                 {
-
-                    if (entId != null)
+                    Object objSubBlock = (Object)tr.GetObject(entId, OpenMode.ForWrite);
+                    Entity entSubBlock = objSubBlock as Entity;
+                    if (entSubBlock != null)
                     {
-                        Entity entSubBlock = (Entity)tr.GetObject(entId, OpenMode.ForWrite);
+                        
                         //DBObject objSubBlock = (DBObject)tr.GetObject(entId, OpenMode.ForWrite);
 
 
@@ -585,6 +603,7 @@ namespace AutoDrawDWG
 
 
         }
+        #endregion
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -681,6 +700,11 @@ namespace AutoDrawDWG
             toolStripStatusLabel1.Text = DateTime.Now.ToString();
         }
 
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+
+        }
+
         private void listViewMultiSelect_CheckedChanged(object sender, EventArgs e)
         {
             listView1.MultiSelect = listViewMultiSelect.Checked;
@@ -729,6 +753,8 @@ namespace AutoDrawDWG
 
             
         }
+
+
 
         
 
