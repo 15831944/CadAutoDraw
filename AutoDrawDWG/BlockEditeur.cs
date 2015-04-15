@@ -24,21 +24,21 @@ namespace AutoDrawDWG
 
         public class objectBound
         {
-            private Point3d _DownLeftDownPoint;
+            private Point3d _DownLeftPoint;
             private Point3d _UpRightPoint;
 
-            private Point3d downLeftPoint
+            public Point3d downLeftPoint
             {
                 get
                 {
-                    return _DownLeftDownPoint;
+                    return _DownLeftPoint;
                 }
                 set
                 {
-                    _DownLeftDownPoint = value;
+                    _DownLeftPoint = value;
                 }
             }
-            private Point3d upRightPoint
+            public Point3d upRightPoint
             {
                 get
                 {
@@ -50,6 +50,9 @@ namespace AutoDrawDWG
                 }
             }
 
+            public objectBound()
+            {
+            }
             public objectBound(Point3d DownLeftPoint, Point3d UpRightPoint)
             {
                 upRightPoint  = UpRightPoint;
@@ -224,11 +227,37 @@ namespace AutoDrawDWG
                             //listBox1.Items.Add(btRecord.Name);
                             autoBlockFit(db, btRecord, trans);
 
+                            /*if (sizeEntity.ContainsKey(btRecord.Name))
+                            {
+                                objectBound objectSize=new objectBound();
+                                objectSize= sizeEntity[btRecord.Name];
+                                objectSize.GetType();
+                                Point3d downLeft = objectSize.downLeftPoint;
+                                double objSize = objectSize.upRightPoint.X - objectSize.downLeftPoint.X;// objectSize.upRightPoint.Y - objectSize.downLeftPoint.Y);
+                             * double scaleSize=30/objSize;
+                                //string a = objectSize.;
+                                //Scale(blockRecordId, downLeft, scaleSize); 
+                            }*/
+
+
                             //int numa = sizeEntity.Count;
                             //重新生成块
                             //btr.
                             //在图中插入 块参照 (画块)
-                            spaceId.InsertBlockReference("0", btRecord.Name, new Autodesk.AutoCAD.Geometry.Point3d(100 * i, 100 * i, 0), new Autodesk.AutoCAD.Geometry.Scale3d(1), 0);
+                            objectBound objectSize = sizeEntity[btRecord.Name];
+
+                            Point3d insetP = new Point3d(Point3d.Origin.X - objectSize.downLeftPoint.X, Point3d.Origin.Y - objectSize.downLeftPoint.Y, 0);
+                            Scale3d scaleX = new Scale3d(30 / (objectSize.upRightPoint.X - objectSize.downLeftPoint.X));
+                            Scale3d scaleY = new Scale3d(30 / (objectSize.upRightPoint.X - objectSize.downLeftPoint.Y));
+                            Scale3d scaleE;
+
+                            if (scaleX.X > scaleY.X)
+                                scaleE = scaleY;
+                            else
+                                scaleE = scaleX;
+
+                            spaceId.InsertBlockReference("0", btRecord.Name, new Point3d(Point3d.Origin.X, Point3d.Origin.Y, 0), scaleE, 0);
+                            spaceId.InsertBlockReference("1", btRecord.Name, insetP, scaleE, 0);
                         }
                         catch (Exception ee)
                         {
@@ -256,7 +285,7 @@ namespace AutoDrawDWG
                 }
                 catch (Exception  ee)
                 {
-
+                    trans.Abort();
                     MessageBox.Show("" + ee, "error");
                 }
                 
@@ -264,29 +293,7 @@ namespace AutoDrawDWG
             return proEnd;
         }
 
-        private ObjectId CreateBlock(string nameOfBlock, Autodesk.AutoCAD.Geometry.Point3d pos)
-        {
-            // get the current working database
-            acadDb.Database db = acadDb.HostApplicationServices.WorkingDatabase;
-            acadDb.Transaction trans = db.TransactionManager.StartTransaction();
-            acadDb.BlockTable bt = (acadDb.BlockTable)(trans.GetObject(db.BlockTableId, acadDb.OpenMode.ForRead));
-            acadDb.BlockTableRecord btr = (acadDb.BlockTableRecord)trans.GetObject(bt[acadDb.BlockTableRecord.ModelSpace], acadDb.OpenMode.ForWrite);
-            // Create the block reference...use the return from CreateEmployeeDefinition directly!
-            acadDb.BlockReference br = new acadDb.BlockReference(pos, bt[nameOfBlock]);
-            //acadDb.BlockReference br = new acadDb.BlockReference(pos, btr.ObjectId);
-            // Add the reference to ModelSpace
-            btr.AppendEntity(br);
-            // Add the attribute reference to the block reference
-            trans.AddNewlyCreatedDBObject(br, true);
-            acadDb.ObjectId retId = br.ObjectId;
-            // trans.Commit();
-
-
-            trans.Commit();
-            trans.Dispose();
-            return retId;
-        }
-
+        
         ImageList imageList1;
         List<string> filename;
 
@@ -350,9 +357,6 @@ namespace AutoDrawDWG
 
         Dictionary<string, int> typeAndNum = new Dictionary<string, int>();
         Dictionary<string, objectBound> sizeEntity = new Dictionary<string, objectBound>();
-
-       
-
         public void autoBlockFit(Database db, BlockTableRecord blockTR, Transaction tr)
         {
             Point3d DownLeft_Point = new Point3d();
@@ -362,12 +366,13 @@ namespace AutoDrawDWG
             bool started = false;
             try
             {
+                DBObjectCollection EntityInOldBlock = new DBObjectCollection();
                 string blockName = blockTR.Name;
                 foreach (ObjectId entId in blockTR)
                 {
 
                     DBObject objSubBlock = (DBObject)tr.GetObject(entId, OpenMode.ForWrite);
-
+                    EntityInOldBlock.Add(objSubBlock);
                     if (objSubBlock.Bounds == null)
                     {
                         continue;
@@ -409,6 +414,7 @@ namespace AutoDrawDWG
 
 
                 }
+                //CreateBlock(blockTR.Name, EntityInOldBlock, DownLeft_Point);
 
                 objectBound ob = new objectBound(DownLeft_Point, UpRight_Point);
                 sizeEntity.Add(blockName, ob);
@@ -420,7 +426,7 @@ namespace AutoDrawDWG
                 //通过平移解决插入位置的问题
 
 
-                
+                /*
                 Polyline c1 = new Polyline();
                 c1.CreatePolyCircle(new Point2d(UpRight_Point.X, UpRight_Point.Y), 5);
 
@@ -447,16 +453,132 @@ namespace AutoDrawDWG
                 {
                     MessageBox.Show(ee + "");
                 }
-                 
+                */
                 
             }
-            catch (Exception ee)
+            catch (Autodesk.AutoCAD.Runtime.Exception ee)
             {
 
             }
 
         }
 
+
+        public void CreateBlock(string oldBlockName, DBObjectCollection objectCollection, Point3d downLeftP)
+        {
+
+            Document doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
+
+            Database db = doc.Database;
+
+            Editor ed = doc.Editor;
+
+            Transaction tr = db.TransactionManager.StartTransaction();
+
+            using (tr)
+            {
+
+                // Get the block table from the drawing
+                BlockTable bt = (BlockTable)tr.GetObject(db.BlockTableId, OpenMode.ForRead);
+
+                string monthT = "";
+                if (DateTime.Now.Month < 10)
+                    monthT = "0" + DateTime.Now.Month;
+                else
+                    monthT = DateTime.Now.Month.ToString();
+
+                string dayT = "";
+                if (DateTime.Now.Day < 10)
+                    dayT = "0" + DateTime.Now.Day;
+                else
+                    dayT = DateTime.Now.Day.ToString();
+
+                string blockToTestName = oldBlockName.Split('M')[0] + "M" + monthT + dayT + "V";
+                string blkName = "";
+                //string blkName = oldBlockName + "M" + DateTime.Now.Month + "-" + DateTime.Now.Day;
+                //调试性能,以后再改进
+                try
+                {
+                    // Validate the provided symbol table name
+
+                    SymbolUtilityServices.ValidateSymbolName(blockToTestName, false);
+
+                    // Only set the block name if it isn't in use
+
+                    if (bt.Has(blockToTestName))
+
+                        ed.WriteMessage("\nA block with this name already exists.");
+                    else
+                        blkName = blockToTestName;
+                }
+
+                catch
+                {
+
+                    // An exception has been thrown, indicating the name is invalid
+                    ed.WriteMessage("\nInvalid block name.");
+                }
+
+                // Create our new block table record...
+                BlockTableRecord btr = new BlockTableRecord();
+                // ... and set its properties
+                btr.Name = blkName;
+                // Add the new block to the block table
+                bt.UpgradeOpen();
+                ObjectId btrId = bt.Add(btr);
+                tr.AddNewlyCreatedDBObject(btr, true);
+
+                // 在块定义中添加实体
+                DBObjectCollection ents = objectCollection;
+                foreach (Entity ent in ents)
+                {
+                    btr.AppendEntity(ent);
+
+                    tr.AddNewlyCreatedDBObject(ent, true);
+                }
+                // Add a block reference to the model space
+                //添加块参照
+                BlockTableRecord ms = (BlockTableRecord)tr.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
+
+                BlockReference br = new BlockReference(new Point3d(Point3d.Origin.X - downLeftP.X, Point3d.Origin.Y - downLeftP.Y, Point3d.Origin.Z - downLeftP.Z), btrId);
+
+                ms.AppendEntity(br);
+                tr.AddNewlyCreatedDBObject(br, true);
+                // Commit the transaction
+                tr.Commit();
+                // Report what we've done
+                ed.WriteMessage("\nCreated block named \"{0}\" containing {1} entities.", blkName, ents.Count);
+            }
+
+        }
+
+        public static void Scale(ObjectId id, Point3d basept, double scale)
+        {
+            Matrix3d transform = Matrix3d.Scaling(scale, basept);
+
+            Database db = id.Database;
+
+            using (Transaction tr = db.TransactionManager.StartTransaction())
+            {
+                try
+                {
+                    Entity ent = (Entity)tr.GetObject(id, OpenMode.ForWrite);
+
+                    if (ent != null)
+                    {
+                        ent.TransformBy(transform);
+                    }
+
+                    tr.Commit();
+
+                }
+                catch (Autodesk.AutoCAD.Runtime.Exception ex)
+                {
+                    Autodesk.AutoCAD.ApplicationServices.Application.ShowAlertDialog(ex.Message);
+                }
+
+            }
+        }
         #region 虽然不影响使用但是图形中的某些entity因为没有minpoint,maxpoint值所以会报错,所以废弃
         public void autoBlockScaleFit(Database db, BlockTableRecord blockTR, Transaction tr, Editor ed)
         {
