@@ -150,7 +150,7 @@
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(562, 407);
+            this.tabControl1.Size = new System.Drawing.Size(824, 398);
             this.tabControl1.TabIndex = 9;
             // 
             // tabPage1
@@ -173,7 +173,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(554, 381);
+            this.tabPage1.Size = new System.Drawing.Size(816, 372);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "导入块";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -214,7 +214,8 @@
             this.listBox1.FormattingEnabled = true;
             this.listBox1.Location = new System.Drawing.Point(397, 68);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(151, 238);
+            this.listBox1.ScrollAlwaysVisible = true;
+            this.listBox1.Size = new System.Drawing.Size(413, 238);
             this.listBox1.TabIndex = 12;
             this.listBox1.Click += new System.EventHandler(this.listBox1_Click_1);
             // 
@@ -282,7 +283,7 @@
             this.toolStripStatusLabel1});
             this.statusStrip1.Location = new System.Drawing.Point(0, 435);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(605, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(848, 22);
             this.statusStrip1.TabIndex = 10;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -304,7 +305,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(605, 457);
+            this.ClientSize = new System.Drawing.Size(848, 457);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.tabControl1);
             this.Name = "BlockEditeur";

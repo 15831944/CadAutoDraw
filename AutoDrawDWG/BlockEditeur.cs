@@ -150,6 +150,11 @@ namespace AutoDrawDWG
 
             B_ReadBlock.Click += B_ReadBlock_Click;
             
+            foreach (var sizeEntitys in sizeEntity)
+            {
+                listBox1.Items.Add("type:" + sizeEntitys.Key.ToString() + " point:" + sizeEntitys.Value.downLeftPoint.X + "-"
+                    + sizeEntitys.Value.downLeftPoint.Y);
+            }
 
             ///
             /// 将生成的bgm文件加入到listview中
@@ -215,7 +220,7 @@ namespace AutoDrawDWG
                             {
                                 str.Append("E");
                             }
-
+                            
                             // 获取块预览图案（适用于AutoCAD 2008及以下版本）
                             //preview = BlockThumbnailHelper.GetBlockThumbanail(btr.ObjectId);
 
@@ -239,7 +244,7 @@ namespace AutoDrawDWG
                                 //Scale(blockRecordId, downLeft, scaleSize); 
                             }*/
 
-
+                            
                             //int numa = sizeEntity.Count;
                             //重新生成块
                             //btr.
@@ -250,14 +255,49 @@ namespace AutoDrawDWG
                             Scale3d scaleX = new Scale3d(30 / (objectSize.upRightPoint.X - objectSize.downLeftPoint.X));
                             Scale3d scaleY = new Scale3d(30 / (objectSize.upRightPoint.X - objectSize.downLeftPoint.Y));
                             Scale3d scaleE;
-
+                            Point3d a = btRecord.Origin;
                             if (scaleX.X > scaleY.X)
                                 scaleE = scaleY;
                             else
                                 scaleE = scaleX;
 
-                            spaceId.InsertBlockReference("0", btRecord.Name, new Point3d(Point3d.Origin.X, Point3d.Origin.Y, 0), scaleE, 0);
-                            spaceId.InsertBlockReference("1", btRecord.Name, insetP, scaleE, 0);
+
+                            //spaceId.InsertBlockReference("0", btRecord.Name, new Point3d(Point3d.Origin.X, Point3d.Origin.Y, 0), scaleE, 0);
+                            
+
+                            LayerTable lt = db.LayerTableId.GetObject(OpenMode.ForRead) as LayerTable;
+                            if (!lt.Has("1"))
+                            {
+                                LayerTableRecord ltr = new LayerTableRecord();
+                                ltr.Name = "1";
+                                lt.UpgradeOpen();
+                                lt.Add(ltr);
+                                db.TransactionManager.AddNewlyCreatedDBObject(ltr, true);
+                                lt.DowngradeOpen();
+                            } 
+                            
+                            if ((btRecord.Origin.X <= objectSize.upRightPoint.X || btRecord.Origin.X >= objectSize.downLeftPoint.X) && (btRecord.Origin.Y <= objectSize.upRightPoint.Y || btRecord.Origin.Y >= objectSize.downLeftPoint.Y))
+                            {
+                                spaceId.InsertBlockReference("0", btRecord.Name, new Point3d(Point3d.Origin.X, Point3d.Origin.Y, 0), scaleE, 0);
+                            }
+                            else
+                            {
+                                spaceId.InsertBlockReference("1", btRecord.Name, insetP, scaleE, 0);
+                            }
+                            //spaceId.InsertBlockReference("1", btRecord.Name, insetP, scaleE, 0);
+
+                            /*
+                            DBText text1 = new DBText();
+                            text1.TextString = "layer0";
+                            text1.Height = 20;
+                            text1.Position = new Point3d(Point3d.Origin.X, Point3d.Origin.Y, 0);
+                            DBText text2 = new DBText();
+                            text2.TextString = "layer1";
+                            text2.Height = 20;
+                            text2.Position = insetP;
+                            db.AddToModelSpace(text1, text2);
+                            trans.Commit(); 
+                            */
                         }
                         catch (Exception ee)
                         {
@@ -366,6 +406,7 @@ namespace AutoDrawDWG
             bool started = false;
             try
             {
+                blockTR.UpgradeOpen();
                 DBObjectCollection EntityInOldBlock = new DBObjectCollection();
                 string blockName = blockTR.Name;
                 foreach (ObjectId entId in blockTR)
@@ -411,13 +452,16 @@ namespace AutoDrawDWG
                             }
                         }
                     }
-
+                    objSubBlock.DowngradeOpen();
 
                 }
                 //CreateBlock(blockTR.Name, EntityInOldBlock, DownLeft_Point);
 
                 objectBound ob = new objectBound(DownLeft_Point, UpRight_Point);
                 sizeEntity.Add(blockName, ob);
+                blockTR.Origin = DownLeft_Point;
+                blockTR.DowngradeOpen();
+
 
                 //minPoint和maxPoint只差为块的大小.
                 //通过缩放解决图形大小的问题.
@@ -579,6 +623,8 @@ namespace AutoDrawDWG
 
             }
         }
+
+
         #region 虽然不影响使用但是图形中的某些entity因为没有minpoint,maxpoint值所以会报错,所以废弃
         public void autoBlockScaleFit(Database db, BlockTableRecord blockTR, Transaction tr, Editor ed)
         {
@@ -648,6 +694,7 @@ namespace AutoDrawDWG
                         {
                             case ("line"):
                                 //entSubBlock.GeometricExtents.MaxPoint
+
                                 break;
                             case ("mline"):
                                 //entSubBlock
@@ -726,6 +773,7 @@ namespace AutoDrawDWG
 
         }
         #endregion
+
 
         private void button1_Click(object sender, EventArgs e)
         {
