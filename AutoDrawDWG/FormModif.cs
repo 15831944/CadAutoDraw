@@ -81,9 +81,9 @@ namespace AutoDrawDWG
                     if (messageboxResult == DialogResult.Yes)
                     {
                         //from
-                        Form1.ListStationAndLocation from = new Form1.ListStationAndLocation(BiStation.FromStation.ID.ToString(), T_From_Name.Text.Replace(" ", "").ToString(), T_From_Loc.Text.ToUpper());
+                        Form1.StationAndLocation from = new Form1.StationAndLocation(BiStation.FromStation.ID.ToString(), T_From_Name.Text.Replace(" ", "").ToString(), T_From_Loc.Text.ToUpper());
                         //to
-                        Form1.ListStationAndLocation to = new Form1.ListStationAndLocation(BiStation.ToStation.ID.ToString(), T_To_Name.Text.Replace(" ", "").ToString(), T_To_Loc.Text.ToUpper());
+                        Form1.StationAndLocation to = new Form1.StationAndLocation(BiStation.ToStation.ID.ToString(), T_To_Name.Text.Replace(" ", "").ToString(), T_To_Loc.Text.ToUpper());
 
                         NewBiStation = new Form1.BinoStation(from, to);
 

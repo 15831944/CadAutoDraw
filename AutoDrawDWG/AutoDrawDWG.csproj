@@ -99,6 +99,7 @@
     <Compile Include="BlockPreview.Designer.cs">
       <DependentUpon>BlockPreview.cs</DependentUpon>
     </Compile>
+    <Compile Include="Draw_Station_Location.cs" />
     <Compile Include="Editeur.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="4d26c079-8c7a-4622-b349-54ae97e956f2" ChangeDateTime="04/27/2015 06:53:49">
+    <Property Name="ElementName" Value="[dbo].[DrawDesign].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[DrawDesign]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Station_Id" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="2bcb4fa2-00f5-4d2b-b813-642a714ea22b" ChangeDateTime="04/27/2015 06:53:57">
+    <Property Name="ElementName" Value="[dbo].[DrawProjet].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[DrawProjet]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Projet_Id" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="533df876-e091-4b9b-992a-cb2ef1d354d5" ChangeDateTime="04/27/2015 06:54:38">
+    <Property Name="ElementName" Value="[dbo].[DrawDesign].[bel]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[DrawDesign]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="belong_to" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="ea09c26d-5046-4ce0-a901-559edfd1d8c4" ChangeDateTime="04/27/2015 06:54:54">
+    <Property Name="ElementName" Value="[dbo].[DrawDesign].[belong_to]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[DrawDesign]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Belong_to_Projet" />
+  </Operation>
+</Operations>

@@ -15,7 +15,7 @@ namespace AutoDrawDWG
             InitializeComponent();
         }
 
-        public class ListStationAndLocation
+        public class StationAndLocation
         {
             private string id = string.Empty;
             private string name = string.Empty;
@@ -23,9 +23,9 @@ namespace AutoDrawDWG
             
             //可以根据自己的需求继续添加,如：private Int32 m_Index；
 
-            public ListStationAndLocation()
+            public StationAndLocation()
             { }
-            public ListStationAndLocation(string sid, string sname,string slocation)
+            public StationAndLocation(string sid, string sname,string slocation)
             {
                 id = sid;
                 name = sname;
@@ -73,16 +73,16 @@ namespace AutoDrawDWG
 
         public class BinoStation
         {
-            private ListStationAndLocation _fromStation;
-            private ListStationAndLocation _toStation;
+            private StationAndLocation _fromStation;
+            private StationAndLocation _toStation;
 
-            public ListStationAndLocation FromStation
+            public StationAndLocation FromStation
             {
                 get { return this._fromStation; }
                 set { this._fromStation = value; }
             }
 
-            public ListStationAndLocation ToStation
+            public StationAndLocation ToStation
             {
                 get { return this._toStation; }
                 set { this._toStation = value; }
@@ -93,7 +93,7 @@ namespace AutoDrawDWG
 
             }
 
-            public BinoStation(ListStationAndLocation fromStation, ListStationAndLocation toStation)
+            public BinoStation(StationAndLocation fromStation, StationAndLocation toStation)
             {
                 this._fromStation = fromStation;
                 this._toStation = toStation;
@@ -113,7 +113,7 @@ namespace AutoDrawDWG
         DataColumn stationID;
         DataSet DS_EditStation = new DataSet();
         
-        List<ListStationAndLocation> list_StationAndLocation = new List<ListStationAndLocation>();
+        List<StationAndLocation> list_StationAndLocation = new List<StationAndLocation>();
         List<BinoStation> list_BinoStation = new List<BinoStation>();
 
         private void B_Valide_Click(object sender, EventArgs e)
@@ -214,7 +214,7 @@ namespace AutoDrawDWG
                         ListStation.Add(T_AddSt.Text.ToString().Replace(" ", ""), T_StaLoc.Text.ToString().Replace(" ", "").ToUpper());
                         isEditStation.Add(T_AddSt.Text.ToString().Replace(" ", ""), T_StaLoc.Text.ToString().Replace(" ", "").ToUpper());
 
-                        ListStationAndLocation StationAndLocation = new ListStationAndLocation(list_StationAndLocation.Count.ToString(), T_AddSt.Text.ToString().Replace(" ", ""), T_StaLoc.Text.ToString().Replace(" ", "").ToUpper());
+                        StationAndLocation StationAndLocation = new StationAndLocation(list_StationAndLocation.Count.ToString(), T_AddSt.Text.ToString().Replace(" ", ""), T_StaLoc.Text.ToString().Replace(" ", "").ToUpper());
                         list_StationAndLocation.Add(StationAndLocation);
 
                         this.comboBox_From.Items.Add(StationAndLocation);
