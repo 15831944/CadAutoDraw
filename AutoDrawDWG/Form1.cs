@@ -398,6 +398,13 @@ namespace AutoDrawDWG
         {
 
         }
+
+        private void B_Draw_Click(object sender, EventArgs e)
+        {
+             
+            Draw_Station_Location dsl = new Draw_Station_Location();
+            //dsl.DrawStationMark(new Autodesk.AutoCAD.Geometry.Point3d(), true);
+        }
         
     }
 }

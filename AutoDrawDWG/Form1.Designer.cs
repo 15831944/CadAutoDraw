@@ -58,17 +58,19 @@
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.B_Admin = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.设置储存位置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.B_Draw = new System.Windows.Forms.Button();
             this.MainGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -243,6 +245,7 @@
             // 
             this.panel3.BackColor = System.Drawing.SystemColors.Control;
             this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel3.Controls.Add(this.B_Draw);
             this.panel3.Location = new System.Drawing.Point(3, 187);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(183, 103);
@@ -349,7 +352,7 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(121, 23);
             this.button1.TabIndex = 0;
-            this.button1.Text = "确认";
+            this.button1.Text = "添加";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -362,6 +365,12 @@
             this.statusStrip1.Size = new System.Drawing.Size(637, 22);
             this.statusStrip1.TabIndex = 4;
             this.statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(131, 17);
+            this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
             // 
             // B_Admin
             // 
@@ -376,12 +385,6 @@
             // timer1
             // 
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
-            // toolStripStatusLabel1
-            // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(131, 17);
-            this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
             // 
             // menuStrip1
             // 
@@ -404,9 +407,19 @@
             // 设置储存位置ToolStripMenuItem
             // 
             this.设置储存位置ToolStripMenuItem.Name = "设置储存位置ToolStripMenuItem";
-            this.设置储存位置ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.设置储存位置ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.设置储存位置ToolStripMenuItem.Text = "设置储存位置";
             this.设置储存位置ToolStripMenuItem.Click += new System.EventHandler(this.设置储存位置ToolStripMenuItem_Click);
+            // 
+            // B_Draw
+            // 
+            this.B_Draw.Location = new System.Drawing.Point(42, 32);
+            this.B_Draw.Name = "B_Draw";
+            this.B_Draw.Size = new System.Drawing.Size(121, 23);
+            this.B_Draw.TabIndex = 0;
+            this.B_Draw.Text = "绘制";
+            this.B_Draw.UseVisualStyleBackColor = true;
+            this.B_Draw.Click += new System.EventHandler(this.B_Draw_Click);
             // 
             // Form1
             // 
@@ -435,6 +448,7 @@
             this.contextMenuStrip1.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
+            this.panel3.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
@@ -483,6 +497,7 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem 设置ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 设置储存位置ToolStripMenuItem;
+        private System.Windows.Forms.Button B_Draw;
     }
 }
 
