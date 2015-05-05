@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
+
+
 
 namespace AutoDrawDWG
 {
@@ -100,6 +103,28 @@ namespace AutoDrawDWG
             }
         }
 
+        public class BlockStockLocation
+        {
+            private string _location;
+
+            public string Location
+            {
+                get
+                {
+                    return this._location;
+                }
+                set
+                {
+                    this._location = value;
+                }
+            }
+
+            public BlockStockLocation(string StockLocation)
+            {
+                this.Location = StockLocation;
+            }
+        }
+
         //文件名和文件格式。
         string NameAndExtention;
 
@@ -112,7 +137,8 @@ namespace AutoDrawDWG
         DataTable inforTable;
         DataColumn stationID;
         DataSet DS_EditStation = new DataSet();
-        
+
+        BlockStockLocation BlockFileLocation = new BlockStockLocation("C:\\Temp");
         List<StationAndLocation> list_StationAndLocation = new List<StationAndLocation>();
         List<BinoStation> list_BinoStation = new List<BinoStation>();
 
@@ -175,6 +201,10 @@ namespace AutoDrawDWG
             inforTable.Columns.Add("站名", typeof(string));
             inforTable.Columns.Add("里程", typeof(string));
 
+            if (File.Exists(BlockFileLocation + "\\BlockBase.dwg"))
+            {
+                toolStripStatusLabel1.Text = "未找到图块库.";
+            }
             //inforTable.PrimaryKey = new DataColumn[] { stationID };
 
         }
@@ -382,7 +412,7 @@ namespace AutoDrawDWG
 
             if (BE == null || BE.IsDisposed)
             {
-                BE = new BlockEditeur(NameAndExtention);
+                BE = new BlockEditeur(NameAndExtention, BlockFileLocation.Location);
                 BE.Owner = this;
                 //BE.ShowDialog();
                 BE.Show();

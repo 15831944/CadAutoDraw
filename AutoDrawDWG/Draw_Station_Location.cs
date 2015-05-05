@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using DotNetARX;
 using Autodesk.AutoCAD.Geometry;
 using Autodesk.AutoCAD.DatabaseServices;
 
@@ -93,6 +94,37 @@ namespace AutoDrawDWG
             return isSuc;
         }
 
+        //新建站点标识
+        private void CreateStationMark(Database db, Transaction trans, Point3d insertPoint, bool isLeft)
+        {
+            Point2d CircleCenter = new Point2d();
+
+            //内圆
+            Polyline InnerCircle = new Polyline();
+            InnerCircle.CreatePolyCircle(CircleCenter, 4);
+
+            //外圆
+            Polyline OuterCircle = new Polyline();
+            OuterCircle.CreatePolyCircle(CircleCenter, 8);
+
+            //直线
+            Polyline pline = new Polyline();
+            pline.CreatePolyline(new Point2d(CircleCenter.X, CircleCenter.Y + 8), new Point2d(CircleCenter.X, CircleCenter.Y - 36));
+
+            //图形填充
+            if (isLeft == true)
+            {
+                curr
+            }
+            else
+            {
+
+            }
+
+           
+
+
+        }
         private void DrawStationMark(Database db, Transaction trans, Point3d insertPoint, bool isLeft)
         {
             

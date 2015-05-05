@@ -61,8 +61,10 @@ namespace AutoDrawDWG
         }
 
         string[] FilePaths = null;
+        string StockLocation = null;
+
         Size defSize = new Size(30, 30);
-        public BlockEditeur(string filePath)
+        public BlockEditeur(string filePath,string stockLocationFromForm)
         {
             InitializeComponent();
             if (filePath != "" && filePath != null)
@@ -75,6 +77,7 @@ namespace AutoDrawDWG
                 }
                 textBox1.Text = str.ToString();
             }
+            StockLocation = stockLocationFromForm;
             
         }
 
@@ -180,7 +183,8 @@ namespace AutoDrawDWG
             // 在C盘根目录下创建一个临时文件夹，用来存放文件中的块预览图标
             string path =string.Empty;
 #if DEBUG
-            path = "C:\\Temp";
+
+            path = StockLocation;// "C:\\Temp";
             
             //string b=
 #else
