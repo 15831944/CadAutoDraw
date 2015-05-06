@@ -433,6 +433,8 @@ namespace AutoDrawDWG
         {
              
             Draw_Station_Location dsl = new Draw_Station_Location();
+            StationAndLocation station_location = new StationAndLocation("1", "AA", "AA1+000");
+            dsl.drawSL(station_location);
             //dsl.DrawStationMark(new Autodesk.AutoCAD.Geometry.Point3d(), true);
         }
         

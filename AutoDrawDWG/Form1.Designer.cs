@@ -47,6 +47,7 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.B_Draw = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.Combo_Block = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -64,7 +65,6 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.设置储存位置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.B_Draw = new System.Windows.Forms.Button();
             this.MainGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
@@ -226,7 +226,6 @@
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "groupBox1";
-            this.groupBox1.Visible = false;
             // 
             // panel1
             // 
@@ -250,6 +249,16 @@
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(183, 103);
             this.panel3.TabIndex = 1;
+            // 
+            // B_Draw
+            // 
+            this.B_Draw.Location = new System.Drawing.Point(42, 32);
+            this.B_Draw.Name = "B_Draw";
+            this.B_Draw.Size = new System.Drawing.Size(121, 23);
+            this.B_Draw.TabIndex = 0;
+            this.B_Draw.Text = "绘制";
+            this.B_Draw.UseVisualStyleBackColor = true;
+            this.B_Draw.Click += new System.EventHandler(this.B_Draw_Click);
             // 
             // panel2
             // 
@@ -410,16 +419,6 @@
             this.设置储存位置ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.设置储存位置ToolStripMenuItem.Text = "设置储存位置";
             this.设置储存位置ToolStripMenuItem.Click += new System.EventHandler(this.设置储存位置ToolStripMenuItem_Click);
-            // 
-            // B_Draw
-            // 
-            this.B_Draw.Location = new System.Drawing.Point(42, 32);
-            this.B_Draw.Name = "B_Draw";
-            this.B_Draw.Size = new System.Drawing.Size(121, 23);
-            this.B_Draw.TabIndex = 0;
-            this.B_Draw.Text = "绘制";
-            this.B_Draw.UseVisualStyleBackColor = true;
-            this.B_Draw.Click += new System.EventHandler(this.B_Draw_Click);
             // 
             // Form1
             // 
