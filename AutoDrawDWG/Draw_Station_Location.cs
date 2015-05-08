@@ -78,9 +78,9 @@ namespace AutoDrawDWG
                     {
                         CreateStationMark(db, trans, insertPoint2, true);
                     }
-                    Point3d insertP = new Point3d();
-                    DrawStationMark(db, trans, insertP, true);
-                    DrawStationMark(db, trans, insertP, false);
+                    //Point3d insertP = new Point3d();
+                    //DrawStationMark(db, trans, insertP, true);
+                    //DrawStationMark(db, trans, insertP, false);
 
                     trans.Commit();
                     m_DocumentLock.Dispose();
@@ -88,7 +88,7 @@ namespace AutoDrawDWG
                 catch (Exception ee)
                 {
 
-                    Application.ShowAlertDialog(ee.Message.ToString() + System.Environment.NewLine + ee.Source.ToString() + System.Environment.NewLine + ee.TargetSite.ToString());
+                    Application.ShowAlertDialog("Message: " + ee.Message.ToString() + System.Environment.NewLine + "Source: " + ee.Source.ToString() + System.Environment.NewLine + "TargetSite: " + ee.TargetSite.ToString() + System.Environment.NewLine + "StackTrace: " + ee.StackTrace.ToString());
                 }
             }
             bool isSuc = false;
@@ -113,6 +113,18 @@ namespace AutoDrawDWG
         //新建站点标识
         private void CreateStationMark(Database db, Transaction trans, Point3d insertPoint, bool isLeft)
         {
+            // Open the Block table for read
+            BlockTable acBlkTbl;
+
+            acBlkTbl = trans.GetObject(db.BlockTableId, OpenMode.ForRead) as BlockTable;
+
+            // Open the Block table record Model space for write
+
+            BlockTableRecord acBlkTblRec; 
+
+            acBlkTblRec = trans.GetObject(acBlkTbl[BlockTableRecord.ModelSpace], OpenMode.ForWrite) as BlockTableRecord;
+
+
             Point2d CircleCenter = new Point2d(insertPoint.X, insertPoint.Y);
 
             //起始、终止角度
@@ -120,128 +132,107 @@ namespace AutoDrawDWG
             double endAngle = 270;
             //内圆 由两个arc组成
             //左侧
-            Polyline InnerArcLeft = new Polyline();
-            InnerArcLeft.CreatePolyArc(CircleCenter, 4, startAngle.DegreeToRadian(), endAngle.DegreeToRadian());
-            ObjectId InnerArcLeftID = db.AddToModelSpace(InnerArcLeft);
+            Arc InnerArcLeft = new Arc(new Point3d(CircleCenter.X, CircleCenter.Y, 0), 4, startAngle.DegreeToRadian(), endAngle.DegreeToRadian());
+            acBlkTblRec.AppendEntity(InnerArcLeft);
+            trans.AddNewlyCreatedDBObject(InnerArcLeft, true);
 
             //右侧
-            Polyline InnerArcRight = new Polyline();
-            InnerArcRight.CreatePolyArc(CircleCenter, 4, startAngle.DegreeToRadian(), endAngle.DegreeToRadian());
-            ObjectId InnerArcRightID = db.AddToModelSpace(InnerArcRight);
+            Arc InnerArcRight = new Arc(new Point3d(CircleCenter.X, CircleCenter.Y, 0), 4, endAngle.DegreeToRadian(), startAngle.DegreeToRadian());
+            acBlkTblRec.AppendEntity(InnerArcRight);
+            trans.AddNewlyCreatedDBObject(InnerArcRight, true);
 
             //外圆 由两个arc组成
             //左侧
-            Polyline OuterArcLeft = new Polyline();
-            OuterArcLeft.CreatePolyArc(CircleCenter, 8, startAngle.DegreeToRadian(), endAngle.DegreeToRadian());
-            ObjectId OuterArcLeftID = db.AddToModelSpace(OuterArcLeft);
+            Arc OuterArcLeft = new Arc(new Point3d(CircleCenter.X, CircleCenter.Y, 0), 8, startAngle.DegreeToRadian(), endAngle.DegreeToRadian());
+            acBlkTblRec.AppendEntity(OuterArcLeft);
+            trans.AddNewlyCreatedDBObject(OuterArcLeft, true);
 
             //右侧
-            Polyline OuterArcRight = new Polyline();
-            OuterArcRight.CreatePolyArc(CircleCenter, 8, startAngle.DegreeToRadian(), endAngle.DegreeToRadian());
-            ObjectId OuterArcRightID = db.AddToModelSpace(OuterArcRight);
+            Arc OuterArcRight = new Arc(new Point3d(CircleCenter.X, CircleCenter.Y, 0), 8, endAngle.DegreeToRadian(), startAngle.DegreeToRadian());
+            acBlkTblRec.AppendEntity(OuterArcRight);
+            trans.AddNewlyCreatedDBObject(OuterArcRight, true);
 
             //直线
             Polyline pline = new Polyline();
             pline.CreatePolyline(new Point2d(CircleCenter.X, CircleCenter.Y + 8), new Point2d(CircleCenter.X, CircleCenter.Y - 36));
-            ObjectId plineID = db.AddToModelSpace(pline);
+            acBlkTblRec.AppendEntity(pline);
+            trans.AddNewlyCreatedDBObject(pline, true);
 
-            ObjectIdCollection ids = new ObjectIdCollection();
-            ids.Add(OuterArcLeftID);
-            //ids.Add(OuterCircleID);
-            ids.Add(plineID);
+            //内直线
+            Polyline innerPline = new Polyline();
+            innerPline.CreatePolyline(new Point2d(CircleCenter.X, CircleCenter.Y + 4), new Point2d(CircleCenter.X, CircleCenter.Y - 4));
+            acBlkTblRec.AppendEntity(innerPline);
+            trans.AddNewlyCreatedDBObject(innerPline, true);
 
-            ObjectIdCollection ids2 = new ObjectIdCollection();
-            ids2.Add(InnerArcLeftID);
-            //ids.Add(OuterCircleID);
-            ids2.Add(plineID);
+            //外直线
+            Polyline outerPline = new Polyline();
+            outerPline.CreatePolyline(new Point2d(CircleCenter.X, CircleCenter.Y + 8), new Point2d(CircleCenter.X, CircleCenter.Y - 8));
+            acBlkTblRec.AppendEntity(outerPline);
+            trans.AddNewlyCreatedDBObject(outerPline, true);
 
-            ObjectIdCollection[] loops = new ObjectIdCollection[2];
-            loops.SetValue(ids, 0);
-            loops.SetValue(ids2, 1);
-
-            Hatch hatch = new Hatch();
-            hatch.PatternScale = 1;
-            ObjectId hatEntId = AddHatch(out hatch, 0, "SOLID", Math.PI / 3, 10);
-            //hatch.CreateHatch(HatchPatternType.PreDefined, "SOLID", true);
-
-            hatch = (Hatch)trans.GetObject(hatEntId, OpenMode.ForWrite);
-            //hatch.Associative = true;
-            for (int i = 0; i < loops.Length; i++)
-            {
-                hatch.AppendLoop(HatchLoopTypes.Default, loops[i]);
-            }
-
-            //ObjectIdCollection ids2 = new ObjectIdCollection();
-            //ids2.Add(InnerCircleID);
-
-            //ObjectIdCollection[] loops = new ObjectIdCollection[2];
-            //loops.SetValue(ids, 0);
-            //loops.SetValue(ids2, 1);
-            
-
-            
-            /*for (int i = 0; i < loops.Length; i++)
-            {
-                hatch.AppendLoop(HatchLoopTypes.Default, loops[i]);
-            }*/
-
-            /*if (isLeft == true)
+            if (isLeft == true)
             {
                 ObjectIdCollection ids = new ObjectIdCollection();
-                ids.Add(InnerArcLeftID);
-                ObjectIdCollection ids2 = new ObjectIdCollection();
-                ids2.Add(OuterArcLeftID);
-                ObjectIdCollection ids3 = new ObjectIdCollection();
-                ids.Add(plineID);
+                ids.Add(OuterArcLeft.ObjectId);
+                ids.Add(outerPline.ObjectId);
 
-                ObjectIdCollection[] loops = new ObjectIdCollection[1];
-                loops.SetValue(ids, 0);
-                //loops.SetValue(ids2, 1);
-                //loops.SetValue(ids3, 1);
+                ObjectIdCollection ids2 = new ObjectIdCollection();
+                ids2.Add(InnerArcLeft.ObjectId);
+                ids2.Add(innerPline.ObjectId);
 
                 Hatch hatch = new Hatch();
-                hatch.PatternScale = 1;
-                hatch.CreateHatch(HatchPatternType.PreDefined, "SOLID", true);
-                //图形填充
+                acBlkTblRec.AppendEntity(hatch);
+                
+                trans.AddNewlyCreatedDBObject(hatch, true);
+
+                hatch.SetDatabaseDefaults();
+
+                hatch.SetHatchPattern(HatchPatternType.PreDefined, "SOLID");
+
                 hatch.Associative = true;
-                for (int i = 0; i < loops.Length; i++)
-                {
-                    hatch.AppendLoop(HatchLoopTypes.Default, loops[i]);
-                }
+
+                hatch.AppendLoop(HatchLoopTypes.Outermost, ids);
+
+                hatch.AppendLoop(HatchLoopTypes.Default, ids2);
+
+                hatch.EvaluateHatch(true);
+
                 ids.Clear();
-                //hatch.EvaluateHatch(true);
+                ids2.Clear();
                 
             }
             else
             {
                 ObjectIdCollection ids = new ObjectIdCollection();
-                ids.Add(InnerArcRightID);
-                ObjectIdCollection ids2 = new ObjectIdCollection();
-                ids2.Add(OuterArcRightID);
-                ObjectIdCollection ids3 = new ObjectIdCollection();
-                ids.Add(plineID);
+                ids.Add(OuterArcRight.ObjectId);
+                ids.Add(outerPline.ObjectId);
 
-                ObjectIdCollection[] loops = new ObjectIdCollection[1];
-                loops.SetValue(ids, 0);
-                //loops.SetValue(ids2, 1);
-                //loops.SetValue(ids3, 1);
+                ObjectIdCollection ids2 = new ObjectIdCollection();
+                ids2.Add(InnerArcRight.ObjectId);
+                ids2.Add(innerPline.ObjectId);
 
                 Hatch hatch = new Hatch();
-                hatch.PatternScale = 1;
-                hatch.CreateHatch(HatchPatternType.PreDefined, "SOLID", true);
-                //图形填充
+
+                acBlkTblRec.AppendEntity(hatch);
+
+                trans.AddNewlyCreatedDBObject(hatch, true);
+
+                hatch.SetDatabaseDefaults();
+
+                hatch.SetHatchPattern(HatchPatternType.PreDefined, "SOLID");
+
                 hatch.Associative = true;
 
-                for (int i = 0; i < loops.Length; i++)
-                {
-                    hatch.AppendLoop(HatchLoopTypes.Default, loops[i]);
-                }
-                ids.Clear();
-                //hatch.EvaluateHatch(true);
-            }*/
-            
-           
+                hatch.AppendLoop(HatchLoopTypes.Outermost, ids);
 
+                hatch.AppendLoop(HatchLoopTypes.Default, ids2);
+
+                hatch.EvaluateHatch(true);
+
+                ids.Clear();
+                ids2.Clear();
+
+            }
 
         }
 
