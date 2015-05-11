@@ -45,8 +45,10 @@ namespace AutoDrawDWG
                 {
                     DocumentLock m_DocumentLock = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LockDocument();
 
+                    //用于生成图块， 如站点图块，铁路标识
                     if (CheckBlock(db, trans))
                     {
+                        //在相应位置插入图块和实体
                         trans.Commit();
                     }
                     else
@@ -87,6 +89,7 @@ namespace AutoDrawDWG
             return isSuc;
         }
 
+        #region 图块
         public bool CheckBlock(Database db, Transaction trans)
         {
             bool allCheck = false;
@@ -96,52 +99,34 @@ namespace AutoDrawDWG
             bool hasRightSideMark = false;
             bool hasRailWayMark = false;
             //查找是已存在站点标识
-            foreach (ObjectId blockRecordId in bt)
-            {
-                BlockTableRecord btRecord = (BlockTableRecord)trans.GetObject(blockRecordId, OpenMode.ForRead);
-                if (btRecord.Name == "始发站站点标示")
-                {
-                    hasLeftSideMark = true;
-                    break;
-                }
 
-                if (btRecord.Name == "到达站站点标示")
-                {
-                    hasRightSideMark = true;
-                    break;
-                }
-
-                if (btRecord.Name == "铁轨_Length_248")
-                {
-                    hasRailWayMark = true;
-                    break;
-                }
-            }
             Point3d insertPoint = new Point3d();
             //如果不存在右侧标识则新建块
-            if (!bt.Has("始发站站点标示"))
+            if (!bt.Has("到达站站点标示"))
             {
-                CreateStationMark(db, trans, insertPoint, false);
+                Form1.StationAndLocation station_location = new Form1.StationAndLocation("1", "吉林站", "DK0+000");
+                CreateStationMark(db, trans, insertPoint, false, station_location);
             }
 
             //如果不存在左侧标识则新建块
             //Point3d insertPoint2 = new Point3d(insertPoint.X + 100, insertPoint.Y, insertPoint.Z);
-            if (!bt.Has("到达站站点标示"))
+            if (!bt.Has("始发站站点标示"))
             {
-                CreateStationMark(db, trans, insertPoint, true);
+                Form1.StationAndLocation station_location = new Form1.StationAndLocation("1", "蛟河西站", "DK66+535");
+                CreateStationMark(db, trans, insertPoint, true, station_location);
             }
 
             //如果不存在铁轨标识则新建块
             if (!bt.Has("铁轨_Length_248"))
             {
-                CreateRailWayMark(db, trans, insertPoint);
+                CreateRailWayMark(db, trans, insertPoint, "XX上行线/下行线");
             }
 
             allCheck = true;
             return allCheck;
         }
-        //新建铁轨标识
-        private void CreateRailWayMark(Database db, Transaction trans, Point3d insertPoint)
+        //添加铁轨标识
+        private void CreateRailWayMark(Database db, Transaction trans, Point3d insertPoint, string RailWayDirection)
         {
             // Open the Block table for read
             BlockTable acBlkTbl = trans.GetObject(db.BlockTableId, OpenMode.ForRead) as BlockTable;
@@ -152,34 +137,38 @@ namespace AutoDrawDWG
             acBlkTbl.Add(acBlkTblRec);
             acBlkTblRec.Name = "铁轨_Length_248";
 
-            //属性块
-            double textHeight = 50;
-            AttributeDefinition ProjectNameShortAtt = new AttributeDefinition(new Point3d(insertPoint.X, insertPoint.Y + textHeight / 2, insertPoint.Z), "XX上行线/下行线", "线路", "输入线路名简称", ObjectId.Null);
+            //块属性
+            double textHeight = 5;
+            AttributeDefinition ProjectNameShortAtt = new AttributeDefinition(new Point3d(insertPoint.X, insertPoint.Y - textHeight, 0), RailWayDirection, "上/下行", "输入线路名简称", ObjectId.Null);
             SetStyleForAtt(ProjectNameShortAtt, textHeight, false);
 
+            acBlkTblRec.AppendEntity(ProjectNameShortAtt);
+            trans.AddNewlyCreatedDBObject(ProjectNameShortAtt, true);
+            //ProjectNameShortAtt.AlignmentPoint = new Point3d(1, 1, 0);
+
             Polyline BigRectangle = new Polyline(4);
-            BigRectangle.AddVertexAt(0, new Point2d(insertPoint.X, insertPoint.Y), 0, 0.1, 0.1);
-            BigRectangle.AddVertexAt(1, new Point2d(insertPoint.X + 248, insertPoint.Y), 0, 0.1, 0.1);
-            BigRectangle.AddVertexAt(2, new Point2d(insertPoint.X + 248, insertPoint.Y - 7), 0, 0.1, 0.1);
-            BigRectangle.AddVertexAt(3, new Point2d(insertPoint.X, insertPoint.Y - 7), 0, 0.1, 0.1);
+            BigRectangle.AddVertexAt(0, new Point2d(insertPoint.X + 40, insertPoint.Y), 0, 0.1, 0.1);
+            BigRectangle.AddVertexAt(1, new Point2d(insertPoint.X + 40 + 248, insertPoint.Y), 0, 0.1, 0.1);
+            BigRectangle.AddVertexAt(2, new Point2d(insertPoint.X + 40 + 248, insertPoint.Y - 7), 0, 0.1, 0.1);
+            BigRectangle.AddVertexAt(3, new Point2d(insertPoint.X + 40, insertPoint.Y - 7), 0, 0.1, 0.1);
             BigRectangle.Closed = true;
             acBlkTblRec.AppendEntity(BigRectangle);
             trans.AddNewlyCreatedDBObject(BigRectangle, true);
 
             Polyline InsideRectangle_1 = new Polyline(4);
-            InsideRectangle_1.AddVertexAt(0, new Point2d(insertPoint.X + 50, insertPoint.Y), 0, 0.1, 0.1);
-            InsideRectangle_1.AddVertexAt(1, new Point2d(insertPoint.X + 100, insertPoint.Y), 0, 0.1, 0.1);
-            InsideRectangle_1.AddVertexAt(2, new Point2d(insertPoint.X + 100, insertPoint.Y - 7), 0, 0.1, 0.1);
-            InsideRectangle_1.AddVertexAt(3, new Point2d(insertPoint.X + 50, insertPoint.Y - 7), 0, 0.1, 0.1);
+            InsideRectangle_1.AddVertexAt(0, new Point2d(insertPoint.X + 90, insertPoint.Y), 0, 0.1, 0.1);
+            InsideRectangle_1.AddVertexAt(1, new Point2d(insertPoint.X + 140, insertPoint.Y), 0, 0.1, 0.1);
+            InsideRectangle_1.AddVertexAt(2, new Point2d(insertPoint.X + 140, insertPoint.Y - 7), 0, 0.1, 0.1);
+            InsideRectangle_1.AddVertexAt(3, new Point2d(insertPoint.X + 90, insertPoint.Y - 7), 0, 0.1, 0.1);
             InsideRectangle_1.Closed = true;
             acBlkTblRec.AppendEntity(InsideRectangle_1);
             trans.AddNewlyCreatedDBObject(InsideRectangle_1, true);
 
             Polyline InsideRectangle_2 = new Polyline(4);
-            InsideRectangle_2.AddVertexAt(0, new Point2d(insertPoint.X + 150, insertPoint.Y), 0, 0.1, 0.1);
-            InsideRectangle_2.AddVertexAt(1, new Point2d(insertPoint.X + 200, insertPoint.Y), 0, 0.1, 0.1);
-            InsideRectangle_2.AddVertexAt(2, new Point2d(insertPoint.X + 200, insertPoint.Y - 7), 0, 0.1, 0.1);
-            InsideRectangle_2.AddVertexAt(3, new Point2d(insertPoint.X + 150, insertPoint.Y - 7), 0, 0.1, 0.1);
+            InsideRectangle_2.AddVertexAt(0, new Point2d(insertPoint.X + 190, insertPoint.Y), 0, 0.1, 0.1);
+            InsideRectangle_2.AddVertexAt(1, new Point2d(insertPoint.X + 240, insertPoint.Y), 0, 0.1, 0.1);
+            InsideRectangle_2.AddVertexAt(2, new Point2d(insertPoint.X + 240, insertPoint.Y - 7), 0, 0.1, 0.1);
+            InsideRectangle_2.AddVertexAt(3, new Point2d(insertPoint.X + 190, insertPoint.Y - 7), 0, 0.1, 0.1);
             InsideRectangle_2.Closed = true;
             acBlkTblRec.AppendEntity(InsideRectangle_2);
             trans.AddNewlyCreatedDBObject(InsideRectangle_2, true);
@@ -203,7 +192,12 @@ namespace AutoDrawDWG
 
             hatch.EvaluateHatch(true);
             db.TransactionManager.AddNewlyCreatedDBObject(acBlkTblRec, true);
-            acBlkTblRec.ObjectId.AddAttsToBlock(ProjectNameShortAtt);
+            //acBlkTblRec.ObjectId.AddAttsToBlock(ProjectNameShortAtt);
+
+            //Dictionary<string,string> att=new Dictionary<string,string>();
+            //att.Add("xx上行线/下行线","吉珲上行线");
+            //double textHeight=50;
+            //db.CurrentSpaceId.InsertBlockReference("0", "铁轨_Length_248", new Point3d(insertPoint.X, insertPoint.Y - textHeight / 2, 0), new Scale3d(2), 0, att);
             acBlkTbl.DowngradeOpen();
         }
 
@@ -223,7 +217,7 @@ namespace AutoDrawDWG
             att.Invisible = invisible;
         }
         //新建站点标识
-        private void CreateStationMark(Database db, Transaction trans, Point3d insertPoint, bool isLeft)
+        private void CreateStationMark(Database db, Transaction trans, Point3d insertPoint, bool isLeft, Form1.StationAndLocation station_location)
         {
             // Open the Block table for read
             BlockTable acBlkTbl;
@@ -248,48 +242,95 @@ namespace AutoDrawDWG
 
             Point2d CircleCenter = new Point2d(insertPoint.X, insertPoint.Y);
 
-            //起始、终止角度
+            //画圆（左右两个半圆）
+                //起始、终止角度
             double startAngle = 90;
             double endAngle = 270;
-            //内圆 由两个arc组成
-            //左侧
-            Arc InnerArcLeft = new Arc(new Point3d(CircleCenter.X, CircleCenter.Y, 0), 4, startAngle.DegreeToRadian(), endAngle.DegreeToRadian());
+                //内圆 由两个arc组成
+                    //左侧
+            Arc InnerArcLeft = new Arc(new Point3d(CircleCenter.X, CircleCenter.Y, 0), 2, startAngle.DegreeToRadian(), endAngle.DegreeToRadian());
             acBlkTblRec.AppendEntity(InnerArcLeft);
             trans.AddNewlyCreatedDBObject(InnerArcLeft, true);
 
-            //右侧
-            Arc InnerArcRight = new Arc(new Point3d(CircleCenter.X, CircleCenter.Y, 0), 4, endAngle.DegreeToRadian(), startAngle.DegreeToRadian());
+                    //右侧
+            Arc InnerArcRight = new Arc(new Point3d(CircleCenter.X, CircleCenter.Y, 0), 2, endAngle.DegreeToRadian(), startAngle.DegreeToRadian());
             acBlkTblRec.AppendEntity(InnerArcRight);
             trans.AddNewlyCreatedDBObject(InnerArcRight, true);
 
-            //外圆 由两个arc组成
-            //左侧
-            Arc OuterArcLeft = new Arc(new Point3d(CircleCenter.X, CircleCenter.Y, 0), 8, startAngle.DegreeToRadian(), endAngle.DegreeToRadian());
+                //外圆 由两个arc组成
+                    //左侧
+            Arc OuterArcLeft = new Arc(new Point3d(CircleCenter.X, CircleCenter.Y, 0), 4, startAngle.DegreeToRadian(), endAngle.DegreeToRadian());
             acBlkTblRec.AppendEntity(OuterArcLeft);
             trans.AddNewlyCreatedDBObject(OuterArcLeft, true);
 
-            //右侧
-            Arc OuterArcRight = new Arc(new Point3d(CircleCenter.X, CircleCenter.Y, 0), 8, endAngle.DegreeToRadian(), startAngle.DegreeToRadian());
+                    //右侧
+            Arc OuterArcRight = new Arc(new Point3d(CircleCenter.X, CircleCenter.Y, 0), 4, endAngle.DegreeToRadian(), startAngle.DegreeToRadian());
             acBlkTblRec.AppendEntity(OuterArcRight);
             trans.AddNewlyCreatedDBObject(OuterArcRight, true);
 
             //直线
             Polyline pline = new Polyline();
-            pline.CreatePolyline(new Point2d(CircleCenter.X, CircleCenter.Y + 8), new Point2d(CircleCenter.X, CircleCenter.Y - 36));
+            pline.CreatePolyline(new Point2d(CircleCenter.X, CircleCenter.Y + 4), new Point2d(CircleCenter.X, CircleCenter.Y - 36));
             acBlkTblRec.AppendEntity(pline);
             trans.AddNewlyCreatedDBObject(pline, true);
 
-            //内直线
+            //内辅助直线
             Polyline innerPline = new Polyline();
-            innerPline.CreatePolyline(new Point2d(CircleCenter.X, CircleCenter.Y + 4), new Point2d(CircleCenter.X, CircleCenter.Y - 4));
+            innerPline.CreatePolyline(new Point2d(CircleCenter.X, CircleCenter.Y + 2), new Point2d(CircleCenter.X, CircleCenter.Y - 2));
             acBlkTblRec.AppendEntity(innerPline);
             trans.AddNewlyCreatedDBObject(innerPline, true);
 
-            //外直线
+            //外辅助直线
             Polyline outerPline = new Polyline();
-            outerPline.CreatePolyline(new Point2d(CircleCenter.X, CircleCenter.Y + 8), new Point2d(CircleCenter.X, CircleCenter.Y - 8));
+            outerPline.CreatePolyline(new Point2d(CircleCenter.X, CircleCenter.Y + 4), new Point2d(CircleCenter.X, CircleCenter.Y - 4));
             acBlkTblRec.AppendEntity(outerPline);
             trans.AddNewlyCreatedDBObject(outerPline, true);
+
+            //添加两个属性块： 站名，里程
+            double textHeight = 3;
+            AttributeDefinition AttStationName=new AttributeDefinition( );// = new AttributeDefinition(new Point3d(insertPoint.X, insertPoint.Y + 12, 0), "", "站名", "输入站点名称", ObjectId.Null);
+            AttributeDefinition AttStationLocation = new AttributeDefinition(new Point3d(insertPoint.X, insertPoint.Y - 18, 0), "", "里程", "输入站点里程", ObjectId.Null);
+
+            //设置两个属性块对齐方式，对齐点
+            AttStationName.TextString = "XXX站";
+            AttStationName.Tag = "站名";
+            AttStationName.Prompt = "输入站点名称";
+            AttStationName.TextStyleId = ObjectId.Null;
+            AttStationName.AlignmentPoint = new Point3d(insertPoint.X, insertPoint.Y + 5, 0);
+            AttStationName.HorizontalMode = TextHorizontalMode.TextCenter; //水平方向取终点
+            AttStationName.VerticalMode = TextVerticalMode.TextBottom;
+
+            AttStationLocation.TextString = "XXX站";
+            AttStationLocation.Tag = "站名";
+            AttStationLocation.Prompt = "输入站点名称";
+            AttStationLocation.TextStyleId = ObjectId.Null;
+            AttStationLocation.AlignmentPoint = new Point3d(insertPoint.X + 1, insertPoint.Y - 18, 0);
+            AttStationLocation.HorizontalMode = TextHorizontalMode.TextCenter; //水平方向取终点
+            AttStationLocation.VerticalMode = TextVerticalMode.TextBottom;
+            //AttStationName.Justify = AttachmentPoint.MiddleCenter;
+            //AttStationName.AlignmentPoint = new Point3d(insertPoint.X, insertPoint.Y + 5, 0);
+            //AttStationName.LockPositionInBlock = true;
+            //AttStationName.AdjustAlignment(db);
+
+            //AttStationLocation.AlignmentPoint = new Point3d(insertPoint.X + 3, insertPoint.Y - 18, 0);
+            //AttStationLocation.Rotation = 90;
+            //AttStationLocation.HorizontalMode = TextHorizontalMode.TextCenter; //水平方向取终点
+            //AttStationLocation.VerticalMode = TextVerticalMode.TextTop;
+            //AttStationLocation.Rotation = 63.4;
+            //AttStationLocation.Justify = AttachmentPoint.MiddleCenter;
+            //AttStationLocation.AlignmentPoint = new Point3d(insertPoint.X + 3, insertPoint.Y - 18, 0);
+            //AttStationLocation.LockPositionInBlock = true;
+            //AttStationLocation.AdjustAlignment(db);
+
+            //设置属性块高度和可见性
+            SetStyleForAtt(AttStationName, textHeight, false);
+            SetStyleForAtt(AttStationLocation, textHeight, false);
+
+            //添加到块定义中
+            acBlkTblRec.AppendEntity(AttStationName);
+            trans.AddNewlyCreatedDBObject(AttStationName, true);
+            acBlkTblRec.AppendEntity(AttStationLocation);
+            trans.AddNewlyCreatedDBObject(AttStationLocation, true);
 
             if (isLeft == false)
             {
@@ -303,7 +344,7 @@ namespace AutoDrawDWG
 
                 Hatch hatch = new Hatch();
                 acBlkTblRec.AppendEntity(hatch);
-                
+
                 trans.AddNewlyCreatedDBObject(hatch, true);
 
                 hatch.SetDatabaseDefaults();
@@ -320,7 +361,7 @@ namespace AutoDrawDWG
 
                 ids.Clear();
                 ids2.Clear();
-                
+
             }
             else
             {
@@ -360,7 +401,14 @@ namespace AutoDrawDWG
 
         }
 
+        #endregion 
 
+        #region 绘图
+        public void drawTable(Database db, Transaction trans, Point3d insertPoint)
+        {
+
+        }
+        #endregion
 
         // 由图案填充类型、填充图案名称、
         // 填充角度和填充比例创建图案填充的函数.
