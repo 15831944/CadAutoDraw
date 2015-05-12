@@ -288,43 +288,57 @@ namespace AutoDrawDWG
 
             //添加两个属性块： 站名，里程
             double textHeight = 3;
-            AttributeDefinition AttStationName=new AttributeDefinition( );// = new AttributeDefinition(new Point3d(insertPoint.X, insertPoint.Y + 12, 0), "", "站名", "输入站点名称", ObjectId.Null);
-            AttributeDefinition AttStationLocation = new AttributeDefinition(new Point3d(insertPoint.X, insertPoint.Y - 18, 0), "", "里程", "输入站点里程", ObjectId.Null);
+            AttributeDefinition AttStationName = new AttributeDefinition();            
 
             //设置两个属性块对齐方式，对齐点
             AttStationName.TextString = "XXX站";
             AttStationName.Tag = "站名";
-            AttStationName.Prompt = "输入站点名称";
+            AttStationName.Prompt = "输入站点名称"; 
+            SetStyleForAtt(AttStationName, textHeight, false);
             AttStationName.TextStyleId = ObjectId.Null;
-            AttStationName.AlignmentPoint = new Point3d(insertPoint.X, insertPoint.Y + 5, 0);
-            AttStationName.HorizontalMode = TextHorizontalMode.TextCenter; //水平方向取终点
-            AttStationName.VerticalMode = TextVerticalMode.TextBottom;
+            AttStationName.Justify = AttachmentPoint.BaseCenter;
 
+            //AttStationName.HorizontalMode = TextHorizontalMode.TextCenter; //水平方向取中点
+            //AttStationName.VerticalMode = TextVerticalMode.TextVerticalMid;
+            AttStationName.AlignmentPoint = new Point3d(insertPoint.X, insertPoint.Y + 6, 0);
+            //AdjustAlignment(db);
+            //AttStationName.AdjustAlignment(db);
+            /*
+            AttStationName.HorizontalMode = TextHorizontalMode.TextCenter; //水平方向取中点
+            AttStationName.VerticalMode = TextVerticalMode.TextVerticalMid;
+            AttStationName.AlignmentPoint = new Point3d(insertPoint.X, insertPoint.Y + 6, 0);
+             */
+
+            AttributeDefinition AttStationLocation = new AttributeDefinition();
+            //new Point3d(insertPoint.X, insertPoint.Y - 18, 0), "", "里程", "输入站点里程", ObjectId.Null);
+            
             AttStationLocation.TextString = "XXX站";
-            AttStationLocation.Tag = "站名";
-            AttStationLocation.Prompt = "输入站点名称";
+            AttStationLocation.Tag = "里程";
+            AttStationLocation.Prompt = "输入站点里程";
             AttStationLocation.TextStyleId = ObjectId.Null;
+            AttStationLocation.Justify = AttachmentPoint.TopCenter;
+            //double rotatedAngle = 90;
+            //AttStationLocation.Rotation = rotatedAngle.DegreeToRadian();
             AttStationLocation.AlignmentPoint = new Point3d(insertPoint.X + 1, insertPoint.Y - 18, 0);
+            /*
             AttStationLocation.HorizontalMode = TextHorizontalMode.TextCenter; //水平方向取终点
             AttStationLocation.VerticalMode = TextVerticalMode.TextBottom;
-            //AttStationName.Justify = AttachmentPoint.MiddleCenter;
-            //AttStationName.AlignmentPoint = new Point3d(insertPoint.X, insertPoint.Y + 5, 0);
-            //AttStationName.LockPositionInBlock = true;
-            //AttStationName.AdjustAlignment(db);
-
-            //AttStationLocation.AlignmentPoint = new Point3d(insertPoint.X + 3, insertPoint.Y - 18, 0);
-            //AttStationLocation.Rotation = 90;
+            AttStationLocation.AlignmentPoint = new Point3d(insertPoint.X + 1, insertPoint.Y - 18, 0);
+            
+            */
             //AttStationLocation.HorizontalMode = TextHorizontalMode.TextCenter; //水平方向取终点
             //AttStationLocation.VerticalMode = TextVerticalMode.TextTop;
-            //AttStationLocation.Rotation = 63.4;
-            //AttStationLocation.Justify = AttachmentPoint.MiddleCenter;
             //AttStationLocation.AlignmentPoint = new Point3d(insertPoint.X + 3, insertPoint.Y - 18, 0);
-            //AttStationLocation.LockPositionInBlock = true;
             //AttStationLocation.AdjustAlignment(db);
-
+            
+            //AttStationLocation.HorizontalMode = TextHorizontalMode.TextCenter; //水平方向取终点
+            //AttStationLocation.VerticalMode = TextVerticalMode.TextBottom;
+            //AttStationLocation.AlignmentPoint = new Point3d(insertPoint.X + 1, insertPoint.Y - 18, 0);
+             
+            
             //设置属性块高度和可见性
-            SetStyleForAtt(AttStationName, textHeight, false);
-            SetStyleForAtt(AttStationLocation, textHeight, false);
+            
+            //SetStyleForAtt(AttStationLocation, textHeight, false);
 
             //添加到块定义中
             acBlkTblRec.AppendEntity(AttStationName);
