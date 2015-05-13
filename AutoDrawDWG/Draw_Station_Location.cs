@@ -46,7 +46,7 @@ namespace AutoDrawDWG
                     DocumentLock m_DocumentLock = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LockDocument();
 
                     //用于生成图块， 如站点图块，铁路标识
-                    if (CheckBlock(db, trans))
+                    if (CheckBlock(db, trans)) //检查预设的块是否存在，如不存在新建
                     {
                         //在相应位置插入图块和实体
                         trans.Commit();
@@ -301,50 +301,29 @@ namespace AutoDrawDWG
             //AttStationName.HorizontalMode = TextHorizontalMode.TextCenter; //水平方向取中点
             //AttStationName.VerticalMode = TextVerticalMode.TextVerticalMid;
             AttStationName.AlignmentPoint = new Point3d(insertPoint.X, insertPoint.Y + 6, 0);
-            //AdjustAlignment(db);
-            //AttStationName.AdjustAlignment(db);
-            /*
-            AttStationName.HorizontalMode = TextHorizontalMode.TextCenter; //水平方向取中点
-            AttStationName.VerticalMode = TextVerticalMode.TextVerticalMid;
-            AttStationName.AlignmentPoint = new Point3d(insertPoint.X, insertPoint.Y + 6, 0);
-             */
+            acBlkTblRec.AppendEntity(AttStationName);
+            trans.AddNewlyCreatedDBObject(AttStationName, true);
 
-            AttributeDefinition AttStationLocation = new AttributeDefinition();
-            //new Point3d(insertPoint.X, insertPoint.Y - 18, 0), "", "里程", "输入站点里程", ObjectId.Null);
-            
+            AttributeDefinition AttStationLocation = new AttributeDefinition();            
             AttStationLocation.TextString = "XXX站";
             AttStationLocation.Tag = "里程";
             AttStationLocation.Prompt = "输入站点里程";
+            SetStyleForAtt(AttStationLocation, textHeight, false);
             AttStationLocation.TextStyleId = ObjectId.Null;
             AttStationLocation.Justify = AttachmentPoint.TopCenter;
+            /*
+             * AttStationLocation.HorizontalMode = TextHorizontalMode.TextCenter; //水平方向取终点
+             * AttStationLocation.VerticalMode = TextVerticalMode.TextBottom;
+             * AttStationLocation.AlignmentPoint = new Point3d(insertPoint.X + 1, insertPoint.Y - 18, 0);          
+             */
+             
             //double rotatedAngle = 90;
             //AttStationLocation.Rotation = rotatedAngle.DegreeToRadian();
             AttStationLocation.AlignmentPoint = new Point3d(insertPoint.X + 1, insertPoint.Y - 18, 0);
-            /*
-            AttStationLocation.HorizontalMode = TextHorizontalMode.TextCenter; //水平方向取终点
-            AttStationLocation.VerticalMode = TextVerticalMode.TextBottom;
-            AttStationLocation.AlignmentPoint = new Point3d(insertPoint.X + 1, insertPoint.Y - 18, 0);
-            
-            */
-            //AttStationLocation.HorizontalMode = TextHorizontalMode.TextCenter; //水平方向取终点
-            //AttStationLocation.VerticalMode = TextVerticalMode.TextTop;
-            //AttStationLocation.AlignmentPoint = new Point3d(insertPoint.X + 3, insertPoint.Y - 18, 0);
-            //AttStationLocation.AdjustAlignment(db);
-            
-            //AttStationLocation.HorizontalMode = TextHorizontalMode.TextCenter; //水平方向取终点
-            //AttStationLocation.VerticalMode = TextVerticalMode.TextBottom;
-            //AttStationLocation.AlignmentPoint = new Point3d(insertPoint.X + 1, insertPoint.Y - 18, 0);
-             
-            
-            //设置属性块高度和可见性
-            
-            //SetStyleForAtt(AttStationLocation, textHeight, false);
 
-            //添加到块定义中
-            acBlkTblRec.AppendEntity(AttStationName);
-            trans.AddNewlyCreatedDBObject(AttStationName, true);
             acBlkTblRec.AppendEntity(AttStationLocation);
             trans.AddNewlyCreatedDBObject(AttStationLocation, true);
+                      
 
             if (isLeft == false)
             {
@@ -420,7 +399,48 @@ namespace AutoDrawDWG
         #region 绘图
         public void drawTable(Database db, Transaction trans, Point3d insertPoint)
         {
+            using (BlockTable bt = (BlockTable)trans.GetObject(db.BlockTableId, OpenMode.ForRead))
+            {
 
+                BlockTableRecord btr = (BlockTableRecord)trans.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
+                Polyline pHorizonline1 = new Polyline();
+                pHorizonline1.CreatePolyline(new Point2d(insertPoint.X, insertPoint.Y + 4), new Point2d(insertPoint.X, insertPoint.Y - 36));
+                btr.AppendEntity(pHorizonline1);
+                trans.AddNewlyCreatedDBObject(pHorizonline1, true);
+
+                Polyline pHorizonline2 = new Polyline();
+                pHorizonline2.CreatePolyline(new Point2d(insertPoint.X, insertPoint.Y + 4), new Point2d(insertPoint.X, insertPoint.Y - 36));
+                btr.AppendEntity(pHorizonline2);
+                trans.AddNewlyCreatedDBObject(pHorizonline2, true);
+
+                Polyline pHorizonline3 = new Polyline();
+                pHorizonline3.CreatePolyline(new Point2d(insertPoint.X, insertPoint.Y + 4), new Point2d(insertPoint.X, insertPoint.Y - 36));
+                btr.AppendEntity(pHorizonline3);
+                trans.AddNewlyCreatedDBObject(pHorizonline3, true);
+
+                Polyline pHorizonline4 = new Polyline();
+                pHorizonline4.CreatePolyline(new Point2d(insertPoint.X, insertPoint.Y + 4), new Point2d(insertPoint.X, insertPoint.Y - 36));
+                btr.AppendEntity(pHorizonline4);
+                trans.AddNewlyCreatedDBObject(pHorizonline4, true);
+
+                Polyline pHorizonline5 = new Polyline();
+                pHorizonline5.CreatePolyline(new Point2d(insertPoint.X, insertPoint.Y + 4), new Point2d(insertPoint.X, insertPoint.Y - 36));
+                btr.AppendEntity(pHorizonline5);
+                trans.AddNewlyCreatedDBObject(pHorizonline5, true);
+
+                Polyline pVerticalLine1 = new Polyline();
+                pVerticalLine1.CreatePolyline(new Point2d(insertPoint.X, insertPoint.Y + 4), new Point2d(insertPoint.X, insertPoint.Y - 36));
+                btr.AppendEntity(pVerticalLine1);
+                trans.AddNewlyCreatedDBObject(pVerticalLine1, true);
+
+                Polyline pVerticalLine2 = new Polyline();
+                pVerticalLine2.CreatePolyline(new Point2d(insertPoint.X, insertPoint.Y + 4), new Point2d(insertPoint.X, insertPoint.Y - 36));
+                btr.AppendEntity(pVerticalLine2);
+                trans.AddNewlyCreatedDBObject(pVerticalLine2, true);
+            }
+            
+
+            
         }
         #endregion
 
