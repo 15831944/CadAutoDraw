@@ -44,7 +44,7 @@ namespace AutoDrawDWG
                 try
                 {
                     DocumentLock m_DocumentLock = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LockDocument();
-
+                    drawTable(db, trans, new Point3d(0, 0, 0));
                     //用于生成图块， 如站点图块，铁路标识
                     if (CheckBlock(db, trans)) //检查预设的块是否存在，如不存在新建
                     {
@@ -55,6 +55,7 @@ namespace AutoDrawDWG
                     {
                         Application.ShowAlertDialog("Error");
                     }
+                    
                     //插入表示站点图形
                     
                     //Point3d insertP = new Point3d();
@@ -310,7 +311,7 @@ namespace AutoDrawDWG
             AttStationLocation.Prompt = "输入站点里程";
             SetStyleForAtt(AttStationLocation, textHeight, false);
             AttStationLocation.TextStyleId = ObjectId.Null;
-            AttStationLocation.Justify = AttachmentPoint.TopCenter;
+            AttStationLocation.Justify = AttachmentPoint.TopLeft;
             /*
              * AttStationLocation.HorizontalMode = TextHorizontalMode.TextCenter; //水平方向取终点
              * AttStationLocation.VerticalMode = TextVerticalMode.TextBottom;
@@ -399,50 +400,80 @@ namespace AutoDrawDWG
         #region 绘图
         public void drawTable(Database db, Transaction trans, Point3d insertPoint)
         {
-            using (BlockTable bt = (BlockTable)trans.GetObject(db.BlockTableId, OpenMode.ForRead))
-            {
+            BlockTable bt = (BlockTable)trans.GetObject(db.BlockTableId, OpenMode.ForRead);
+            bt.UpgradeOpen();
+            BlockTableRecord btr = (BlockTableRecord)trans.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
 
-                BlockTableRecord btr = (BlockTableRecord)trans.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
-                Polyline pHorizonline1 = new Polyline();
-                pHorizonline1.CreatePolyline(new Point2d(insertPoint.X, insertPoint.Y + 4), new Point2d(insertPoint.X, insertPoint.Y - 36));
-                btr.AppendEntity(pHorizonline1);
-                trans.AddNewlyCreatedDBObject(pHorizonline1, true);
+            Polyline pHorizonline1 = new Polyline();
+            pHorizonline1.CreatePolyline(new Point2d(insertPoint.X, insertPoint.Y), new Point2d(insertPoint.X + 30, insertPoint.Y));
+            btr.AppendEntity(pHorizonline1);
+            trans.AddNewlyCreatedDBObject(pHorizonline1, true);
 
-                Polyline pHorizonline2 = new Polyline();
-                pHorizonline2.CreatePolyline(new Point2d(insertPoint.X, insertPoint.Y + 4), new Point2d(insertPoint.X, insertPoint.Y - 36));
-                btr.AppendEntity(pHorizonline2);
-                trans.AddNewlyCreatedDBObject(pHorizonline2, true);
+            Polyline pHorizonline2 = new Polyline();
+            pHorizonline2.CreatePolyline(new Point2d(insertPoint.X, insertPoint.Y - 8.5), new Point2d(insertPoint.X + 30, insertPoint.Y - 8.5));
+            btr.AppendEntity(pHorizonline2);
+            trans.AddNewlyCreatedDBObject(pHorizonline2, true);
 
-                Polyline pHorizonline3 = new Polyline();
-                pHorizonline3.CreatePolyline(new Point2d(insertPoint.X, insertPoint.Y + 4), new Point2d(insertPoint.X, insertPoint.Y - 36));
-                btr.AppendEntity(pHorizonline3);
-                trans.AddNewlyCreatedDBObject(pHorizonline3, true);
+            Polyline pHorizonline3 = new Polyline();
+            pHorizonline3.CreatePolyline(new Point2d(insertPoint.X, insertPoint.Y - 19), new Point2d(insertPoint.X + 30, insertPoint.Y - 19));
+            btr.AppendEntity(pHorizonline3);
+            trans.AddNewlyCreatedDBObject(pHorizonline3, true);
 
-                Polyline pHorizonline4 = new Polyline();
-                pHorizonline4.CreatePolyline(new Point2d(insertPoint.X, insertPoint.Y + 4), new Point2d(insertPoint.X, insertPoint.Y - 36));
-                btr.AppendEntity(pHorizonline4);
-                trans.AddNewlyCreatedDBObject(pHorizonline4, true);
+            Polyline pHorizonline4 = new Polyline();
+            pHorizonline4.CreatePolyline(new Point2d(insertPoint.X, insertPoint.Y - 32.5), new Point2d(insertPoint.X + 247, insertPoint.Y - 32.5));
+            btr.AppendEntity(pHorizonline4);
+            trans.AddNewlyCreatedDBObject(pHorizonline4, true);
 
-                Polyline pHorizonline5 = new Polyline();
-                pHorizonline5.CreatePolyline(new Point2d(insertPoint.X, insertPoint.Y + 4), new Point2d(insertPoint.X, insertPoint.Y - 36));
-                btr.AppendEntity(pHorizonline5);
-                trans.AddNewlyCreatedDBObject(pHorizonline5, true);
+            Polyline pHorizonline5 = new Polyline();
+            pHorizonline5.CreatePolyline(new Point2d(insertPoint.X, insertPoint.Y - 41), new Point2d(insertPoint.X + 247, insertPoint.Y - 41));
+            btr.AppendEntity(pHorizonline5);
+            trans.AddNewlyCreatedDBObject(pHorizonline5, true);
 
-                Polyline pVerticalLine1 = new Polyline();
-                pVerticalLine1.CreatePolyline(new Point2d(insertPoint.X, insertPoint.Y + 4), new Point2d(insertPoint.X, insertPoint.Y - 36));
-                btr.AppendEntity(pVerticalLine1);
-                trans.AddNewlyCreatedDBObject(pVerticalLine1, true);
+            Polyline pVerticalLine1 = new Polyline();
+            pVerticalLine1.CreatePolyline(new Point2d(insertPoint.X, insertPoint.Y), new Point2d(insertPoint.X, insertPoint.Y - 41));
+            btr.AppendEntity(pVerticalLine1);
+            trans.AddNewlyCreatedDBObject(pVerticalLine1, true);
 
-                Polyline pVerticalLine2 = new Polyline();
-                pVerticalLine2.CreatePolyline(new Point2d(insertPoint.X, insertPoint.Y + 4), new Point2d(insertPoint.X, insertPoint.Y - 36));
-                btr.AppendEntity(pVerticalLine2);
-                trans.AddNewlyCreatedDBObject(pVerticalLine2, true);
-            }
-            
+            Polyline pVerticalLine2 = new Polyline();
+            pVerticalLine2.CreatePolyline(new Point2d(insertPoint.X + 30, insertPoint.Y), new Point2d(insertPoint.X + 30, insertPoint.Y - 41));
+            btr.AppendEntity(pVerticalLine2);
+            trans.AddNewlyCreatedDBObject(pVerticalLine2, true);
 
-            
+            DBText TStationName = new DBText();
+            TStationName.TextString = "站名";
+            TStationName.Height = 3;
+            TStationName.VerticalMode = TextVerticalMode.TextVerticalMid;
+            TStationName.HorizontalMode = TextHorizontalMode.TextCenter;
+            TStationName.AlignmentPoint = new Point3d(insertPoint.X + 30 / 2, insertPoint.Y - 8.5 / 2, 0);
+
+            DBText TStationmark = new DBText();
+            TStationmark.TextString = "图示";
+            TStationmark.Height = 3;
+            TStationmark.VerticalMode = TextVerticalMode.TextVerticalMid;
+            TStationmark.HorizontalMode = TextHorizontalMode.TextCenter;
+            TStationmark.AlignmentPoint = new Point3d(insertPoint.X + 30 / 2, insertPoint.Y - 8.5 - 8.5 / 2, 0);
+
+            DBText TStationLocation = new DBText();
+            TStationLocation.TextString = "站中心里程";
+            TStationLocation.Height = 3;
+            TStationLocation.VerticalMode = TextVerticalMode.TextVerticalMid;
+            TStationLocation.HorizontalMode = TextHorizontalMode.TextCenter;
+            TStationLocation.AlignmentPoint = new Point3d(insertPoint.X + 30 / 2, insertPoint.Y - (19 + (32.5 - 19) / 2), 0);
+
+            DBText TStationDistance = new DBText();
+            TStationDistance.TextString = "站间距离";
+            TStationDistance.Height = 3;
+            TStationDistance.VerticalMode = TextVerticalMode.TextVerticalMid;
+            TStationDistance.HorizontalMode = TextHorizontalMode.TextCenter;
+            TStationDistance.AlignmentPoint = new Point3d(insertPoint.X + 30 / 2, insertPoint.Y - (32.5 + (41 - 32.5) / 2), 0);
+
+            //db.AddToModelSpace(pHorizonline1, pHorizonline2, pHorizonline3, pHorizonline4, pHorizonline5, pVerticalLine1, pVerticalLine2);
+            db.AddToModelSpace(TStationName, TStationmark, TStationLocation, TStationDistance);
+            bt.DowngradeOpen();
+            btr.DowngradeOpen();
         }
         #endregion
+
 
         // 由图案填充类型、填充图案名称、
         // 填充角度和填充比例创建图案填充的函数.
