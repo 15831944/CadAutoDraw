@@ -44,10 +44,14 @@ namespace AutoDrawDWG
                 try
                 {
                     DocumentLock m_DocumentLock = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LockDocument();
-                    drawTable(db, trans, new Point3d(0, 0, 0));
+                    
                     //用于生成图块， 如站点图块，铁路标识
                     if (CheckBlock(db, trans)) //检查预设的块是否存在，如不存在新建
                     {
+                        //绘制背景.
+                        drawRightSideBackGround(db, trans, new Point3d(0, 0, 0));
+
+                        //插入块
                         //在相应位置插入图块和实体
                         trans.Commit();
                     }
@@ -90,7 +94,7 @@ namespace AutoDrawDWG
             return isSuc;
         }
 
-        #region 图块
+        #region 生成图块
         public bool CheckBlock(Database db, Transaction trans)
         {
             bool allCheck = false;
@@ -136,11 +140,22 @@ namespace AutoDrawDWG
             BlockTableRecord acBlkTblRec = new BlockTableRecord();
             acBlkTbl.UpgradeOpen();
             acBlkTbl.Add(acBlkTblRec);
-            acBlkTblRec.Name = "铁轨_Length_248";
+            acBlkTblRec.Name = "铁轨_Length_208";
 
             //块属性
-            double textHeight = 5;
-            AttributeDefinition ProjectNameShortAtt = new AttributeDefinition(new Point3d(insertPoint.X, insertPoint.Y - textHeight, 0), RailWayDirection, "上/下行", "输入线路名简称", ObjectId.Null);
+            double textHeight = 3;
+            //AttributeDefinition ProjectNameShortAtt = new AttributeDefinition(new Point3d(insertPoint.X, insertPoint.Y - 7 / 2, 0), RailWayDirection, "上/下行", "输入线路名简称", ObjectId.Null);
+
+            AttributeDefinition ProjectNameShortAtt = new AttributeDefinition();
+            ProjectNameShortAtt.TextString = "XXX上行/下行线";
+            ProjectNameShortAtt.Tag = "上行/下行线";
+            ProjectNameShortAtt.Prompt = "输入线路名称";
+            ProjectNameShortAtt.TextStyleId = ObjectId.Null;
+            ProjectNameShortAtt.Justify = AttachmentPoint.MiddleLeft;
+            ProjectNameShortAtt.HorizontalMode = TextHorizontalMode.TextLeft;
+            ProjectNameShortAtt.VerticalMode = TextVerticalMode.TextVerticalMid;
+
+            ProjectNameShortAtt.AlignmentPoint = new Point3d(insertPoint.X, insertPoint.Y - textHeight / 2, 0);
             SetStyleForAtt(ProjectNameShortAtt, textHeight, false);
 
             acBlkTblRec.AppendEntity(ProjectNameShortAtt);
@@ -148,28 +163,28 @@ namespace AutoDrawDWG
             //ProjectNameShortAtt.AlignmentPoint = new Point3d(1, 1, 0);
 
             Polyline BigRectangle = new Polyline(4);
-            BigRectangle.AddVertexAt(0, new Point2d(insertPoint.X + 40, insertPoint.Y), 0, 0.1, 0.1);
-            BigRectangle.AddVertexAt(1, new Point2d(insertPoint.X + 40 + 248, insertPoint.Y), 0, 0.1, 0.1);
-            BigRectangle.AddVertexAt(2, new Point2d(insertPoint.X + 40 + 248, insertPoint.Y - 7), 0, 0.1, 0.1);
-            BigRectangle.AddVertexAt(3, new Point2d(insertPoint.X + 40, insertPoint.Y - 7), 0, 0.1, 0.1);
+            BigRectangle.AddVertexAt(0, new Point2d(insertPoint.X + 20, insertPoint.Y), 0, 0.1, 0.1);
+            BigRectangle.AddVertexAt(1, new Point2d(insertPoint.X + 20 + 228, insertPoint.Y), 0, 0.1, 0.1);
+            BigRectangle.AddVertexAt(2, new Point2d(insertPoint.X + 20 + 228, insertPoint.Y - 7), 0, 0.1, 0.1);
+            BigRectangle.AddVertexAt(3, new Point2d(insertPoint.X + 20, insertPoint.Y - 7), 0, 0.1, 0.1);
             BigRectangle.Closed = true;
             acBlkTblRec.AppendEntity(BigRectangle);
             trans.AddNewlyCreatedDBObject(BigRectangle, true);
 
             Polyline InsideRectangle_1 = new Polyline(4);
-            InsideRectangle_1.AddVertexAt(0, new Point2d(insertPoint.X + 90, insertPoint.Y), 0, 0.1, 0.1);
-            InsideRectangle_1.AddVertexAt(1, new Point2d(insertPoint.X + 140, insertPoint.Y), 0, 0.1, 0.1);
-            InsideRectangle_1.AddVertexAt(2, new Point2d(insertPoint.X + 140, insertPoint.Y - 7), 0, 0.1, 0.1);
-            InsideRectangle_1.AddVertexAt(3, new Point2d(insertPoint.X + 90, insertPoint.Y - 7), 0, 0.1, 0.1);
+            InsideRectangle_1.AddVertexAt(0, new Point2d(insertPoint.X + 65, insertPoint.Y), 0, 0.1, 0.1);
+            InsideRectangle_1.AddVertexAt(1, new Point2d(insertPoint.X + 110, insertPoint.Y), 0, 0.1, 0.1);
+            InsideRectangle_1.AddVertexAt(2, new Point2d(insertPoint.X + 110, insertPoint.Y - 7), 0, 0.1, 0.1);
+            InsideRectangle_1.AddVertexAt(3, new Point2d(insertPoint.X + 65, insertPoint.Y - 7), 0, 0.1, 0.1);
             InsideRectangle_1.Closed = true;
             acBlkTblRec.AppendEntity(InsideRectangle_1);
             trans.AddNewlyCreatedDBObject(InsideRectangle_1, true);
 
             Polyline InsideRectangle_2 = new Polyline(4);
-            InsideRectangle_2.AddVertexAt(0, new Point2d(insertPoint.X + 190, insertPoint.Y), 0, 0.1, 0.1);
-            InsideRectangle_2.AddVertexAt(1, new Point2d(insertPoint.X + 240, insertPoint.Y), 0, 0.1, 0.1);
-            InsideRectangle_2.AddVertexAt(2, new Point2d(insertPoint.X + 240, insertPoint.Y - 7), 0, 0.1, 0.1);
-            InsideRectangle_2.AddVertexAt(3, new Point2d(insertPoint.X + 190, insertPoint.Y - 7), 0, 0.1, 0.1);
+            InsideRectangle_2.AddVertexAt(0, new Point2d(insertPoint.X + 155, insertPoint.Y), 0, 0.1, 0.1);
+            InsideRectangle_2.AddVertexAt(1, new Point2d(insertPoint.X + 200, insertPoint.Y), 0, 0.1, 0.1);
+            InsideRectangle_2.AddVertexAt(2, new Point2d(insertPoint.X + 200, insertPoint.Y - 7), 0, 0.1, 0.1);
+            InsideRectangle_2.AddVertexAt(3, new Point2d(insertPoint.X + 155, insertPoint.Y - 7), 0, 0.1, 0.1);
             InsideRectangle_2.Closed = true;
             acBlkTblRec.AppendEntity(InsideRectangle_2);
             trans.AddNewlyCreatedDBObject(InsideRectangle_2, true);
@@ -397,7 +412,14 @@ namespace AutoDrawDWG
 
         #endregion 
 
-        #region 绘图
+        #region 绘制背景
+        public void drawRightSideBackGround(Database db, Transaction trans, Point3d insertPoint)
+        {
+            drawTable(db, trans, new Point3d(0, 0, 0));
+            drawDoubleFibre(db, trans, new Point3d(0, -70, 0)); //绘制表示通信、信号电缆的直线
+            insertRailWayBlock(db, trans, new Point3d(0, -90, 0));
+            drawDoubleFibre(db, trans, new Point3d(0, -110, 0)); //绘制表示通信、信号电缆的直线
+        }
         public void drawTable(Database db, Transaction trans, Point3d insertPoint)
         {
             BlockTable bt = (BlockTable)trans.GetObject(db.BlockTableId, OpenMode.ForRead);
@@ -472,8 +494,50 @@ namespace AutoDrawDWG
             bt.DowngradeOpen();
             btr.DowngradeOpen();
         }
+
+        //一次绘制两条线
+        public void drawDoubleFibre(Database db, Transaction trans, Point3d insertPoint)
+        {
+            Polyline pHorizonline1 = new Polyline();
+            pHorizonline1.CreatePolyline(new Point2d(insertPoint.X, insertPoint.Y), new Point2d(insertPoint.X + 248, insertPoint.Y));
+            Polyline pHorizonline2 = new Polyline();
+            pHorizonline2.CreatePolyline(new Point2d(insertPoint.X, insertPoint.Y - 4), new Point2d(insertPoint.X + 248, insertPoint.Y - 4));
+            Polyline pHorizonline3 = new Polyline();
+            pHorizonline3.CreatePolyline(new Point2d(insertPoint.X, insertPoint.Y - 8), new Point2d(insertPoint.X + 248, insertPoint.Y - 8));
+
+            DBText TFibreName1 = new DBText();
+            TFibreName1.TextString = "信号电缆槽";
+            TFibreName1.Height = 3;
+            TFibreName1.VerticalMode = TextVerticalMode.TextVerticalMid;
+            TFibreName1.HorizontalMode = TextHorizontalMode.TextLeft;
+            TFibreName1.AlignmentPoint = new Point3d(insertPoint.X, insertPoint.Y - 2, 0);
+
+            DBText TFibreName2 = new DBText();
+            TFibreName2.TextString = "通信电缆槽";
+            TFibreName2.Height = 3;
+            TFibreName2.VerticalMode = TextVerticalMode.TextVerticalMid;
+            TFibreName2.HorizontalMode = TextHorizontalMode.TextLeft;
+            TFibreName2.AlignmentPoint = new Point3d(insertPoint.X, insertPoint.Y - 6, 0);
+
+            db.AddToModelSpace(TFibreName1, TFibreName2);
+            db.AddToModelSpace(pHorizonline1, pHorizonline2, pHorizonline3);
+        }
+
+
         #endregion
 
+        #region 插入块
+
+        //插入‘轨道’块
+        public void insertRailWayBlock(Database db, Transaction trans, Point3d insertPoint)
+        {
+            ObjectId spaceId = db.CurrentSpaceId;//获取当前空间
+
+            Dictionary<string, string> atts = new Dictionary<string, string>();
+            atts.Add("上行/下行线", "吉珲上行线");
+            spaceId.InsertBlockReference("0", "铁轨_Length_208", insertPoint, new Scale3d(1), 0, atts);
+        }
+        #endregion
 
         // 由图案填充类型、填充图案名称、
         // 填充角度和填充比例创建图案填充的函数.
