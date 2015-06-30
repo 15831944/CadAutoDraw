@@ -36,7 +36,7 @@ namespace AutoDrawDWG
             }
         }
         */
-        public bool drawSL(Form1.StationAndLocation station_location)//Point3d startDrawPoint, , string BlockName)
+        public bool drawSL(Form1.StationAndLocation station_location,string selectedLayer)//Point3d startDrawPoint, , string BlockName)
         {
             Database db = HostApplicationServices.WorkingDatabase;
             using (Transaction trans = db.TransactionManager.StartTransaction())
@@ -49,7 +49,9 @@ namespace AutoDrawDWG
                     if (CheckBlock(db, trans)) //检查预设的块是否存在，如不存在新建
                     {
                         //绘制背景.
-                        drawRightSideBackGround(db, trans, new Point3d(0, 0, 0));
+                            //为每张图生成块表
+                        List<string> list_Block_Name = new List<string>();
+                        drawRightSideBackGround(db, trans, new Point3d(0, 0, 0), list_Block_Name, selectedLayer);
 
                         //插入块
                         //在相应位置插入图块和实体
@@ -130,7 +132,8 @@ namespace AutoDrawDWG
             allCheck = true;
             return allCheck;
         }
-        //添加铁轨标识
+
+        //如果不存在则添加铁轨标识
         private void CreateRailWayMark(Database db, Transaction trans, Point3d insertPoint, string RailWayDirection)
         {
             // Open the Block table for read
@@ -156,17 +159,17 @@ namespace AutoDrawDWG
             ProjectNameShortAtt.VerticalMode = TextVerticalMode.TextVerticalMid;
 
             ProjectNameShortAtt.AlignmentPoint = new Point3d(insertPoint.X, insertPoint.Y - textHeight / 2, 0);
-            SetStyleForAtt(ProjectNameShortAtt, textHeight, false);
+            SetStyleForAttribut(ProjectNameShortAtt, textHeight, false);
 
             acBlkTblRec.AppendEntity(ProjectNameShortAtt);
             trans.AddNewlyCreatedDBObject(ProjectNameShortAtt, true);
             //ProjectNameShortAtt.AlignmentPoint = new Point3d(1, 1, 0);
 
             Polyline BigRectangle = new Polyline(4);
-            BigRectangle.AddVertexAt(0, new Point2d(insertPoint.X + 20, insertPoint.Y), 0, 0.1, 0.1);
-            BigRectangle.AddVertexAt(1, new Point2d(insertPoint.X + 20 + 228, insertPoint.Y), 0, 0.1, 0.1);
-            BigRectangle.AddVertexAt(2, new Point2d(insertPoint.X + 20 + 228, insertPoint.Y - 7), 0, 0.1, 0.1);
-            BigRectangle.AddVertexAt(3, new Point2d(insertPoint.X + 20, insertPoint.Y - 7), 0, 0.1, 0.1);
+            BigRectangle.AddVertexAt(0, new Point2d(insertPoint.X + 15, insertPoint.Y), 0, 0.1, 0.1);
+            BigRectangle.AddVertexAt(1, new Point2d(insertPoint.X + 15 + 228, insertPoint.Y), 0, 0.1, 0.1);
+            BigRectangle.AddVertexAt(2, new Point2d(insertPoint.X + 15 + 228, insertPoint.Y - 7), 0, 0.1, 0.1);
+            BigRectangle.AddVertexAt(3, new Point2d(insertPoint.X + 15, insertPoint.Y - 7), 0, 0.1, 0.1);
             BigRectangle.Closed = true;
             acBlkTblRec.AppendEntity(BigRectangle);
             trans.AddNewlyCreatedDBObject(BigRectangle, true);
@@ -217,7 +220,7 @@ namespace AutoDrawDWG
             acBlkTbl.DowngradeOpen();
         }
 
-        private void SetStyleForAtt(AttributeDefinition att, bool invisible)
+        private void SetStyleForAttribut(AttributeDefinition att, bool invisible)
         {
             att.Height = 0.15;//高度
             att.HorizontalMode = TextHorizontalMode.TextCenter;
@@ -225,13 +228,14 @@ namespace AutoDrawDWG
             att.Invisible = invisible;
         }
 
-        private void SetStyleForAtt(AttributeDefinition att, double textHeight, bool invisible)
+        private void SetStyleForAttribut(AttributeDefinition att, double textHeight, bool invisible)
         {
             att.Height = textHeight;//高度
             att.HorizontalMode = TextHorizontalMode.TextCenter;
             att.VerticalMode = TextVerticalMode.TextVerticalMid;
             att.Invisible = invisible;
         }
+
         //新建站点标识
         private void CreateStationMark(Database db, Transaction trans, Point3d insertPoint, bool isLeft, Form1.StationAndLocation station_location)
         {
@@ -310,7 +314,7 @@ namespace AutoDrawDWG
             AttStationName.TextString = "XXX站";
             AttStationName.Tag = "站名";
             AttStationName.Prompt = "输入站点名称"; 
-            SetStyleForAtt(AttStationName, textHeight, false);
+            SetStyleForAttribut(AttStationName, textHeight, false);
             AttStationName.TextStyleId = ObjectId.Null;
             AttStationName.Justify = AttachmentPoint.BaseCenter;
 
@@ -324,7 +328,7 @@ namespace AutoDrawDWG
             AttStationLocation.TextString = "XXX站";
             AttStationLocation.Tag = "里程";
             AttStationLocation.Prompt = "输入站点里程";
-            SetStyleForAtt(AttStationLocation, textHeight, false);
+            SetStyleForAttribut(AttStationLocation, textHeight, false);
             AttStationLocation.TextStyleId = ObjectId.Null;
             AttStationLocation.Justify = AttachmentPoint.TopLeft;
             /*
@@ -413,13 +417,22 @@ namespace AutoDrawDWG
         #endregion 
 
         #region 绘制背景
-        public void drawRightSideBackGround(Database db, Transaction trans, Point3d insertPoint)
+        public void drawRightSideBackGround(Database db, Transaction trans, Point3d insertPoint, List<string> list_NameOfBlock, string layerName)
         {
-            drawTable(db, trans, new Point3d(0, 0, 0));
-            drawDoubleFibre(db, trans, new Point3d(0, -70, 0)); //绘制表示通信、信号电缆的直线
-            insertRailWayBlock(db, trans, new Point3d(0, -90, 0));
-            drawDoubleFibre(db, trans, new Point3d(0, -110, 0)); //绘制表示通信、信号电缆的直线
+            drawTable(db, trans, new Point3d(0, 0, 0));//绘制右侧表框
+            drawDoubleFibre(db, trans, new Point3d(0, -70, 0)); //绘制表示铁轨上方通信、信号电缆的直线
+            insert_RailWay_Block(db, trans, new Point3d(5, -90, 0), true, layerName); //插入表示上行线块
+            insert_RailWay_Block(db, trans, new Point3d(5, -110, 0), false, layerName); //插入表示下行线块
+            drawDoubleFibre(db, trans, new Point3d(0, -130, 0)); //绘制表示铁轨下方通信、信号电缆的直线
+
+            //插入块
+            foreach (string bName in list_NameOfBlock)
+            {
+                Point3d BlockInsertPoint = new Point3d();
+                insert_Current_Block_with_Name(bName, db, trans, BlockInsertPoint, layerName);
+            }
         }
+
         public void drawTable(Database db, Transaction trans, Point3d insertPoint)
         {
             BlockTable bt = (BlockTable)trans.GetObject(db.BlockTableId, OpenMode.ForRead);
@@ -528,16 +541,42 @@ namespace AutoDrawDWG
 
         #region 插入块
 
-        //插入‘轨道’块
-        public void insertRailWayBlock(Database db, Transaction trans, Point3d insertPoint)
+        //插入'轨道'块
+        public void insert_RailWay_Block(Database db, Transaction trans, Point3d insertPoint, bool isUp, string layerName)
         {
             ObjectId spaceId = db.CurrentSpaceId;//获取当前空间
 
             Dictionary<string, string> atts = new Dictionary<string, string>();
-            atts.Add("上行/下行线", "吉珲上行线");
-            spaceId.InsertBlockReference("0", "铁轨_Length_208", insertPoint, new Scale3d(1), 0, atts);
+            if (isUp == true)
+            {
+                atts.Add("上行/下行线", "吉珲上行线");
+            }
+            else
+            {
+                atts.Add("上行/下行线", "吉珲下行线");
+            }
+            //string layer = Form1.;
+            spaceId.InsertBlockReference(layerName, "铁轨_Length_208", insertPoint, new Scale3d(1), 0, atts);
         }
+
+
         #endregion
+
+
+        public void insert_Current_Block_with_Name(string Bname, Database db, Transaction trans, Point3d insertPoint,string layerName)
+        {
+            BlockTable bt = (BlockTable)trans.GetObject(db.BlockTableId, OpenMode.ForRead);
+            if (!bt.Has(Bname))
+            {
+                Application.ShowAlertDialog("未找到块:" + Bname + ".");
+                return;
+            }
+            else
+            {
+                ObjectId spaceId = db.CurrentSpaceId;//获取当前空间
+                spaceId.InsertBlockReference(layerName, Bname, insertPoint, new Scale3d(1), 0);
+            }
+        }
 
         // 由图案填充类型、填充图案名称、
         // 填充角度和填充比例创建图案填充的函数.
@@ -567,7 +606,7 @@ namespace AutoDrawDWG
             }
         }
 
-        private void DrawStationMark(Database db, Transaction trans, Point3d insertPoint, bool isLeft)
+        private void DrawStationMark(Database db, Transaction trans, Point3d insertPoint, bool isLeft) //empty
         {
             
 
@@ -576,7 +615,7 @@ namespace AutoDrawDWG
 
         }
 
-        private bool drawBlock(Point3d startDrawPoint, string BlockName)
+        private bool drawBlock(Point3d startDrawPoint, string BlockName) //empty
         {
             bool isSuc = false;
 
@@ -591,7 +630,7 @@ namespace AutoDrawDWG
 
             //
             return isSuc;
-        }
+        } //empty
 
         private bool drawText(Point3d startDrawPoint, string drawText)
         {
@@ -600,6 +639,6 @@ namespace AutoDrawDWG
 
             //
             return isSuc;
-        }
+        } //empty
     }
 }

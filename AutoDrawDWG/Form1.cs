@@ -23,12 +23,12 @@ namespace AutoDrawDWG
             private string id = string.Empty;
             private string name = string.Empty;
             private string location = string.Empty;
-            
+
             //可以根据自己的需求继续添加,如：private Int32 m_Index；
 
             public StationAndLocation()
             { }
-            public StationAndLocation(string sid, string sname,string slocation)
+            public StationAndLocation(string sid, string sname, string slocation)
             {
                 id = sid;
                 name = sname;
@@ -130,8 +130,8 @@ namespace AutoDrawDWG
 
         string ProjectName;
         string addStation = "";
-        Dictionary<string,string> ListStation = new Dictionary<string,string>();
-        Dictionary<string,string> isEditStation = new Dictionary<string,string>();
+        Dictionary<string, string> ListStation = new Dictionary<string, string>();
+        Dictionary<string, string> isEditStation = new Dictionary<string, string>();
 
         DataSet DS_Station;
         DataTable inforTable;
@@ -167,7 +167,7 @@ namespace AutoDrawDWG
 
             this.Size = new Size(700, 420);
             MainGroupBox.Visible = true;
-            
+
         }
 
 
@@ -180,7 +180,7 @@ namespace AutoDrawDWG
                 //groupBox1.Text = ProjectName;
             }
         }
-        
+
         private void Form1_ResizeEnd(object sender, EventArgs e)
         {
             MainGroupBox.Size = new Size(MainGroupBox.Size.Width, this.Size.Height - 92);
@@ -230,13 +230,13 @@ namespace AutoDrawDWG
                         isInTheList = true;
 
                     }
-                    
+
 
                     if (isInTheList == false)
                     {
                         //在dataset中添加数据
                         addData(T_AddSt.Text.ToString().Replace(" ", ""), T_StaLoc.Text.ToString().Replace(" ", "").ToUpper());
-                      
+
                         dataGridView1.DataSource = DS_Station.Tables["StationAndInfo"];
 
                         //L_AddSt.Items.Add(T_AddSt.Text.ToString().Replace(" ", "") + "," + T_StaLoc.Text.ToString().Replace(" ", "").ToUpper());
@@ -255,7 +255,7 @@ namespace AutoDrawDWG
                         this.comboBox_To.DisplayMember = "Name";
                         this.comboBox_To.ValueMember = "Location";
 
-                        
+
                         if (groupBox1.Visible == false)
                         {
                             this.Size = new Size(700, this.Size.Height);
@@ -280,7 +280,7 @@ namespace AutoDrawDWG
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             //comboBox_From.Text = comboBox_From.SelectedItem.ToString();
-                //MessageBox.Show(comboBox1.SelectedItem.ToString());
+            //MessageBox.Show(comboBox1.SelectedItem.ToString());
         }
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
@@ -338,7 +338,7 @@ namespace AutoDrawDWG
 
                 //List<ListStationAndLocation>
                 refreshListBox(list_BinoStation);
-                
+
             }
 
         }
@@ -431,12 +431,15 @@ namespace AutoDrawDWG
 
         private void B_Draw_Click(object sender, EventArgs e)
         {
-             
+            string layerName = Com_CadLayer.SelectedItem.ToString(); //绘制于图层
+
             Draw_Station_Location dsl = new Draw_Station_Location();
             StationAndLocation station_location = new StationAndLocation("1", "AA", "AA1+000");
-            dsl.drawSL(station_location);
+            dsl.drawSL(station_location, string layerName);
             //dsl.DrawStationMark(new Autodesk.AutoCAD.Geometry.Point3d(), true);
         }
-        
+
+
     }
+
 }

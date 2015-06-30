@@ -65,6 +65,8 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.设置储存位置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.Com_CadLayer = new System.Windows.Forms.ComboBox();
+            this.label7 = new System.Windows.Forms.Label();
             this.MainGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
@@ -420,6 +422,23 @@
             this.设置储存位置ToolStripMenuItem.Text = "设置储存位置";
             this.设置储存位置ToolStripMenuItem.Click += new System.EventHandler(this.设置储存位置ToolStripMenuItem_Click);
             // 
+            // Com_CadLayer
+            // 
+            this.Com_CadLayer.FormattingEnabled = true;
+            this.Com_CadLayer.Location = new System.Drawing.Point(277, 31);
+            this.Com_CadLayer.Name = "Com_CadLayer";
+            this.Com_CadLayer.Size = new System.Drawing.Size(121, 21);
+            this.Com_CadLayer.TabIndex = 7;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(198, 33);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(79, 13);
+            this.label7.TabIndex = 8;
+            this.label7.Text = "绘制于图层：";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -427,6 +446,8 @@
             this.BackColor = System.Drawing.SystemColors.Control;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(637, 404);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.Com_CadLayer);
             this.Controls.Add(this.B_Admin);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
@@ -497,6 +518,8 @@
         private System.Windows.Forms.ToolStripMenuItem 设置ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 设置储存位置ToolStripMenuItem;
         private System.Windows.Forms.Button B_Draw;
+        private System.Windows.Forms.ComboBox Com_CadLayer;
+        private System.Windows.Forms.Label label7;
     }
 }
 
