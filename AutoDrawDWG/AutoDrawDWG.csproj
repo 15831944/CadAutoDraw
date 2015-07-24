@@ -99,6 +99,12 @@
     <Compile Include="BlockPreview.Designer.cs">
       <DependentUpon>BlockPreview.cs</DependentUpon>
     </Compile>
+    <Compile Include="BlockSelect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BlockSelect.Designer.cs">
+      <DependentUpon>BlockSelect.cs</DependentUpon>
+    </Compile>
     <Compile Include="Draw_Station_Location.cs" />
     <Compile Include="Editeur.cs">
       <SubType>Form</SubType>
@@ -127,6 +133,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="BlockPreview.resx">
       <DependentUpon>BlockPreview.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BlockSelect.resx">
+      <DependentUpon>BlockSelect.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Editeur.resx">
       <DependentUpon>Editeur.cs</DependentUpon>

@@ -57,7 +57,7 @@
             this.comboBox_From = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.B_AddEq = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.B_Admin = new System.Windows.Forms.Button();
@@ -67,6 +67,8 @@
             this.设置储存位置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Com_CadLayer = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
+            this.B_ChoixEqu = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.MainGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
@@ -111,7 +113,7 @@
             this.MainGroupBox.Size = new System.Drawing.Size(210, 314);
             this.MainGroupBox.TabIndex = 2;
             this.MainGroupBox.TabStop = false;
-            this.MainGroupBox.Text = "设置站点";
+            this.MainGroupBox.Text = "设置车站名称与里程";
             this.MainGroupBox.Visible = false;
             // 
             // B_GridModiCancel
@@ -168,7 +170,7 @@
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(34, 13);
             this.label3.TabIndex = 3;
-            this.label3.Text = "站名:";
+            this.label3.Text = "名称:";
             // 
             // B_AddSt
             // 
@@ -224,22 +226,21 @@
             this.groupBox1.Controls.Add(this.panel1);
             this.groupBox1.Location = new System.Drawing.Point(227, 58);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(205, 314);
+            this.groupBox1.Size = new System.Drawing.Size(202, 314);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "groupBox1";
+            this.groupBox1.Text = "设备名称和里程";
             // 
             // panel1
             // 
             this.panel1.AutoScroll = true;
             this.panel1.AutoScrollMargin = new System.Drawing.Size(5, 5);
-            this.panel1.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.panel1.Controls.Add(this.panel3);
+            this.panel1.BackColor = System.Drawing.SystemColors.ActiveBorder;
             this.panel1.Controls.Add(this.panel2);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(3, 16);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(199, 295);
+            this.panel1.Size = new System.Drawing.Size(196, 295);
             this.panel1.TabIndex = 0;
             // 
             // panel3
@@ -247,14 +248,14 @@
             this.panel3.BackColor = System.Drawing.SystemColors.Control;
             this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel3.Controls.Add(this.B_Draw);
-            this.panel3.Location = new System.Drawing.Point(3, 187);
+            this.panel3.Location = new System.Drawing.Point(3, 248);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(183, 103);
+            this.panel3.Size = new System.Drawing.Size(188, 40);
             this.panel3.TabIndex = 1;
             // 
             // B_Draw
             // 
-            this.B_Draw.Location = new System.Drawing.Point(42, 32);
+            this.B_Draw.Location = new System.Drawing.Point(39, 10);
             this.B_Draw.Name = "B_Draw";
             this.B_Draw.Size = new System.Drawing.Size(121, 23);
             this.B_Draw.TabIndex = 0;
@@ -266,6 +267,9 @@
             // 
             this.panel2.BackColor = System.Drawing.SystemColors.Control;
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel2.Controls.Add(this.textBox1);
+            this.panel2.Controls.Add(this.B_ChoixEqu);
+            this.panel2.Controls.Add(this.panel3);
             this.panel2.Controls.Add(this.Combo_Block);
             this.panel2.Controls.Add(this.label6);
             this.panel2.Controls.Add(this.T_NumBlock);
@@ -274,10 +278,11 @@
             this.panel2.Controls.Add(this.comboBox_From);
             this.panel2.Controls.Add(this.label2);
             this.panel2.Controls.Add(this.label1);
-            this.panel2.Controls.Add(this.button1);
-            this.panel2.Location = new System.Drawing.Point(3, 3);
+            this.panel2.Controls.Add(this.B_AddEq);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(183, 178);
+            this.panel2.Size = new System.Drawing.Size(196, 295);
             this.panel2.TabIndex = 0;
             // 
             // Combo_Block
@@ -285,7 +290,7 @@
             this.Combo_Block.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.Combo_Block.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.Combo_Block.FormattingEnabled = true;
-            this.Combo_Block.Location = new System.Drawing.Point(42, 67);
+            this.Combo_Block.Location = new System.Drawing.Point(44, 214);
             this.Combo_Block.Name = "Combo_Block";
             this.Combo_Block.Size = new System.Drawing.Size(121, 21);
             this.Combo_Block.TabIndex = 8;
@@ -293,7 +298,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(5, 96);
+            this.label6.Location = new System.Drawing.Point(7, 162);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(34, 13);
             this.label6.TabIndex = 7;
@@ -302,8 +307,9 @@
             // T_NumBlock
             // 
             this.T_NumBlock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.T_NumBlock.Enabled = false;
             this.T_NumBlock.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.T_NumBlock.Location = new System.Drawing.Point(42, 93);
+            this.T_NumBlock.Location = new System.Drawing.Point(44, 159);
             this.T_NumBlock.Name = "T_NumBlock";
             this.T_NumBlock.Size = new System.Drawing.Size(121, 20);
             this.T_NumBlock.TabIndex = 6;
@@ -311,7 +317,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(3, 70);
+            this.label5.Location = new System.Drawing.Point(5, 6);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(34, 13);
             this.label5.TabIndex = 5;
@@ -322,10 +328,11 @@
             this.comboBox_To.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox_To.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBox_To.FormattingEnabled = true;
-            this.comboBox_To.Location = new System.Drawing.Point(42, 40);
+            this.comboBox_To.Location = new System.Drawing.Point(44, 131);
             this.comboBox_To.Name = "comboBox_To";
             this.comboBox_To.Size = new System.Drawing.Size(121, 21);
             this.comboBox_To.TabIndex = 4;
+            this.comboBox_To.Visible = false;
             this.comboBox_To.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
             // 
             // comboBox_From
@@ -333,16 +340,17 @@
             this.comboBox_From.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox_From.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBox_From.FormattingEnabled = true;
-            this.comboBox_From.Location = new System.Drawing.Point(42, 15);
+            this.comboBox_From.Location = new System.Drawing.Point(44, 106);
             this.comboBox_From.Name = "comboBox_From";
             this.comboBox_From.Size = new System.Drawing.Size(121, 21);
             this.comboBox_From.TabIndex = 3;
+            this.comboBox_From.Visible = false;
             this.comboBox_From.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(17, 43);
+            this.label2.Location = new System.Drawing.Point(19, 134);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(22, 13);
             this.label2.TabIndex = 2;
@@ -351,21 +359,21 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(17, 18);
+            this.label1.Location = new System.Drawing.Point(19, 109);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(22, 13);
             this.label1.TabIndex = 1;
             this.label1.Text = "从:";
             // 
-            // button1
+            // B_AddEq
             // 
-            this.button1.Location = new System.Drawing.Point(42, 119);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(121, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "添加";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.B_AddEq.Location = new System.Drawing.Point(44, 185);
+            this.B_AddEq.Name = "B_AddEq";
+            this.B_AddEq.Size = new System.Drawing.Size(121, 23);
+            this.B_AddEq.TabIndex = 0;
+            this.B_AddEq.Text = "添加";
+            this.B_AddEq.UseVisualStyleBackColor = true;
+            this.B_AddEq.Click += new System.EventHandler(this.B_AddEq_Click);
             // 
             // statusStrip1
             // 
@@ -439,6 +447,24 @@
             this.label7.TabIndex = 8;
             this.label7.Text = "绘制于图层：";
             // 
+            // B_ChoixEqu
+            // 
+            this.B_ChoixEqu.Location = new System.Drawing.Point(171, 3);
+            this.B_ChoixEqu.Name = "B_ChoixEqu";
+            this.B_ChoixEqu.Size = new System.Drawing.Size(19, 23);
+            this.B_ChoixEqu.TabIndex = 9;
+            this.B_ChoixEqu.Text = "+";
+            this.B_ChoixEqu.UseVisualStyleBackColor = true;
+            this.B_ChoixEqu.Click += new System.EventHandler(this.B_ChoixEqu_Click);
+            // 
+            // textBox1
+            // 
+            this.textBox1.Enabled = false;
+            this.textBox1.Location = new System.Drawing.Point(44, 4);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(121, 20);
+            this.textBox1.TabIndex = 10;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -496,7 +522,7 @@
         private System.Windows.Forms.ComboBox comboBox_From;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button B_AddEq;
         private System.Windows.Forms.TextBox T_StaLoc;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
@@ -520,6 +546,8 @@
         private System.Windows.Forms.Button B_Draw;
         private System.Windows.Forms.ComboBox Com_CadLayer;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button B_ChoixEqu;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
 

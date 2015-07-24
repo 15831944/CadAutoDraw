@@ -209,6 +209,7 @@ namespace AutoDrawDWG
 
         }
 
+        //添加车站信息
         private void B_AddSt_Click(object sender, EventArgs e)
         {
             if (T_AddSt.Text == "添加站点" || T_AddSt.Text == "")
@@ -230,9 +231,7 @@ namespace AutoDrawDWG
                         isInTheList = true;
 
                     }
-
-
-                    if (isInTheList == false)
+                    else
                     {
                         //在dataset中添加数据
                         addData(T_AddSt.Text.ToString().Replace(" ", ""), T_StaLoc.Text.ToString().Replace(" ", "").ToUpper());
@@ -241,8 +240,9 @@ namespace AutoDrawDWG
 
                         //L_AddSt.Items.Add(T_AddSt.Text.ToString().Replace(" ", "") + "," + T_StaLoc.Text.ToString().Replace(" ", "").ToUpper());
                         //
+                        //将站点名称与里程添加进字典中
                         ListStation.Add(T_AddSt.Text.ToString().Replace(" ", ""), T_StaLoc.Text.ToString().Replace(" ", "").ToUpper());
-                        isEditStation.Add(T_AddSt.Text.ToString().Replace(" ", ""), T_StaLoc.Text.ToString().Replace(" ", "").ToUpper());
+                        //isEditStation.Add(T_AddSt.Text.ToString().Replace(" ", ""), T_StaLoc.Text.ToString().Replace(" ", "").ToUpper());
 
                         StationAndLocation StationAndLocation = new StationAndLocation(list_StationAndLocation.Count.ToString(), T_AddSt.Text.ToString().Replace(" ", ""), T_StaLoc.Text.ToString().Replace(" ", "").ToUpper());
                         list_StationAndLocation.Add(StationAndLocation);
@@ -258,19 +258,16 @@ namespace AutoDrawDWG
 
                         if (groupBox1.Visible == false)
                         {
-                            this.Size = new Size(700, this.Size.Height);
+                            //this.Size = new Size(700, this.Size.Height);
                             groupBox1.Visible = true;
-                            groupBox1.Text = "站间设备设置";
+                            //groupBox1.Text = "站间设备设置";
                         }
-
-
                     }
 
-
-                    else
+                    /*else
                     {
                         MessageBox.Show("名称不符合规范" + System.Environment.NewLine + "或与管理员联系.", "注意", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                    }
+                    }*/
                 }
             }
         }
@@ -327,10 +324,10 @@ namespace AutoDrawDWG
             }*/
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void B_AddEq_Click(object sender, EventArgs e)
         {
             //T_NumBlock.Text = comboBox_From.SelectedItem.ToString() + "--" + comboBox_To.SelectedItem.ToString();
-            if (comboBox_From.SelectedItem.ToString() != comboBox_To.SelectedItem.ToString())
+            if (comboBox_From.SelectedItem.ToString() != comboBox_To.SelectedItem.ToString() || (comboBox_From.SelectedItem.ToString() == "" || comboBox_To.SelectedItem.ToString() == ""))
             {
                 //todo
                 BinoStation binoStation = new BinoStation(list_StationAndLocation[comboBox_From.SelectedIndex], list_StationAndLocation[comboBox_To.SelectedIndex]);
@@ -431,13 +428,23 @@ namespace AutoDrawDWG
 
         private void B_Draw_Click(object sender, EventArgs e)
         {
-            string layerName = Com_CadLayer.SelectedItem.ToString(); //绘制于图层
+            string layerName = Com_CadLayer.SelectedItem.ToString(); //绘制于当前图层
 
             Draw_Station_Location dsl = new Draw_Station_Location();
             StationAndLocation station_location = new StationAndLocation("1", "AA", "AA1+000");
-            dsl.drawSL(station_location, string layerName);
+            dsl.drawSL(station_location, layerName);
             //dsl.DrawStationMark(new Autodesk.AutoCAD.Geometry.Point3d(), true);
         }
+
+        //选择设备，可多选
+        private void B_ChoixEqu_Click(object sender, EventArgs e)
+        {
+            BlockSelect bs = new BlockSelect();
+            bs.Show();
+        }
+
+
+
 
 
     }

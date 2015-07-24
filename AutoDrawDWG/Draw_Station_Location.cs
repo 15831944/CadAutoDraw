@@ -420,9 +420,13 @@ namespace AutoDrawDWG
         public void drawRightSideBackGround(Database db, Transaction trans, Point3d insertPoint, List<string> list_NameOfBlock, string layerName)
         {
             drawTable(db, trans, new Point3d(0, 0, 0));//绘制右侧表框
+
             drawDoubleFibre(db, trans, new Point3d(0, -70, 0)); //绘制表示铁轨上方通信、信号电缆的直线
-            insert_RailWay_Block(db, trans, new Point3d(5, -90, 0), true, layerName); //插入表示上行线块
-            insert_RailWay_Block(db, trans, new Point3d(5, -110, 0), false, layerName); //插入表示下行线块
+
+            insert_RailWay_Block(db, trans, new Point3d(5, -90, 0), true, layerName); //插入表示轨道上行线块
+
+            insert_RailWay_Block(db, trans, new Point3d(5, -110, 0), false, layerName); //插入表示轨道下行线块
+
             drawDoubleFibre(db, trans, new Point3d(0, -130, 0)); //绘制表示铁轨下方通信、信号电缆的直线
 
             //插入块
