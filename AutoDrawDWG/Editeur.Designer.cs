@@ -100,6 +100,7 @@
             this.Controls.Add(this.textBox1);
             this.Name = "Editeur";
             this.Text = "Editeur";
+            this.Load += new System.EventHandler(this.Editeur_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

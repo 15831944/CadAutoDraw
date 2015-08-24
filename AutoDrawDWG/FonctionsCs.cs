@@ -46,5 +46,12 @@ namespace AutoDrawDWG
             Match = _match;
             return _isMatch;
         }
+
+        #region 操作xml文件
+
+        #endregion
+
+        #region 操作项目资源内文件
+        #endregion
     }
 }

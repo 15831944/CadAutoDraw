@@ -6,7 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
-
+using SetLibraryLocation;
 
 
 namespace AutoDrawDWG
@@ -17,6 +17,9 @@ namespace AutoDrawDWG
         {
             InitializeComponent();
         }
+
+        
+
 
         public class StationAndLocation
         {
@@ -421,9 +424,29 @@ namespace AutoDrawDWG
             toolStripStatusLabel1.Text = DateTime.Now.ToString();
         }
 
+
+        private string sLocation;
+
+        public string StringLocation
+        {
+            get
+            {
+                return this.sLocation;
+            }
+            set
+            {
+                this.sLocation = value;
+            }
+        }
+
+        
+
         private void 设置储存位置ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            SetLibraryLocation.LibarayLocation sll = new SetLibraryLocation.LibarayLocation();
+            sll.Owner = this;
+            sll.ShowDialog();
+            //sll.
         }
 
         private void B_Draw_Click(object sender, EventArgs e)

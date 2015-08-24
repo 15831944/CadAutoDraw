@@ -46,9 +46,11 @@
             this.删除ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.B_ChoixEqu = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
             this.B_Draw = new System.Windows.Forms.Button();
-            this.panel2 = new System.Windows.Forms.Panel();
             this.Combo_Block = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.T_NumBlock = new System.Windows.Forms.TextBox();
@@ -67,15 +69,13 @@
             this.设置储存位置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Com_CadLayer = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.B_ChoixEqu = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.MainGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.panel1.SuspendLayout();
-            this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.panel3.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -243,26 +243,6 @@
             this.panel1.Size = new System.Drawing.Size(196, 295);
             this.panel1.TabIndex = 0;
             // 
-            // panel3
-            // 
-            this.panel3.BackColor = System.Drawing.SystemColors.Control;
-            this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panel3.Controls.Add(this.B_Draw);
-            this.panel3.Location = new System.Drawing.Point(3, 248);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(188, 40);
-            this.panel3.TabIndex = 1;
-            // 
-            // B_Draw
-            // 
-            this.B_Draw.Location = new System.Drawing.Point(39, 10);
-            this.B_Draw.Name = "B_Draw";
-            this.B_Draw.Size = new System.Drawing.Size(121, 23);
-            this.B_Draw.TabIndex = 0;
-            this.B_Draw.Text = "绘制";
-            this.B_Draw.UseVisualStyleBackColor = true;
-            this.B_Draw.Click += new System.EventHandler(this.B_Draw_Click);
-            // 
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.SystemColors.Control;
@@ -284,6 +264,44 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(196, 295);
             this.panel2.TabIndex = 0;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Enabled = false;
+            this.textBox1.Location = new System.Drawing.Point(44, 4);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(121, 20);
+            this.textBox1.TabIndex = 10;
+            // 
+            // B_ChoixEqu
+            // 
+            this.B_ChoixEqu.Location = new System.Drawing.Point(171, 3);
+            this.B_ChoixEqu.Name = "B_ChoixEqu";
+            this.B_ChoixEqu.Size = new System.Drawing.Size(19, 23);
+            this.B_ChoixEqu.TabIndex = 9;
+            this.B_ChoixEqu.Text = "+";
+            this.B_ChoixEqu.UseVisualStyleBackColor = true;
+            this.B_ChoixEqu.Click += new System.EventHandler(this.B_ChoixEqu_Click);
+            // 
+            // panel3
+            // 
+            this.panel3.BackColor = System.Drawing.SystemColors.Control;
+            this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel3.Controls.Add(this.B_Draw);
+            this.panel3.Location = new System.Drawing.Point(3, 248);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(188, 40);
+            this.panel3.TabIndex = 1;
+            // 
+            // B_Draw
+            // 
+            this.B_Draw.Location = new System.Drawing.Point(39, 10);
+            this.B_Draw.Name = "B_Draw";
+            this.B_Draw.Size = new System.Drawing.Size(121, 23);
+            this.B_Draw.TabIndex = 0;
+            this.B_Draw.Text = "绘制";
+            this.B_Draw.UseVisualStyleBackColor = true;
+            this.B_Draw.Click += new System.EventHandler(this.B_Draw_Click);
             // 
             // Combo_Block
             // 
@@ -426,7 +444,7 @@
             // 设置储存位置ToolStripMenuItem
             // 
             this.设置储存位置ToolStripMenuItem.Name = "设置储存位置ToolStripMenuItem";
-            this.设置储存位置ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.设置储存位置ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.设置储存位置ToolStripMenuItem.Text = "设置储存位置";
             this.设置储存位置ToolStripMenuItem.Click += new System.EventHandler(this.设置储存位置ToolStripMenuItem_Click);
             // 
@@ -446,24 +464,6 @@
             this.label7.Size = new System.Drawing.Size(79, 13);
             this.label7.TabIndex = 8;
             this.label7.Text = "绘制于图层：";
-            // 
-            // B_ChoixEqu
-            // 
-            this.B_ChoixEqu.Location = new System.Drawing.Point(171, 3);
-            this.B_ChoixEqu.Name = "B_ChoixEqu";
-            this.B_ChoixEqu.Size = new System.Drawing.Size(19, 23);
-            this.B_ChoixEqu.TabIndex = 9;
-            this.B_ChoixEqu.Text = "+";
-            this.B_ChoixEqu.UseVisualStyleBackColor = true;
-            this.B_ChoixEqu.Click += new System.EventHandler(this.B_ChoixEqu_Click);
-            // 
-            // textBox1
-            // 
-            this.textBox1.Enabled = false;
-            this.textBox1.Location = new System.Drawing.Point(44, 4);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(121, 20);
-            this.textBox1.TabIndex = 10;
             // 
             // Form1
             // 
@@ -494,9 +494,9 @@
             this.contextMenuStrip1.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
-            this.panel3.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            this.panel3.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
