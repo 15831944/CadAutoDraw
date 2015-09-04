@@ -105,5 +105,17 @@ namespace SetLibraryLocation
         {
             poseTime = 0;
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            string s = Properties.Resources.TextFile1;
+            if( textBox2.Text==""||textBox2.Text==null){
+                textBox2.Text = s;
+            }
+            else if (textBox2.Text != s) { 
+                //Properties.Resources.TextFi
+            }
+            
+        }
     }
 }

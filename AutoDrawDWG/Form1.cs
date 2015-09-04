@@ -18,7 +18,7 @@ namespace AutoDrawDWG
             InitializeComponent();
         }
 
-        
+        public string DirectoryLocation;
 
 
         public class StationAndLocation
@@ -212,6 +212,7 @@ namespace AutoDrawDWG
 
         }
 
+        
         //添加车站信息
         private void B_AddSt_Click(object sender, EventArgs e)
         {
@@ -250,6 +251,8 @@ namespace AutoDrawDWG
                         StationAndLocation StationAndLocation = new StationAndLocation(list_StationAndLocation.Count.ToString(), T_AddSt.Text.ToString().Replace(" ", ""), T_StaLoc.Text.ToString().Replace(" ", "").ToUpper());
                         list_StationAndLocation.Add(StationAndLocation);
 
+                        refreshCombobox(list_StationAndLocation);
+                        /*
                         this.comboBox_From.Items.Add(StationAndLocation);
                         this.comboBox_From.DisplayMember = "Name";
                         this.comboBox_From.ValueMember = "Location";
@@ -257,7 +260,7 @@ namespace AutoDrawDWG
                         this.comboBox_To.Items.Add(StationAndLocation);
                         this.comboBox_To.DisplayMember = "Name";
                         this.comboBox_To.ValueMember = "Location";
-
+                        */
 
                         if (groupBox1.Visible == false)
                         {
@@ -292,18 +295,7 @@ namespace AutoDrawDWG
         {
             //MessageBox.Show(dataGridView1.SelectedColumns.+" ","1");
         }
-
-        private void addData(string name, string location)
-        {
-            DataRow dr = DS_Station.Tables["StationAndInfo"].NewRow();
-
-            dr["站名"] = name;
-            dr["里程"] = location;
-
-            DS_Station.Tables["StationAndInfo"].Rows.Add(dr);
-
-            DS_Station.AcceptChanges();
-        }
+        //右下方'保存'按钮
         private void button2_Click(object sender, EventArgs e)
         {
             if (DS_Station.HasChanges(DataRowState.Modified | DataRowState.Added) && DS_Station.HasErrors)
@@ -326,6 +318,19 @@ namespace AutoDrawDWG
                 MessageBox.Show("没有数据需要保存");
             }*/
         }
+
+        private void addData(string name, string location)
+        {
+            DataRow dr = DS_Station.Tables["StationAndInfo"].NewRow();
+
+            dr["站名"] = name;
+            dr["里程"] = location;
+
+            DS_Station.Tables["StationAndInfo"].Rows.Add(dr);
+
+            DS_Station.AcceptChanges();
+        }
+
 
         private void B_AddEq_Click(object sender, EventArgs e)
         {
@@ -379,6 +384,24 @@ namespace AutoDrawDWG
             list_BinoStation[a.index].ToStation.Location = a.biStation.ToStation.Location;
             refreshListBox(list_BinoStation);
             //throw new NotImplementedException();
+        }
+
+        //刷新中部两个comboBox
+        private void refreshCombobox(List<StationAndLocation> listElements)
+        {
+            comboBox_From.Items.Clear();
+            comboBox_To.Items.Clear();
+
+            foreach (var element in listElements)
+            {
+                this.comboBox_From.Items.Add(element);
+                this.comboBox_From.DisplayMember = "Name";
+                this.comboBox_From.ValueMember = "Location";
+
+                this.comboBox_To.Items.Add(element);
+                this.comboBox_To.DisplayMember = "Name";
+                this.comboBox_To.ValueMember = "Location"; 
+            }
         }
 
         private void refreshListBox(List<BinoStation> listElements)
@@ -466,7 +489,12 @@ namespace AutoDrawDWG
             bs.Show();
         }
 
-
+        private string LoadDirectoryLocation()
+        {
+            string s = Properties.Resources.setting;
+            MessageBox.Show(s);
+            return null;
+        }
 
 
 
