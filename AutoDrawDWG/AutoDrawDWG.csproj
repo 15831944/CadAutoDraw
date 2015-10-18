@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AutoDrawDWG</RootNamespace>
     <AssemblyName>AutoDrawDWG</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <PublishUrl>发布\</PublishUrl>
     <Install>true</Install>
@@ -64,19 +64,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="accoremgd">
-      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\AutoCAD 2013\accoremgd.dll</HintPath>
+      <HintPath>..\..\..\Program Files\Autodesk\AutoCAD 2016\accoremgd.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="acdbmgd">
-      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\AutoCAD 2013\acdbmgd.dll</HintPath>
+      <HintPath>..\..\..\Program Files\Autodesk\AutoCAD 2016\acdbmgd.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="acmgd">
-      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\AutoCAD 2013\acmgd.dll</HintPath>
+      <HintPath>..\..\..\Program Files\Autodesk\AutoCAD 2016\acmgd.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="DotNetARX">
-      <HintPath>F:\工作\开发基础与实例教程\DotNetARX\2010\bin\Debug\DotNetARX.dll</HintPath>
+      <HintPath>E:\工作用\OneDrive\工作\编程\DotNetARX\DotNetARX\2010\bin\Debug\DotNetARX.dll</HintPath>
     </Reference>
     <Reference Include="SetLibraryLocation">
       <HintPath>..\SetLibraryLocation\bin\Debug\SetLibraryLocation.exe</HintPath>
@@ -131,6 +131,12 @@
     <Compile Include="Program.cs" />
     <Compile Include="ProjetStarter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SetLibarayLocation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SetLibarayLocation.Designer.cs">
+      <DependentUpon>SetLibarayLocation.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="BlockEditeur.resx">
       <DependentUpon>BlockEditeur.cs</DependentUpon>
     </EmbeddedResource>
@@ -159,6 +165,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="SetLibarayLocation.resx">
+      <DependentUpon>SetLibarayLocation.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="app.config" />
     <None Include="AutoDrawDWG_TemporaryKey.pfx" />
     <None Include="Properties\Settings.settings">
@@ -183,14 +192,9 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Resourse\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Resources\setting.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\setting.txt" />
+    <None Include="Resources\AppSetting.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

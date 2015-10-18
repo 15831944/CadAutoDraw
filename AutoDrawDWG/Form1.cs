@@ -6,7 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
-using SetLibraryLocation;
+//using SetLibraryLocation;
 
 
 namespace AutoDrawDWG
@@ -466,9 +466,11 @@ namespace AutoDrawDWG
 
         private void 设置储存位置ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetLibraryLocation.LibarayLocation sll = new SetLibraryLocation.LibarayLocation();
-            sll.Owner = this;
-            sll.ShowDialog();
+            SetLibarayLocation sLl = new SetLibarayLocation();
+            sLl.Show();
+            //SetLibraryLocation.LibarayLocation sll = new SetLibraryLocation.LibarayLocation();
+            //sll.Owner = this;
+            //sll.ShowDialog();
             //sll.
         }
 
@@ -491,8 +493,8 @@ namespace AutoDrawDWG
 
         private string LoadDirectoryLocation()
         {
-            string s = Properties.Resources.setting;
-            MessageBox.Show(s);
+            //string s = Properties.Resources.setting;
+            //MessageBox.Show(s);
             return null;
         }
 
