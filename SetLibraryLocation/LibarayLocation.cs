@@ -1,12 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using System.IO;
 using AutoDrawDWG;
 namespace SetLibraryLocation
 {
@@ -48,21 +41,39 @@ namespace SetLibraryLocation
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
                 path = folderBrowserDialog.SelectedPath;
+                //显示选择的文件位置
+                this.textBox1.Text = path;
+                //地址回传
+                Form1 f = (Form1)this.Owner;
+                f.StringLocation = path;
+                //form.bi
+                //form.StringLocation
+                //form1.Show();//.LocationString 
+                //提示变更成功
+                //TODO 设置验证
+                if (DirectoryIsMatch())
+                {
+                    toolStripStatusLabel1.Text = "库位置变更成功。";
+                    
+                }
+                //调用方法延时自动关闭窗口
+                CloseForm();
             }
             else
             {
+                MessageBox.Show("未能设置库位置。");
             }
-            this.textBox1.Text = path;
+           
 
-            Form1 f = (Form1)this.Owner;
-            f.StringLocation = path;
-            //form.bi
-            //form.StringLocation
-            //form1.Show();//.LocationString 
-            toolStripStatusLabel1.Text = "库位置变更成功。";
-            CloseForm();
+            
         }
         string titlelName = "设置库文件位置";
+
+        private bool DirectoryIsMatch()
+        {
+            bool isMatch = true;
+            return isMatch;
+        }
 
         private void CloseForm()
         {

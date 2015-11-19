@@ -203,7 +203,7 @@ namespace AutoDrawDWG
                     //打开块表
                     BlockTable bt = (BlockTable)trans.GetObject(db.BlockTableId, OpenMode.ForRead);
                     // 循环遍历块表中的块表记录
-                    int i=0;
+                    //int i=0;
                     foreach (ObjectId blockRecordId in bt)
                     {
                         // 打开 块表 记录对象
